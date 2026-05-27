@@ -758,7 +758,8 @@ body::before {
 .itbl-loss   { color: var(--red);   font-weight: 600; }
 
 .receipt-badge { margin-top: 5px; }
-  display:none; position:fixed; inset:0; z-index:600;
+.pin-ov {
+  display:none; position:fixed; inset:0; z-index:700;
   background:var(--bg0); align-items:center; justify-content:center;
   padding:24px; flex-direction:column;
 }
@@ -1013,6 +1014,11 @@ body::before {
         <div class="items-hd">
           <span class="items-lbl">🪙 Gold Items</span>
           <button class="items-add-btn" onclick="addItemRow()">+ Add Item</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;background:rgba(212,161,42,0.05);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 12px;">
+          <span style="font-size:11px;color:var(--tx1);white-space:nowrap">24K Rate (₹/g)</span>
+          <input class="item-fi" type="number" id="gold-rate-input" placeholder="e.g. 9500" style="flex:1;padding:7px 10px;font-size:13px" oninput="onGoldRateChange()" />
+          <span style="font-size:10px;color:var(--tx2);white-space:nowrap">Value auto-fills</span>
         </div>
         <div id="items-container">
           <div class="items-empty">No items added yet. Tap "+ Add Item" to begin.</div>
@@ -1721,8 +1727,6 @@ setInterval(() => render(), 30 * 60 * 1000);
 // ══════════════════════════════════════════
 let itemRows = [];
 
-const PURITY_RATES = { '24K': 1.0, '22K': 22/24, '18K': 18/24, '14K': 14/24 };
-
 const ITEM_TYPES = [
   { key: 'ring',      label: 'Ring',      svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="10" stroke="#D4A12A" stroke-width="4" fill="none"/><circle cx="20" cy="20" r="5" stroke="#D4A12A" stroke-width="2" fill="none"/></svg>` },
   { key: 'chain',     label: 'Chain',     svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 20 Q14 14 20 20 Q26 26 32 20" stroke="#D4A12A" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="10" cy="20" rx="3" ry="5" stroke="#D4A12A" stroke-width="2" fill="none" transform="rotate(-30 10 20)"/><ellipse cx="30" cy="20" rx="3" ry="5" stroke="#D4A12A" stroke-width="2" fill="none" transform="rotate(-30 30 20)"/></svg>` },
@@ -1781,39 +1785,45 @@ function renderItemsForm() {
             oninput="itemUpdate(${i},'wt',this.value)"/>
         </div>
         <div>
-          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Value (₹)</div>
-          <input class="item-fi" type="number" placeholder="0" value="${it.value||''}"
-            oninput="itemUpdate(${i},'value',this.value)"/>
+          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Value (₹) <span style="color:var(--g3);font-size:8px">${it.autoVal?'auto':'manual'}</span></div>
+          <input class="item-fi" type="number" placeholder="0" id="item-val-${i}" value="${it.value||''}"
+            oninput="itemUpdate(${i},'value',this.value,true)"/>
         </div>
       </div>
     </div>`;
   }).join('');
 
   // Collateral summary
-  const totalVal = itemRows.reduce((s, it) => s + (parseFloat(it.value)||0), 0);
-  const loanAmt  = parseFloat($('f-amt').value) || 0;
-  if (totalVal > 0 && loanAmt > 0) {
-    const diff = totalVal - loanAmt;
-    const cls  = diff > 0 ? 'profit' : diff < 0 ? 'loss' : 'neutral';
-    const label = diff > 0 ? `Collateral surplus: +${inr(diff)}` : diff < 0 ? `Collateral deficit: ${inr(diff)}` : 'Collateral = Loan';
-    c.innerHTML += `<div class="item-pl ${cls}" style="margin-top:4px">${label}</div>`;
-  }
+  updateCollateralSummary();
 }
 
-window.addItemRow = function() {
-  itemRows.push({ type: '', item: '', qty: 1, wt: '', purity: '22K', value: '' });
-  renderItemsForm();
+const PURITY_FACTOR = { '24K': 1.0, '22K': 22/24, '18K': 18/24, '14K': 14/24 };
+
+function calcAutoValue(it) {
+  const rate = parseFloat($('gold-rate-input')?.value) || 0;
+  const wt   = parseFloat(it.wt) || 0;
+  const pf   = PURITY_FACTOR[it.purity] || (22/24);
+  if (!rate || !wt) return null;
+  return Math.round(wt * pf * rate);
+}
+
+window.onGoldRateChange = function() {
+  itemRows.forEach((it, i) => {
+    if (it.autoVal !== false) { // only update if not manually overridden
+      const v = calcAutoValue(it);
+      if (v !== null) {
+        it.value = v;
+        it.autoVal = true;
+        const el = document.getElementById('item-val-' + i);
+        if (el) el.value = v;
+      }
+    }
+  });
+  // update collateral summary
+  updateCollateralSummary();
 };
 
-window.removeItemRow = function(i) {
-  itemRows.splice(i, 1);
-  renderItemsForm();
-};
-
-window.itemUpdate = function(i, field, val) {
-  itemRows[i][field] = field === 'qty' || field === 'wt' || field === 'value' ? parseFloat(val)||'' : val;
-  if (field === 'type') { renderItemsForm(); return; } // re-render to update selected state
-  // re-render summary row only
+function updateCollateralSummary() {
   const totalVal = itemRows.reduce((s, it) => s + (parseFloat(it.value)||0), 0);
   const loanAmt  = parseFloat($('f-amt').value) || 0;
   const existing = $('items-container').querySelector('.item-pl');
@@ -1826,6 +1836,35 @@ window.itemUpdate = function(i, field, val) {
     div.className = `item-pl ${cls}`; div.style.marginTop = '4px'; div.textContent = label;
     $('items-container').appendChild(div);
   }
+}
+
+window.addItemRow = function() {
+  itemRows.push({ type: '', item: '', qty: 1, wt: '', purity: '22K', value: '', autoVal: true });
+  renderItemsForm();
+};
+
+window.removeItemRow = function(i) {
+  itemRows.splice(i, 1);
+  renderItemsForm();
+};
+
+window.itemUpdate = function(i, field, val, manual = false) {
+  itemRows[i][field] = field === 'qty' || field === 'wt' || field === 'value' ? parseFloat(val)||'' : val;
+  if (field === 'value' && manual) {
+    itemRows[i].autoVal = false; // user typed manually — stop auto-updating
+  }
+  if (field === 'type') { renderItemsForm(); return; }
+  // auto-recalc value when wt or purity changes (unless manually set)
+  if ((field === 'wt' || field === 'purity') && itemRows[i].autoVal !== false) {
+    const v = calcAutoValue(itemRows[i]);
+    if (v !== null) {
+      itemRows[i].value = v;
+      itemRows[i].autoVal = true;
+      const el = document.getElementById('item-val-' + i);
+      if (el) el.value = v;
+    }
+  }
+  updateCollateralSummary();
 };
 
 window.toggleItemsCard = function(id) {
@@ -1917,6 +1956,8 @@ window.openLoanSheet = function(loan = null) {
   const opt = $('f-rd-opt'); if(opt) opt.style.display = (loan && loan.status==='Closed') ? 'none' : 'inline';
   renderReceiptArea(loan?.receipt || null);
   renderItemsForm();
+  // reset gold rate input (don't carry over between loans)
+  const gri = $('gold-rate-input'); if (gri && !loan) gri.value = '';
   livePreview();
   // Disable Closed option for staff
   const sel = $('f-status');
