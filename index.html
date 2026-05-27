@@ -1834,7 +1834,9 @@ window.toggleItemsCard = function(id) {
   if (!toggle || !body) return;
   const open = body.classList.toggle('open');
   toggle.classList.toggle('open', open);
-}; // { data: base64, type: mimeType, name: fileName }
+};
+
+let pendingReceipt = null; // { data: base64, type: mimeType, name: fileName }
 
 function renderReceiptArea(existingReceipt) {
   const area = $('receipt-upload-area');
