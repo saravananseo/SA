@@ -616,7 +616,148 @@ body::before {
 /* ── CLOSE BUTTON hover ── */
 .sheet-close:hover { background: var(--glassH); }
 .hdr-btn:hover { background: var(--glassH); }
-.pin-ov {
+
+/* ── RECEIPT UPLOAD ── */
+.receipt-zone {
+  border: 2px dashed var(--bd); border-radius: var(--rs);
+  padding: 18px 16px; text-align: center; cursor: pointer;
+  background: rgba(212,161,42,0.03); position: relative;
+  transition: border-color 0.2s, background 0.2s; margin-bottom: 16px;
+}
+.receipt-zone:hover { border-color: var(--g2); background: rgba(212,161,42,0.06); }
+.receipt-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.receipt-zone-ic { font-size: 26px; margin-bottom: 6px; }
+.receipt-zone-t { font-size: 13px; color: var(--tx1); font-weight: 500; }
+.receipt-zone-s { font-size: 11px; color: var(--tx2); margin-top: 3px; }
+.receipt-uploaded {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  background: rgba(39,201,122,0.07); border: 1px solid rgba(39,201,122,0.25);
+  border-radius: var(--rs); padding: 12px 14px; margin-bottom: 16px;
+}
+.receipt-uploaded-info { display: flex; align-items: center; gap: 10px; }
+.receipt-uploaded-ic { font-size: 22px; }
+.receipt-uploaded-lbl { font-size: 13px; font-weight: 600; color: var(--green); }
+.receipt-uploaded-sub { font-size: 11px; color: var(--tx2); margin-top: 2px; }
+.receipt-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.receipt-btn {
+  padding: 7px 12px; border-radius: var(--rs); font-size: 12px; font-weight: 600;
+  font-family: 'DM Sans', sans-serif; cursor: pointer; border: none; transition: opacity 0.2s;
+}
+.receipt-btn:active { opacity: 0.75; }
+.receipt-view-btn { background: rgba(39,201,122,0.15); color: var(--green); }
+.receipt-remove-btn { background: rgba(232,85,85,0.12); color: var(--red); }
+.receipt-ov {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,0.94); backdrop-filter: blur(10px);
+  flex-direction: column; align-items: center; justify-content: center;
+}
+.receipt-ov.open { display: flex; }
+.receipt-ov-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; padding: 16px 20px;
+  position: absolute; top: 0; left: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.7), transparent);
+  z-index: 1;
+}
+.receipt-ov-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--g1); }
+.receipt-ov-img { max-width: 96vw; max-height: 82vh; border-radius: var(--rs); object-fit: contain; box-shadow: 0 8px 40px rgba(0,0,0,0.8); }
+.receipt-ov-pdf { width: 96vw; height: 82vh; border: none; border-radius: var(--rs); }
+.receipt-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(39,201,122,0.1); border: 1px solid rgba(39,201,122,0.25);
+  color: var(--green); border-radius: 20px; padding: 3px 9px;
+  font-size: 10px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+}
+/* ── ITEM TYPE PICKER ── */
+.item-type-row {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.item-type-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 7px 8px; border-radius: var(--rs);
+  background: rgba(255,255,255,0.03); border: 1.5px solid var(--bd);
+  cursor: pointer; transition: all 0.18s; min-width: 52px;
+}
+.item-type-btn:active { transform: scale(0.92); }
+.item-type-btn.sel {
+  background: rgba(212,161,42,0.12); border-color: var(--g1);
+  box-shadow: 0 0 10px rgba(212,161,42,0.15);
+}
+.item-type-btn img, .item-type-btn svg { width: 28px; height: 28px; }
+.item-type-lbl { font-size: 9px; color: var(--tx2); font-weight: 500; white-space: nowrap; }
+.item-type-btn.sel .item-type-lbl { color: var(--g1); }
+.item-type-ic { font-size: 24px; line-height: 1; }
+.items-section { margin-bottom: 16px; }
+.items-hd {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+}
+.items-lbl { font-size: 10px; font-weight: 600; color: var(--tx1); text-transform: uppercase; letter-spacing: 0.9px; }
+.items-add-btn {
+  display: flex; align-items: center; gap: 5px; padding: 6px 12px;
+  background: rgba(212,161,42,0.1); border: 1px solid var(--bd);
+  border-radius: var(--rs); color: var(--g1); font-size: 12px; font-weight: 600;
+  font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.2s;
+}
+.items-add-btn:active { background: rgba(212,161,42,0.2); }
+.item-row {
+  background: rgba(255,255,255,0.02); border: 1px solid var(--bd);
+  border-radius: var(--rs); padding: 12px; margin-bottom: 8px; position: relative;
+}
+.item-row-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.item-row-grid3 {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 8px;
+}
+.item-fi {
+  width: 100%; padding: 9px 11px;
+  background: rgba(255,255,255,0.03); border: 1.5px solid var(--bd);
+  border-radius: var(--rs); font-size: 13px; font-family: 'DM Sans', sans-serif;
+  color: var(--tx0); outline: none; -webkit-appearance: none;
+  transition: border-color 0.2s;
+}
+.item-fi:focus { border-color: var(--g2); }
+.item-fi::placeholder { color: var(--tx2); font-size: 12px; }
+.item-fi option { background: var(--bg2); }
+.item-del-btn {
+  position: absolute; top: 8px; right: 8px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: rgba(232,85,85,0.12); border: none; color: var(--red);
+  font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.item-pl { font-size: 11px; font-weight: 600; margin-top: 6px; padding: 4px 8px; border-radius: 6px; text-align: center; }
+.item-pl.profit { background: rgba(39,201,122,0.1); color: var(--green); }
+.item-pl.loss   { background: rgba(232,85,85,0.1);  color: var(--red); }
+.item-pl.neutral { background: rgba(255,255,255,0.05); color: var(--tx2); }
+.items-empty { text-align: center; padding: 14px; font-size: 12px; color: var(--tx2); border: 1px dashed var(--bd); border-radius: var(--rs); }
+
+/* ── ITEMS in card (expandable) ── */
+.card-items-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 16px; border-top: 1px solid rgba(212,161,42,0.08);
+  cursor: pointer; background: rgba(212,161,42,0.03);
+  font-size: 11px; font-weight: 600; color: var(--tx1);
+  transition: background 0.2s;
+}
+.card-items-toggle:active { background: rgba(212,161,42,0.07); }
+.card-items-toggle-ic { font-size: 13px; transition: transform 0.25s; }
+.card-items-toggle.open .card-items-toggle-ic { transform: rotate(180deg); }
+.card-items-body { display: none; padding: 0 12px 12px; overflow-x: auto; }
+.card-items-body.open { display: block; }
+.items-tbl { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 380px; }
+.items-tbl th {
+  background: rgba(212,161,42,0.08); color: var(--tx1); padding: 7px 8px;
+  text-align: left; font-weight: 600; text-transform: uppercase;
+  font-size: 9px; letter-spacing: 0.6px; border-bottom: 1px solid var(--bd);
+  white-space: nowrap;
+}
+.items-tbl td { padding: 7px 8px; border-bottom: 1px solid rgba(212,161,42,0.04); color: var(--tx0); white-space: nowrap; }
+.items-tbl tr:last-child td { border-bottom: none; }
+.items-tbl tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+.itbl-profit { color: var(--green); font-weight: 600; }
+.itbl-loss   { color: var(--red);   font-weight: 600; }
+
+.receipt-badge { margin-top: 5px; }
   display:none; position:fixed; inset:0; z-index:600;
   background:var(--bg0); align-items:center; justify-content:center;
   padding:24px; flex-direction:column;
@@ -668,7 +809,6 @@ body::before {
         <!-- A&S Logo Icon -->
         <img src="icon-192.png" width="100" height="100" style="border-radius:13px;border:1px solid rgba(212,161,42,0.3);box-shadow:0 0 20px rgba(212,161,42,0.15);flex-shrink:0" alt="A&S"/>
         <div class="brand-info">
-          <div class="brand-name">Gold Loan</div>
           <div class="role-badge admin" id="role-badge">Admin</div>
         </div>
       </div>
@@ -867,6 +1007,24 @@ body::before {
           <option value="Closed">Closed</option>
         </select>
       </div>
+
+      <!-- Gold Items -->
+      <div class="items-section">
+        <div class="items-hd">
+          <span class="items-lbl">🪙 Gold Items</span>
+          <button class="items-add-btn" onclick="addItemRow()">+ Add Item</button>
+        </div>
+        <div id="items-container">
+          <div class="items-empty">No items added yet. Tap "+ Add Item" to begin.</div>
+        </div>
+      </div>
+
+      <!-- Receipt upload -->
+      <div class="fg">
+        <label class="fl">Receipt / Document</label>
+        <div id="receipt-upload-area"></div>
+      </div>
+
       <button class="btn-primary" onclick="saveLoan()">💾  Save Loan</button>
     </div>
   </div>
@@ -976,6 +1134,15 @@ const firebaseConfig = {
       <button class="conf-btn conf-ok" onclick="doDelete()">Delete</button>
     </div>
   </div>
+</div>
+
+<!-- RECEIPT VIEWER OVERLAY -->
+<div class="receipt-ov" id="receipt-ov">
+  <div class="receipt-ov-hd">
+    <div class="receipt-ov-title">📎 Receipt</div>
+    <button class="sheet-close" onclick="closeReceiptViewer()">✕</button>
+  </div>
+  <div id="receipt-ov-content"></div>
 </div>
 
 <!-- PIN LOGIN OVERLAY -->
@@ -1344,6 +1511,7 @@ function renderLoans() {
             <span class="card-arrow">→</span>
             <span>${l.releaseDate ? fmtDate(l.releaseDate) : (l.status==='Active' ? '<span style="color:var(--green);font-weight:600">Ongoing</span>' : '—')}</span>
           </div>
+          ${l.receipt ? `<span class="receipt-badge" onclick="openReceiptViewer('${l.id}')">📎 Receipt</span>` : ''}
         </div>
         <span class="badge ${isActive ? 'active' : 'closed'}">${l.status}</span>
       </div>
@@ -1362,6 +1530,46 @@ function renderLoans() {
           ${currentRole !== 'staff' ? `<button class="c-btn c-del" onclick="askDelete('${l.id}')">🗑️</button>` : ''}
         </div>
       </div>
+      ${l.items && l.items.length ? `
+      <div class="card-items-toggle" id="citoggle-${l.id}" onclick="toggleItemsCard('${l.id}')">
+        <span>🪙 ${l.items.length} Gold Item${l.items.length>1?'s':''}</span>
+        <span class="card-items-toggle-ic">▾</span>
+      </div>
+      <div class="card-items-body" id="cibody-${l.id}">
+        <table class="items-tbl">
+          <thead><tr><th>Type</th><th>Item</th><th>Qty</th><th>Wt (g)</th><th>Purity</th><th>Value</th><th>P/L</th></tr></thead>
+          <tbody>
+            ${l.items.map(it => {
+              const val = parseFloat(it.value)||0;
+              const perItemLoan = (l.amount||0) / l.items.length;
+              const pl = val > 0 ? val - perItemLoan : null;
+              const plHtml = pl !== null
+                ? `<span class="${pl>=0?'itbl-profit':'itbl-loss'}">${pl>=0?'+':''}${inr(pl)}</span>`
+                : '—';
+              const typeObj = ITEM_TYPES.find(t => t.key === it.type);
+              const typeHtml = typeObj
+                ? `<span title="${typeObj.label}" style="display:inline-flex;width:22px;height:22px">${typeObj.svg}</span>`
+                : '—';
+              return `<tr>
+                <td>${typeHtml}</td>
+                <td>${it.item||'—'}</td>
+                <td>${it.qty||'—'}</td>
+                <td>${it.wt?it.wt+'g':'—'}</td>
+                <td>${it.purity||'—'}</td>
+                <td>${val?inr(val):'—'}</td>
+                <td>${plHtml}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+          <tfoot>
+            <tr style="border-top:1px solid var(--bd)">
+              <td colspan="5" style="font-weight:600;color:var(--tx1);padding-top:8px">Total</td>
+              <td style="font-weight:600;color:var(--g1);padding-top:8px">${inr(l.items.reduce((s,it)=>s+(parseFloat(it.value)||0),0))}</td>
+              <td style="padding-top:8px">${(()=>{const tv=l.items.reduce((s,it)=>s+(parseFloat(it.value)||0),0);const diff=tv-(l.amount||0);return tv>0?`<span class="${diff>=0?'itbl-profit':'itbl-loss'}">${diff>=0?'+':''}${inr(diff)}</span>`:'—';})()}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>` : ''}
     </div>`;
   }).join('');
 }
@@ -1509,10 +1717,194 @@ setInterval(() => render(), 30 * 60 * 1000);
 })();
 
 // ══════════════════════════════════════════
-// ADD / EDIT LOAN
+// GOLD ITEMS
 // ══════════════════════════════════════════
+let itemRows = [];
+
+const PURITY_RATES = { '24K': 1.0, '22K': 22/24, '18K': 18/24, '14K': 14/24 };
+
+const ITEM_TYPES = [
+  { key: 'ring',      label: 'Ring',      svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="10" stroke="#D4A12A" stroke-width="4" fill="none"/><circle cx="20" cy="20" r="5" stroke="#D4A12A" stroke-width="2" fill="none"/></svg>` },
+  { key: 'chain',     label: 'Chain',     svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 20 Q14 14 20 20 Q26 26 32 20" stroke="#D4A12A" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="10" cy="20" rx="3" ry="5" stroke="#D4A12A" stroke-width="2" fill="none" transform="rotate(-30 10 20)"/><ellipse cx="30" cy="20" rx="3" ry="5" stroke="#D4A12A" stroke-width="2" fill="none" transform="rotate(-30 30 20)"/></svg>` },
+  { key: 'bangle',    label: 'Bangle',    svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="13" stroke="#D4A12A" stroke-width="5" fill="none"/></svg>` },
+  { key: 'necklace',  label: 'Necklace',  svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 10 Q20 32 32 10" stroke="#D4A12A" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="20" cy="30" r="4" stroke="#D4A12A" stroke-width="2" fill="none"/><circle cx="8" cy="10" r="2" fill="#D4A12A"/><circle cx="32" cy="10" r="2" fill="#D4A12A"/></svg>` },
+  { key: 'earring',   label: 'Earring',   svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 8 Q15 5 18 5 Q21 5 21 8" stroke="#D4A12A" stroke-width="2" fill="none"/><circle cx="18" cy="20" r="7" stroke="#D4A12A" stroke-width="2.5" fill="none"/><line x1="18" y1="8" x2="18" y2="13" stroke="#D4A12A" stroke-width="2"/></svg>` },
+  { key: 'bracelet',  label: 'Bracelet',  svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 20 Q10 10 20 10 Q30 10 30 20 Q30 30 20 30 Q10 30 10 20Z" stroke="#D4A12A" stroke-width="3" fill="none"/><line x1="17" y1="30" x2="23" y2="30" stroke="#D4A12A" stroke-width="3" stroke-linecap="round"/></svg>` },
+  { key: 'coin',      label: 'Coin',      svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="14" stroke="#D4A12A" stroke-width="3" fill="none"/><text x="20" y="25" text-anchor="middle" fill="#D4A12A" font-size="13" font-weight="bold">₹</text></svg>` },
+  { key: 'bar',       label: 'Bar',       svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="13" width="26" height="14" rx="3" stroke="#D4A12A" stroke-width="3" fill="none"/><line x1="12" y1="13" x2="12" y2="27" stroke="#D4A12A" stroke-width="1.5" opacity=".5"/><line x1="28" y1="13" x2="28" y2="27" stroke="#D4A12A" stroke-width="1.5" opacity=".5"/></svg>` },
+  { key: 'pendant',   label: 'Pendant',   svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 10 Q20 8 24 10" stroke="#D4A12A" stroke-width="2" fill="none"/><path d="M20 10 L20 14" stroke="#D4A12A" stroke-width="2"/><path d="M20 14 L14 22 L20 34 L26 22 Z" stroke="#D4A12A" stroke-width="2.5" fill="none"/></svg>` },
+  { key: 'other',     label: 'Other',     svg: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="13" cy="20" r="3" fill="#D4A12A"/><circle cx="20" cy="20" r="3" fill="#D4A12A"/><circle cx="27" cy="20" r="3" fill="#D4A12A"/></svg>` },
+];
+
+function getTypeObj(key) { return ITEM_TYPES.find(t => t.key === key) || ITEM_TYPES[ITEM_TYPES.length-1]; }
+
+function renderItemsForm() {
+  const c = $('items-container');
+  if (!itemRows.length) {
+    c.innerHTML = '<div class="items-empty">No items added yet. Tap "+ Add Item" to begin.</div>';
+    return;
+  }
+  c.innerHTML = itemRows.map((it, i) => {
+    const typePicker = ITEM_TYPES.map(t => `
+      <button class="item-type-btn${it.type===t.key?' sel':''}" onclick="itemUpdate(${i},'type','${t.key}')" title="${t.label}">
+        ${t.svg}
+        <span class="item-type-lbl">${t.label}</span>
+      </button>`).join('');
+
+    return `
+    <div class="item-row" id="irow-${i}">
+      <button class="item-del-btn" onclick="removeItemRow(${i})">✕</button>
+      <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:7px">Type</div>
+      <div class="item-type-row">${typePicker}</div>
+      <div class="item-row-grid">
+        <div>
+          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Item Name</div>
+          <input class="item-fi" placeholder="e.g. Wedding Ring…" value="${it.item||''}"
+            oninput="itemUpdate(${i},'item',this.value)"/>
+        </div>
+        <div>
+          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Purity</div>
+          <select class="item-fi" onchange="itemUpdate(${i},'purity',this.value)">
+            ${['24K','22K','18K','14K'].map(p=>`<option value="${p}" ${it.purity===p?'selected':''}>${p}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="item-row-grid3">
+        <div>
+          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Qty</div>
+          <input class="item-fi" type="number" placeholder="1" value="${it.qty||''}"
+            oninput="itemUpdate(${i},'qty',this.value)"/>
+        </div>
+        <div>
+          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Weight (g)</div>
+          <input class="item-fi" type="number" step="0.01" placeholder="0.00" value="${it.wt||''}"
+            oninput="itemUpdate(${i},'wt',this.value)"/>
+        </div>
+        <div>
+          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Value (₹)</div>
+          <input class="item-fi" type="number" placeholder="0" value="${it.value||''}"
+            oninput="itemUpdate(${i},'value',this.value)"/>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Collateral summary
+  const totalVal = itemRows.reduce((s, it) => s + (parseFloat(it.value)||0), 0);
+  const loanAmt  = parseFloat($('f-amt').value) || 0;
+  if (totalVal > 0 && loanAmt > 0) {
+    const diff = totalVal - loanAmt;
+    const cls  = diff > 0 ? 'profit' : diff < 0 ? 'loss' : 'neutral';
+    const label = diff > 0 ? `Collateral surplus: +${inr(diff)}` : diff < 0 ? `Collateral deficit: ${inr(diff)}` : 'Collateral = Loan';
+    c.innerHTML += `<div class="item-pl ${cls}" style="margin-top:4px">${label}</div>`;
+  }
+}
+
+window.addItemRow = function() {
+  itemRows.push({ type: '', item: '', qty: 1, wt: '', purity: '22K', value: '' });
+  renderItemsForm();
+};
+
+window.removeItemRow = function(i) {
+  itemRows.splice(i, 1);
+  renderItemsForm();
+};
+
+window.itemUpdate = function(i, field, val) {
+  itemRows[i][field] = field === 'qty' || field === 'wt' || field === 'value' ? parseFloat(val)||'' : val;
+  if (field === 'type') { renderItemsForm(); return; } // re-render to update selected state
+  // re-render summary row only
+  const totalVal = itemRows.reduce((s, it) => s + (parseFloat(it.value)||0), 0);
+  const loanAmt  = parseFloat($('f-amt').value) || 0;
+  const existing = $('items-container').querySelector('.item-pl');
+  if (existing) existing.remove();
+  if (totalVal > 0 && loanAmt > 0) {
+    const diff = totalVal - loanAmt;
+    const cls  = diff > 0 ? 'profit' : diff < 0 ? 'loss' : 'neutral';
+    const label = diff > 0 ? `Collateral surplus: +${inr(diff)}` : diff < 0 ? `Collateral deficit: ${inr(diff)}` : 'Collateral = Loan';
+    const div = document.createElement('div');
+    div.className = `item-pl ${cls}`; div.style.marginTop = '4px'; div.textContent = label;
+    $('items-container').appendChild(div);
+  }
+};
+
+window.toggleItemsCard = function(id) {
+  const toggle = document.getElementById('citoggle-' + id);
+  const body   = document.getElementById('cibody-' + id);
+  if (!toggle || !body) return;
+  const open = body.classList.toggle('open');
+  toggle.classList.toggle('open', open);
+}; // { data: base64, type: mimeType, name: fileName }
+
+function renderReceiptArea(existingReceipt) {
+  const area = $('receipt-upload-area');
+  if (!area) return;
+  if (pendingReceipt || existingReceipt) {
+    const r = pendingReceipt || existingReceipt;
+    const isPdf = r.type === 'application/pdf';
+    area.innerHTML = `
+      <div class="receipt-uploaded">
+        <div class="receipt-uploaded-info">
+          <div class="receipt-uploaded-ic">${isPdf ? '📄' : '🖼️'}</div>
+          <div>
+            <div class="receipt-uploaded-lbl">Receipt uploaded</div>
+            <div class="receipt-uploaded-sub">${r.name || (isPdf ? 'document.pdf' : 'image')}</div>
+          </div>
+        </div>
+        <div class="receipt-actions">
+          <button class="receipt-btn receipt-view-btn" onclick="openReceiptViewer()">👁 View</button>
+          <button class="receipt-btn receipt-remove-btn" onclick="removeReceipt()">✕</button>
+        </div>
+      </div>`;
+  } else {
+    area.innerHTML = `
+      <div class="receipt-zone">
+        <input type="file" accept="image/*,.pdf" onchange="receiptFileChosen(event)"/>
+        <div class="receipt-zone-ic">📎</div>
+        <div class="receipt-zone-t">Tap to upload receipt</div>
+        <div class="receipt-zone-s">Image or PDF · stored with this loan</div>
+      </div>`;
+  }
+}
+
+window.receiptFileChosen = function(e) {
+  const file = e.target.files[0]; if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { toast('⚠️ File too large (max 5MB)'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pendingReceipt = { data: ev.target.result, type: file.type, name: file.name };
+    renderReceiptArea(null);
+    toast('📎 Receipt ready to save');
+  };
+  reader.readAsDataURL(file);
+};
+
+window.removeReceipt = function() {
+  pendingReceipt = { removed: true };
+  renderReceiptArea(null);
+  toast('Receipt removed');
+};
+
+window.openReceiptViewer = function(loanId) {
+  let r = pendingReceipt;
+  if (!r && loanId) { const l = loans.find(x => x.id === loanId); r = l?.receipt; }
+  if (!r || r.removed) { toast('No receipt'); return; }
+  const isPdf = r.type === 'application/pdf';
+  $('receipt-ov-content').innerHTML = isPdf
+    ? `<iframe class="receipt-ov-pdf" src="${r.data}"></iframe>`
+    : `<img class="receipt-ov-img" src="${r.data}" alt="Receipt"/>`;
+  $('receipt-ov').classList.add('open');
+};
+
+window.closeReceiptViewer = function() {
+  $('receipt-ov').classList.remove('open');
+  $('receipt-ov-content').innerHTML = '';
+};
+
 window.openLoanSheet = function(loan = null) {
   editId = loan ? loan.id : null;
+  pendingReceipt = null;
+  itemRows = loan?.items ? JSON.parse(JSON.stringify(loan.items)) : [];
   $('loan-sheet-title').textContent = loan ? 'Edit Loan' : 'New Loan';
   $('f-no').value     = loan ? loan.name        : '';
   $('f-ld').value     = loan ? loan.loanDate    : '';
@@ -1521,11 +1913,21 @@ window.openLoanSheet = function(loan = null) {
   $('f-rate').value   = loan ? loan.rate        : '';
   $('f-status').value = loan ? loan.status      : 'Active';
   const opt = $('f-rd-opt'); if(opt) opt.style.display = (loan && loan.status==='Closed') ? 'none' : 'inline';
+  renderReceiptArea(loan?.receipt || null);
+  renderItemsForm();
   livePreview();
+  // Disable Closed option for staff
+  const sel = $('f-status');
+  if (sel) Array.from(sel.options).forEach(o => { o.disabled = (currentRole === 'staff' && o.value === 'Closed'); });
   $('loan-ov').classList.add('open');
   setTimeout(() => $('f-no').focus(), 350);
 };
-window.closeLoanSheet = function() { $('loan-ov').classList.remove('open'); editId = null; };
+window.closeLoanSheet = function() {
+  $('loan-ov').classList.remove('open');
+  editId = null;
+  pendingReceipt = null;
+  itemRows = [];
+};
 
 window.onStatusChange = function() {
   const status = $('f-status').value;
@@ -1562,7 +1964,14 @@ window.saveLoan = async function() {
   if (isNaN(amt) || amt<=0) { toast('⚠️ Enter valid amount'); return; }
   if (isNaN(rate)||rate<=0) { toast('⚠️ Enter valid rate'); return; }
 
+  // Handle receipt
+  let receiptData = editId ? (loans.find(l => l.id === editId)?.receipt || null) : null;
+  if (pendingReceipt?.removed) receiptData = null;
+  else if (pendingReceipt?.data) receiptData = { data: pendingReceipt.data, type: pendingReceipt.type, name: pendingReceipt.name };
+
   const lObj = { id: editId || uid(), name: no, loanDate: ld, releaseDate: rd, amount: amt, rate, status };
+  if (receiptData) lObj.receipt = receiptData;
+  if (itemRows.length) lObj.items = itemRows.filter(it => it.item || it.wt || it.value);
 
   if (fbOn) {
     syncBar('syncing', 'Saving…');
@@ -1901,13 +2310,6 @@ function applyRole(role){
   }
   render();
 }
-const _orig0=window.openLoanSheet;
-window.openLoanSheet=function(loan){
-  _orig0(loan);
-  const sel=document.getElementById('f-status');
-  if(!sel)return;
-  Array.from(sel.options).forEach(o=>{o.disabled=(currentRole==='staff'&&o.value==='Closed');});
-};
 window.openRoles=function(){
   if(currentRole!=='admin'){window.toast('Admin only');return;}
   renderRoleList(); document.getElementById('roles-ov').classList.add('open');
