@@ -1685,6 +1685,10 @@ scheduleMidnightRefresh();
 // Safety net every 30 min in case app stays open across midnight
 setInterval(() => render(), 30 * 60 * 1000);
 
+// Re-render whenever user returns to app (tab refocus, phone screen wake)
+document.addEventListener('visibilitychange', () => { if (!document.hidden) render(); });
+window.addEventListener('focus', () => render());
+
 // ── Swipe down to close bottom sheets ──
 (function() {
   let startY = 0, sheet = null, ov = null;
