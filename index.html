@@ -1586,7 +1586,7 @@ function renderStats() {
 
   // Active totals — interest calculated till today
   let actP=0, actI=0, actSR=0;
-  let nextDateMs = Infinity, nextDateStr = '—', nextAddedAmt = 0;
+  let nextDateMs = Infinity, nextDateStr = null, nextAddedAmt = 0;
 
   // First pass: accumulate totals and per-loan current interest
   const actDetails = actLoans.map(l => {
@@ -1597,44 +1597,40 @@ function renderStats() {
     actI  += i;
     actSR += l.rate;
 
-    // Compute next trigger date for this loan
-    const a = new Date(l.loanDate + 'T00:00:00');
+    // Find the exact next date when calcMonths increments
+    // by scanning forward day by day from tomorrow
     const b = new Date(today + 'T00:00:00');
-    let compM = (b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth());
-    if (b.getDate() < a.getDate()) compM--;
-    const lastComplete = new Date(a);
-    lastComplete.setMonth(lastComplete.getMonth() + compM);
-    const remDays = Math.round((b - lastComplete) / (1000*60*60*24));
-
-    let nextTrigger;
-    if (remDays >= 5) {
-      // already rounded up, next trigger is when (compM+1) full months complete
-      nextTrigger = new Date(a);
-      nextTrigger.setMonth(nextTrigger.getMonth() + compM + 1);
-    } else {
-      // next trigger: when remaining days hit 5 (i.e. lastComplete + 5 days)
-      nextTrigger = new Date(lastComplete);
-      nextTrigger.setDate(nextTrigger.getDate() + 5);
-      if (nextTrigger <= b) {
-        nextTrigger = new Date(a);
-        nextTrigger.setMonth(nextTrigger.getMonth() + compM + 1);
-      }
+    const currentM = m; // calcMonths result for today
+    let nextTrigger = new Date(b);
+    nextTrigger.setDate(nextTrigger.getDate() + 1); // start from tomorrow
+    let safetyCount = 0;
+    while (safetyCount < 40) { // max 40 days forward
+      const ds = localDate(nextTrigger);
+      if (calcMonths(l.loanDate, ds) > currentM) break;
+      nextTrigger.setDate(nextTrigger.getDate() + 1);
+      safetyCount++;
     }
 
+    const trigDateStr = localDate(nextTrigger);
     const added   = calcInterest(l.amount, l.rate, 1); // each trigger always adds exactly 1 month
-    return { trigMs: nextTrigger.getTime(), nextTrigger, added, currentI: i };
+    return { trigMs: nextTrigger.getTime(), trigDateStr, nextTrigger, added, currentI: i };
   });
 
   // Second pass: find earliest trigger date, sum only loans on that date
   actDetails.forEach(d => {
-    if (d.trigMs < nextDateMs) {
+    if (!nextDateStr || d.trigDateStr < nextDateStr) {
       nextDateMs   = d.trigMs;
-      nextDateStr  = d.nextTrigger.toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'});
+      nextDateStr  = d.trigDateStr;
       nextAddedAmt = d.added;  // reset — only this loan so far
-    } else if (d.trigMs === nextDateMs) {
+    } else if (d.trigDateStr === nextDateStr) {
       nextAddedAmt += d.added; // same date — accumulate
     }
   });
+  // Format for display
+  if (nextDateStr) {
+    const nd = new Date(nextDateStr + 'T00:00:00');
+    nextDateStr = nd.toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'});
+  }
 
   // Closed totals — interest actually earned
   let clP=0, clI=0, clM=0, clMC=0, clSR=0;
