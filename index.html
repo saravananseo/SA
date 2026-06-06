@@ -862,7 +862,7 @@ body::before {
       <div class="met" id="met-active" onclick="setStatusFilter('Active')" style="cursor:pointer"><div class="met-v" style="color:var(--green)" id="mc">0</div><div class="met-l">Active Loans</div></div>
       <div class="met" id="met-closed" onclick="setStatusFilter('Closed')" style="cursor:pointer"><div class="met-v" style="color:var(--red)" id="mc-cl">0</div><div class="met-l">Closed Loans</div></div>
       <div class="met" id="met-active-p" onclick="setStatusFilter('Active')" style="cursor:pointer"><div class="met-v" id="mp">₹0</div><div class="met-l">Active Principal</div></div>
-      <div class="met" id="met-closed-p" onclick="setStatusFilter('Closed')" style="cursor:pointer"><div class="met-v" id="mp-cl">₹0</div><div class="met-l">Closed Principal</div></div>
+      <div class="met" id="met-overdue" onclick="setStatusFilter('Overdue')" style="cursor:pointer"><div class="met-v" style="color:var(--red)" id="mc-overdue">0</div><div class="met-l">Overdue Loans</div></div>
     </div>
   </div>
 
@@ -1470,12 +1470,12 @@ window.toggleSearch = function() {
   if (w.classList.contains('open')) $('si').focus();
   else clearSearch();
 };
-window.clearSearch = function() { $('si').value = ''; statusFilter = null; ['met-active','met-closed','met-active-p','met-closed-p'].forEach(id => { const el=$(id); if(el) el.style.background=''; }); renderLoans(); };
+window.clearSearch = function() { $('si').value = ''; statusFilter = null; ['met-active','met-closed','met-active-p','met-overdue'].forEach(id => { const el=$(id); if(el) el.style.background=''; }); renderLoans(); };
 
 window.onSearchInput = function() {
   if (statusFilter) {
     statusFilter = null;
-    ['met-active','met-closed','met-active-p','met-closed-p'].forEach(id => {
+    ['met-active','met-closed','met-active-p','met-overdue'].forEach(id => {
       const el = $(id); if (el) el.style.background = '';
     });
   }
@@ -1489,7 +1489,7 @@ window.setStatusFilter = function(status) {
     statusFilter = status;
   }
   // highlight active filter in metrics strip
-  ['met-active','met-closed','met-active-p','met-closed-p'].forEach(id => {
+  ['met-active','met-closed','met-active-p','met-overdue'].forEach(id => {
     const el = $(id); if (!el) return;
     el.style.background = '';
   });
@@ -1498,7 +1498,8 @@ window.setStatusFilter = function(status) {
     $('met-active-p') && ($('met-active-p').style.background = 'rgba(39,201,122,0.12)');
   } else if (statusFilter === 'Closed') {
     $('met-closed') && ($('met-closed').style.background = 'rgba(232,85,85,0.12)');
-    $('met-closed-p') && ($('met-closed-p').style.background = 'rgba(232,85,85,0.12)');
+  } else if (statusFilter === 'Overdue') {
+    $('met-overdue') && ($('met-overdue').style.background = 'rgba(232,85,85,0.12)');
   }
   switchNav('loans');
   renderLoans();
@@ -1510,11 +1511,19 @@ window.setStatusFilter = function(status) {
 function renderLoans() {
   const q    = ($('si').value || '').toLowerCase();
   let list = loans.filter(l => l.name.toLowerCase().includes(q));
-  if (statusFilter) list = list.filter(l => l.status === statusFilter);
+  if (statusFilter === 'Active' || statusFilter === 'Closed') {
+    list = list.filter(l => l.status === statusFilter);
+  } else if (statusFilter === 'Overdue') {
+    list = list.filter(l => {
+      if (l.status !== 'Active') return false;
+      const days = Math.floor((new Date(localDate()+'T00:00:00') - new Date(l.loanDate+'T00:00:00')) / (1000*60*60*24));
+      return days >= 365;
+    });
+  }
   const el   = $('loan-list');
 
   if (!list.length) {
-    const filterMsg = statusFilter ? `No ${statusFilter} loans found.` : (loans.length === 0 ? 'Tap + to record your first gold loan.' : 'Try a different loan number.');
+    const filterMsg = statusFilter ? `No ${statusFilter === 'Overdue' ? 'overdue' : statusFilter.toLowerCase()} loans found.` : (loans.length === 0 ? 'Tap + to record your first gold loan.' : 'Try a different loan number.');
     el.innerHTML = `<div class="empty">
       <div class="empty-ic">🪙</div>
       <div class="empty-t">${loans.length === 0 ? 'No Loans Yet' : 'No Results'}</div>
@@ -1746,10 +1755,15 @@ function renderStats() {
   const grand = actP + actI;
 
   // ── Header metrics bar ──
-  $('mc').textContent    = actLoans.length;
-  $('mc-cl').textContent = clLoans.length;
-  $('mp').textContent    = inr(actP);
-  $('mp-cl').textContent = inr(clP);
+  const overdueCount = loans.filter(l => {
+    if (l.status !== 'Active') return false;
+    const days = Math.floor((new Date(localDate()+'T00:00:00') - new Date(l.loanDate+'T00:00:00')) / (1000*60*60*24));
+    return days >= 365;
+  }).length;
+  $('mc').textContent       = actLoans.length;
+  $('mc-cl').textContent    = clLoans.length;
+  $('mp').textContent       = inr(actP);
+  $('mc-overdue').textContent = overdueCount;
 
   // ── Stats page ──
   $('s-grand').textContent   = inr(grand);
