@@ -862,7 +862,7 @@ body::before {
       <div class="met" id="met-active" onclick="setStatusFilter('Active')" style="cursor:pointer"><div class="met-v" style="color:var(--green)" id="mc">0</div><div class="met-l">Active Loans</div></div>
       <div class="met" id="met-closed" onclick="setStatusFilter('Closed')" style="cursor:pointer"><div class="met-v" style="color:var(--red)" id="mc-cl">0</div><div class="met-l">Closed Loans</div></div>
       <div class="met" id="met-active-p" onclick="setStatusFilter('Active')" style="cursor:pointer"><div class="met-v" id="mp">₹0</div><div class="met-l">Active Principal</div></div>
-      <div class="met" id="met-overdue" onclick="setStatusFilter('Overdue')" style="cursor:pointer"><div class="met-v" style="color:var(--red)" id="mc-overdue">0</div><div class="met-l">Overdue Loans</div></div>
+      <div class="met" id="met-overdue" onclick="setStatusFilter('Overdue')" style="cursor:pointer"><div class="met-v" style="color:#F5A623" id="mc-overdue">0</div><div class="met-l">Overdue Loans</div></div>
     </div>
   </div>
 
@@ -1499,7 +1499,7 @@ window.setStatusFilter = function(status) {
   } else if (statusFilter === 'Closed') {
     $('met-closed') && ($('met-closed').style.background = 'rgba(232,85,85,0.12)');
   } else if (statusFilter === 'Overdue') {
-    $('met-overdue') && ($('met-overdue').style.background = 'rgba(232,85,85,0.12)');
+    $('met-overdue') && ($('met-overdue').style.background = 'rgba(245,166,35,0.15)');
   }
   switchNav('loans');
   renderLoans();
