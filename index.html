@@ -617,7 +617,34 @@ body::before {
 .sheet-close:hover { background: var(--glassH); }
 .hdr-btn:hover { background: var(--glassH); }
 
-/* ── RECEIPT UPLOAD ── */
+/* ── OVER 1 YEAR INDICATOR ── */
+.over-year-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: linear-gradient(135deg, rgba(232,85,85,0.15), rgba(232,85,85,0.08));
+  border: 1px solid rgba(232,85,85,0.4);
+  color: var(--red); border-radius: 20px;
+  padding: 3px 10px; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.3px; margin-top: 5px;
+  animation: overYearPulse 2.5s ease-in-out infinite;
+}
+.over-year-badge .oy-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--red); flex-shrink: 0;
+  animation: overYearPulse 2.5s ease-in-out infinite;
+}
+@keyframes overYearPulse {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+.card-stripe.over-year {
+  background: linear-gradient(90deg, #3A1818, var(--red), #5C1010, var(--red), #3A1818);
+  background-size: 200% 100%;
+  animation: stripeScroll 3s linear infinite;
+}
+@keyframes stripeScroll {
+  0%   { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
 .receipt-zone {
   border: 2px dashed var(--bd); border-radius: var(--rs);
   padding: 18px 16px; text-align: center; cursor: pointer;
@@ -1503,9 +1530,20 @@ function renderLoans() {
     const total    = interest !== null ? l.amount + interest : null;
     const isActive = l.status === 'Active';
 
+    // Over 1 year check
+    const loanStartMs   = new Date(l.loanDate + 'T00:00:00').getTime();
+    const compareMs     = new Date((effRd||l.loanDate) + 'T00:00:00').getTime();
+    const daysElapsed   = Math.floor((compareMs - loanStartMs) / (1000*60*60*24));
+    const overOneYear   = daysElapsed >= 365;
+    const years         = Math.floor(daysElapsed / 365);
+    const remDaysAfterYr= daysElapsed % 365;
+    const overYearLabel = years === 1
+      ? `⚠ Over 1 Year${remDaysAfterYr > 0 ? ' + ' + remDaysAfterYr + 'd' : ''}`
+      : `⚠ ${years} Years${remDaysAfterYr > 0 ? ' + ' + remDaysAfterYr + 'd' : ''}`;
+
     return `
     <div class="lcard" style="animation-delay:${i * 0.04}s">
-      <div class="card-stripe ${isActive ? 'active' : 'closed'}"></div>
+      <div class="card-stripe ${overOneYear ? 'over-year' : (isActive ? 'active' : 'closed')}"></div>
       <div class="card-head">
         <div>
           <div class="card-lno">${l.name}</div>
@@ -1514,6 +1552,7 @@ function renderLoans() {
             <span class="card-arrow">→</span>
             <span>${l.releaseDate ? fmtDate(l.releaseDate) : (l.status==='Active' ? '<span style="color:var(--green);font-weight:600">Ongoing</span>' : '—')}</span>
           </div>
+          ${overOneYear ? `<span class="over-year-badge"><span class="oy-dot"></span>${overYearLabel}</span>` : ''}
           ${l.receipt ? `<span class="receipt-badge" onclick="openReceiptViewer('${l.id}')">📎 Receipt</span>` : ''}
         </div>
         <span class="badge ${isActive ? 'active' : 'closed'}">${l.status}</span>
