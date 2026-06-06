@@ -1535,7 +1535,13 @@ function renderLoans() {
       </div>
       ${l.items && l.items.length ? `
       <div class="card-items-toggle" id="citoggle-${l.id}" onclick="toggleItemsCard('${l.id}')">
-        <span>🪙 ${l.items.length} Gold Item${l.items.length>1?'s':''}</span>
+        <span>${(()=>{
+          const goldCount   = l.items.filter(it=>!(it.purity||'').startsWith('Silver')).length;
+          const silverCount = l.items.filter(it=>(it.purity||'').startsWith('Silver')).length;
+          if (goldCount && silverCount) return `🪙 ${goldCount} Gold · ${silverCount} Silver`;
+          if (silverCount) return `🥈 ${silverCount} Silver Item${silverCount>1?'s':''}`;
+          return `🪙 ${goldCount} Gold Item${goldCount>1?'s':''}`;
+        })()}</span>
         <span class="card-items-toggle-ic">▾</span>
       </div>
       <div class="card-items-body" id="cibody-${l.id}">
