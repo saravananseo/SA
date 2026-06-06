@@ -2675,8 +2675,26 @@ function bootAuth(){
 // ROLES_PLACEHOLDER_END
 
 // ══════════════════════════════════════════
-// BOOT
+// THEME SWITCHER
 // ══════════════════════════════════════════
+const THEME_KEY = 'ak_theme_v1';
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  document.querySelector('meta[name="theme-color"]')
+    ?.setAttribute('content', theme === 'light' ? '#FBF7EE' : '#080601');
+  const btn = $('theme-btn');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+  localStorage.setItem(THEME_KEY, theme);
+}
+
+window.toggleTheme = function() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+};
+
+// Restore saved theme on boot
+applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 
 const storedCfg = loadFbCfg();
