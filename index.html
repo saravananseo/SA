@@ -744,7 +744,7 @@ body::before {
 .card-items-toggle.open .card-items-toggle-ic { transform: rotate(180deg); }
 .card-items-body { display: none; padding: 0 12px 12px; overflow-x: auto; }
 .card-items-body.open { display: block; }
-.items-tbl { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 380px; }
+.items-tbl { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 460px; }
 .items-tbl th {
   background: rgba(212,161,42,0.08); color: var(--tx1); padding: 7px 8px;
   text-align: left; font-weight: 600; text-transform: uppercase;
@@ -1540,39 +1540,91 @@ function renderLoans() {
       </div>
       <div class="card-items-body" id="cibody-${l.id}">
         <table class="items-tbl">
-          <thead><tr><th>Type</th><th>Item</th><th>Qty</th><th>Wt (g)</th><th>Purity</th><th>Value</th><th>P/L</th></tr></thead>
+          <thead><tr><th>Type</th><th>Item</th><th>Qty</th><th>Wt (g)</th><th>Purity</th><th>Value</th><th>80% Val</th><th>P/L</th></tr></thead>
           <tbody>
-            ${l.items.map(it => {
-              const val = parseFloat(it.value)||0;
-              const perItemLoan = (l.amount||0) / l.items.length;
-              const pl = val > 0 ? val - perItemLoan : null;
-              const plHtml = pl !== null
-                ? `<span class="${pl>=0?'itbl-profit':'itbl-loss'}">${pl>=0?'+':''}${inr(pl)}</span>`
-                : '—';
-              const typeObj = ITEM_TYPES.find(t => t.key === it.type);
-              const typeHtml = typeObj
-                ? `<span title="${typeObj.label}" style="display:inline-flex;width:22px;height:22px">${typeObj.svg}</span>`
-                : '—';
-              return `<tr>
-                <td>${typeHtml}</td>
-                <td>${it.item||'—'}</td>
-                <td>${it.qty||'—'}</td>
-                <td>${it.wt?it.wt+'g':'—'}</td>
-                <td>${it.purity||'—'}</td>
-                <td>${val?inr(val):'—'}</td>
-                <td>${plHtml}</td>
-              </tr>`;
-            }).join('')}
+            ${(()=>{
+              const GOLD_RATE_22K = 14310;
+              const goldFactors = {'24K':24/22,'22K':1,'18K':18/22,'14K':14/22};
+              const silverBase = 105;
+              const silverFactors = {'Silver 999':1,'Silver 925':0.925,'Silver 800':0.8};
+
+              const itemsWithVal = l.items.map(it => {
+                let val = parseFloat(it.value)||0;
+                if (!val && it.wt) {
+                  const wt = parseFloat(it.wt)||0;
+                  const p = it.purity||'22K';
+                  if (p.startsWith('Silver')) {
+                    val = Math.round(wt * silverBase * (silverFactors[p]??1));
+                  } else {
+                    val = Math.round(wt * GOLD_RATE_22K * (goldFactors[p]??(22/22)));
+                  }
+                }
+                return {...it, _val: val};
+              });
+
+              const totalWt = l.items.reduce((s,it)=>s+(parseFloat(it.wt)||0),0);
+
+              return itemsWithVal.map(it => {
+                const val = it._val;
+                const val80 = val ? Math.round(val * 0.8) : 0;
+                const wt = parseFloat(it.wt)||0;
+                const wtShare = totalWt > 0 ? (wt/totalWt) * (l.amount||0) : 0;
+                const pl = val > 0 && wtShare > 0 ? val - wtShare : null;
+                const plHtml = pl !== null
+                  ? `<span class="${pl>=0?'itbl-profit':'itbl-loss'}">${pl>=0?'+':''}${inr(pl)}</span>`
+                  : '—';
+                const typeObj = ITEM_TYPES.find(t => t.key === it.type);
+                const typeHtml = typeObj
+                  ? `<span title="${typeObj.label}" style="display:inline-flex;width:22px;height:22px">${typeObj.svg}</span>`
+                  : '—';
+                return `<tr>
+                  <td>${typeHtml}</td>
+                  <td>${it.item||'—'}</td>
+                  <td>${it.qty||'—'}</td>
+                  <td>${wt?wt+'g':'—'}</td>
+                  <td>${it.purity||'—'}</td>
+                  <td>${val?inr(val):'—'}</td>
+                  <td style="color:var(--g2)">${val80?inr(val80):'—'}</td>
+                  <td>${plHtml}</td>
+                </tr>`;
+              }).join('');
+            })()}
           </tbody>
           <tfoot>
-            <tr style="border-top:1px solid var(--bd)">
-              <td colspan="2" style="font-weight:600;color:var(--tx1);padding-top:8px">Total</td>
-              <td style="font-weight:600;color:var(--g1);padding-top:8px">${l.items.reduce((s,it)=>s+(parseFloat(it.qty)||0),0)}</td>
-              <td style="font-weight:600;color:var(--g1);padding-top:8px">${l.items.reduce((s,it)=>s+(parseFloat(it.wt)||0),0).toFixed(2)}g</td>
-              <td style="padding-top:8px"></td>
-              <td style="font-weight:600;color:var(--g1);padding-top:8px">${inr(l.items.reduce((s,it)=>s+(parseFloat(it.value)||0),0))}</td>
-              <td style="padding-top:8px">${(()=>{const tv=l.items.reduce((s,it)=>s+(parseFloat(it.value)||0),0);const diff=tv-(l.amount||0);return tv>0?`<span class="${diff>=0?'itbl-profit':'itbl-loss'}">${diff>=0?'+':''}${inr(diff)}</span>`:'—';})()}</td>
-            </tr>
+            ${(()=>{
+              const GOLD_RATE_22K = 14310;
+              const goldFactors = {'24K':24/22,'22K':1,'18K':18/22,'14K':14/22};
+              const silverBase = 105;
+              const silverFactors = {'Silver 999':1,'Silver 925':0.925,'Silver 800':0.8};
+              let totalVal=0, totalQty=0, totalWt=0;
+              l.items.forEach(it => {
+                let val = parseFloat(it.value)||0;
+                if (!val && it.wt) {
+                  const wt = parseFloat(it.wt)||0;
+                  const p = it.purity||'22K';
+                  val = p.startsWith('Silver')
+                    ? Math.round(wt * silverBase * (silverFactors[p]??1))
+                    : Math.round(wt * GOLD_RATE_22K * (goldFactors[p]??(22/22)));
+                }
+                totalVal += val;
+                totalQty += parseFloat(it.qty)||0;
+                totalWt  += parseFloat(it.wt)||0;
+              });
+              const total80 = Math.round(totalVal * 0.8);
+              const diff = totalVal - (l.amount||0);
+              const plHtml = totalVal > 0
+                ? `<span class="${diff>=0?'itbl-profit':'itbl-loss'}">${diff>=0?'+':''}${inr(diff)}</span>`
+                : '—';
+              return `<tr style="border-top:1px solid var(--bd)">
+                <td colspan="2" style="font-weight:700;color:var(--tx1);padding-top:8px">Total</td>
+                <td style="font-weight:700;color:var(--g1);padding-top:8px">${totalQty}</td>
+                <td style="font-weight:700;color:var(--g1);padding-top:8px">${totalWt.toFixed(2)}g</td>
+                <td style="padding-top:8px"></td>
+                <td style="font-weight:700;color:var(--g1);padding-top:8px">${inr(totalVal)}</td>
+                <td style="font-weight:700;color:var(--g2);padding-top:8px">${inr(total80)}</td>
+                <td style="padding-top:8px">${plHtml}</td>
+              </tr>`;
+            })()}
           </tfoot>
         </table>
       </div>` : ''}
