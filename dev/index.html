@@ -710,7 +710,73 @@ body::before {
 .sheet-close:hover { background: var(--glassH); }
 .hdr-btn:hover { background: var(--glassH); }
 
-/* ── OVER 1 YEAR INDICATOR ── */
+/* ── AI ORNAMENT MATCH OVERLAY ── */
+.ai-match-ov {
+  display: none; position: fixed; inset: 0; z-index: 550;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+  align-items: flex-end; justify-content: center;
+}
+.ai-match-ov.open { display: flex; }
+.ai-match-sheet {
+  background: linear-gradient(180deg, var(--bg3) 0%, var(--bg2) 100%);
+  border: 1px solid var(--bd); border-bottom: none;
+  border-radius: var(--rx) var(--rx) 0 0;
+  width: 100%; max-width: 520px; max-height: 88vh; overflow-y: auto;
+  animation: sheetUp 0.35s cubic-bezier(0.22,1,0.36,1);
+  padding-bottom: 24px;
+}
+.ai-match-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px 14px; border-bottom: 1px solid var(--bd);
+}
+.ai-match-title { font-family: 'Manrope', sans-serif; font-size: 18px; font-weight: 700; color: var(--g1); }
+.ai-match-body { padding: 16px 20px; }
+.ai-scanning {
+  text-align: center; padding: 32px 20px;
+}
+.ai-scan-ic { font-size: 48px; margin-bottom: 12px; animation: aiSpin 2s linear infinite; }
+@keyframes aiSpin { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.15);opacity:0.7} }
+.ai-scan-t { font-size: 15px; font-weight: 600; color: var(--tx0); margin-bottom: 6px; }
+.ai-scan-s { font-size: 12px; color: var(--tx2); line-height: 1.6; }
+.ai-match-card {
+  border-radius: var(--rs); padding: 14px; margin-bottom: 10px;
+  border: 1px solid var(--bd);
+}
+.ai-match-card.danger {
+  background: rgba(232,85,85,0.08); border-color: rgba(232,85,85,0.4);
+}
+.ai-match-card.warn {
+  background: rgba(245,166,35,0.08); border-color: rgba(245,166,35,0.35);
+}
+.ai-match-card.safe {
+  background: rgba(39,201,122,0.06); border-color: rgba(39,201,122,0.3);
+}
+.ai-match-card-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.ai-match-loan { font-weight: 700; font-size: 14px; color: var(--tx0); }
+.ai-match-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+}
+.ai-match-badge.danger { background: rgba(232,85,85,0.2); color: var(--red); }
+.ai-match-badge.warn   { background: rgba(245,166,35,0.2); color: #F5A623; }
+.ai-match-badge.safe   { background: rgba(39,201,122,0.15); color: var(--green); }
+.ai-match-reason { font-size: 12px; color: var(--tx1); line-height: 1.6; }
+.ai-match-meta { font-size: 11px; color: var(--tx2); margin-top: 6px; }
+.ai-desc-box {
+  background: rgba(212,161,42,0.05); border: 1px solid var(--bd);
+  border-radius: var(--rs); padding: 12px 14px; margin-bottom: 14px;
+  font-size: 12px; color: var(--tx1); line-height: 1.7;
+}
+.ai-desc-lbl { font-size: 10px; font-weight: 700; color: var(--g2); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+.receipt-scan-btn {
+  width: 100%; padding: 10px; margin-top: 8px;
+  background: linear-gradient(135deg, rgba(91,141,239,0.15), rgba(91,141,239,0.08));
+  border: 1px solid rgba(91,141,239,0.35); border-radius: var(--rs);
+  color: var(--blue); font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background 0.2s;
+}
+.receipt-scan-btn:active { background: rgba(91,141,239,0.22); }
 .over-year-badge {
   display: inline-flex; align-items: center; gap: 5px;
   background: linear-gradient(135deg, rgba(232,85,85,0.15), rgba(232,85,85,0.08));
@@ -1263,7 +1329,42 @@ const firebaseConfig = {
   </div>
 </div>
 
-<!-- RECEIPT VIEWER OVERLAY -->
+<!-- AI ORNAMENT MATCH OVERLAY -->
+<div class="ai-match-ov" id="ai-match-ov">
+  <div class="ai-match-sheet">
+    <div class="sheet-handle"></div>
+    <div class="ai-match-hd">
+      <div class="ai-match-title">🔍 Ornament Match Analysis</div>
+      <button class="sheet-close" onclick="closeAiMatch()">✕</button>
+    </div>
+    <div class="ai-match-body" id="ai-match-body"></div>
+  </div>
+</div>
+
+<!-- GEMINI API KEY SETUP -->
+<div class="cfg-ov" id="gemini-ov">
+  <div class="cfg-box">
+    <div class="cfg-title">🤖 Gemini AI Setup</div>
+    <div class="cfg-sub">Free API key required for ornament duplicate detection.<br/>No credit card needed.</div>
+    <div class="cfg-steps">
+      <strong>Get your free key (1 min):</strong><br/>
+      1. Go to <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a><br/>
+      2. Click <strong>Create API Key</strong><br/>
+      3. Copy and paste it below<br/><br/>
+      <strong>Free limits:</strong> 1,500 scans/day · 15/minute — plenty for daily use ✅
+    </div>
+    <input class="cfg-ta" id="gemini-key-input" type="password"
+      placeholder="Paste your Gemini API key here (AIza...)"
+      style="min-height:56px;font-family:'Inter',sans-serif;font-size:14px;letter-spacing:1px"/>
+    <button class="btn-primary" style="margin-top:14px" onclick="saveGeminiKey()">✅ Save & Enable AI Scan</button>
+    <button class="btn-ghost" style="margin-top:10px" onclick="$('gemini-ov').classList.remove('open')">Cancel</button>
+    <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--tx2)">
+      Key stored locally on this device only. Never sent anywhere except Google.
+    </div>
+  </div>
+</div>
+
+<!-- AI MATCH OVERLAY -->
 <div class="receipt-ov" id="receipt-ov">
   <div class="receipt-ov-hd">
     <div class="receipt-ov-title">📎 Receipt</div>
@@ -2146,6 +2247,7 @@ function renderReceiptArea(existingReceipt) {
   if (pendingReceipt || existingReceipt) {
     const r = pendingReceipt || existingReceipt;
     const isPdf = r.type === 'application/pdf';
+    const canScan = !isPdf; // only scan images, not PDFs
     area.innerHTML = `
       <div class="receipt-uploaded">
         <div class="receipt-uploaded-info">
@@ -2159,7 +2261,8 @@ function renderReceiptArea(existingReceipt) {
           <button class="receipt-btn receipt-view-btn" onclick="openReceiptViewer()">👁 View</button>
           <button class="receipt-btn receipt-remove-btn" onclick="removeReceipt()">✕</button>
         </div>
-      </div>`;
+      </div>
+      ${canScan ? `<button class="receipt-scan-btn" onclick="runOrnamentScan()">🤖 AI Scan — Check for duplicate ornaments across loans</button>` : ''}`;
   } else {
     area.innerHTML = `
       <div class="receipt-zone">
@@ -2200,7 +2303,179 @@ window.openReceiptViewer = function(loanId) {
   $('receipt-ov').classList.add('open');
 };
 
-window.closeReceiptViewer = function() {
+// ══════════════════════════════════════════
+// GEMINI AI ORNAMENT SCAN
+// ══════════════════════════════════════════
+const GEMINI_KEY_STORE = 'ak_gemini_key_v1';
+
+function getGeminiKey() { return localStorage.getItem(GEMINI_KEY_STORE) || ''; }
+
+window.saveGeminiKey = function() {
+  const key = $('gemini-key-input').value.trim();
+  if (!key.startsWith('AIza')) { toast('⚠️ Invalid key — should start with AIza'); return; }
+  localStorage.setItem(GEMINI_KEY_STORE, key);
+  $('gemini-ov').classList.remove('open');
+  toast('✅ Gemini API key saved');
+  runOrnamentScan(); // proceed with scan
+};
+
+window.closeAiMatch = function() { $('ai-match-ov').classList.remove('open'); };
+
+async function geminiDescribeImage(base64, mimeType, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{
+        parts: [
+          { inline_data: { mime_type: mimeType, data: base64 } },
+          { text: `You are an expert jewellery analyst. Examine this image and describe the gold/silver ornaments in detail for identification purposes. Focus on: type (ring/chain/bangle/necklace etc), distinctive features, engravings, stones, clasps, design patterns, approximate size, unique marks. Be specific. Respond ONLY with a JSON object (no markdown): {"description": "...", "types": ["ring","chain",...], "distinctive": "key identifying features in one sentence"}` }
+        ]
+      }],
+      generationConfig: { temperature: 0.1, maxOutputTokens: 500 }
+    })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e?.error?.message || 'Gemini error'); }
+  const data = await res.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+  try { return JSON.parse(text.replace(/```json|```/g,'').trim()); }
+  catch { return { description: text, types: [], distinctive: text }; }
+}
+
+async function geminiCompare(currentDesc, otherDescs, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  const prompt = `You are a fraud detection expert for a gold loan business.
+
+Current ornament being pledged:
+${JSON.stringify(currentDesc)}
+
+Compare against these existing loans:
+${JSON.stringify(otherDescs.map((l,i) => ({
+  index: i,
+  loan: l.loanName,
+  date: l.loanDate,
+  amount: l.amount,
+  description: l.aiDesc ? l.aiDesc.description : 'No photo description available'
+})), null, 2)}
+
+For each existing loan, assess if the same physical ornament could have been pledged. Consider type, design, distinctive features. Respond ONLY with JSON array (no markdown): [{"loanIndex": 0, "risk": "HIGH|MEDIUM|LOW|NONE", "confidence": 0-100, "reason": "one sentence"}]`;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.1, maxOutputTokens: 1000 }
+    })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e?.error?.message || 'Gemini error'); }
+  const data = await res.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
+  try { return JSON.parse(text.replace(/```json|```/g,'').trim()); }
+  catch { return []; }
+}
+
+window.runOrnamentScan = async function() {
+  const r = pendingReceipt;
+  if (!r?.data || r.type === 'application/pdf') { toast('⚠️ Image receipt required for AI scan'); return; }
+
+  // Check for Gemini API key
+  const apiKey = getGeminiKey();
+  if (!apiKey) {
+    $('gemini-key-input').value = '';
+    $('gemini-ov').classList.add('open');
+    return;
+  }
+
+  const otherLoans = loans.filter(l => l.receipt?.data && l.receipt.type !== 'application/pdf');
+
+  $('ai-match-body').innerHTML = `
+    <div class="ai-scanning">
+      <div class="ai-scan-ic">🤖</div>
+      <div class="ai-scan-t">Analysing ornaments…</div>
+      <div class="ai-scan-s">Gemini AI is examining the image and comparing against ${otherLoans.length} loan${otherLoans.length!==1?'s':''} with photos.</div>
+    </div>`;
+  $('ai-match-ov').classList.add('open');
+
+  try {
+    const base64  = r.data.split(',')[1];
+    const mimeType = r.type;
+
+    // Step 1: Describe current image
+    const currentDesc = await geminiDescribeImage(base64, mimeType, apiKey);
+    pendingReceipt.aiDesc = currentDesc;
+
+    if (!otherLoans.length) {
+      $('ai-match-body').innerHTML = `
+        <div class="ai-desc-box">
+          <div class="ai-desc-lbl">🔍 Ornament Description</div>
+          ${currentDesc.description}
+        </div>
+        <div class="ai-match-card safe">
+          <div class="ai-match-card-hd">
+            <span class="ai-match-loan">✅ No Other Loans to Compare</span>
+            <span class="ai-match-badge safe">CLEAR</span>
+          </div>
+          <div class="ai-match-reason">No other loans with photos found. Description saved for future comparisons.</div>
+        </div>`;
+      return;
+    }
+
+    // Step 2: Compare descriptions
+    const otherDescs = otherLoans.map(l => ({
+      loanName: l.name,
+      loanDate: l.loanDate,
+      amount:   l.amount,
+      aiDesc:   l.receipt.aiDesc || null,
+    }));
+
+    const results = await geminiCompare(currentDesc, otherDescs, apiKey);
+
+    const highRisk = results.filter(r => r.risk === 'HIGH');
+    const summary  = highRisk.length > 0
+      ? `<div style="background:rgba(232,85,85,0.1);border:1px solid rgba(232,85,85,0.4);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:600;color:var(--red)">⚠️ ${highRisk.length} HIGH RISK match${highRisk.length>1?'es':''} found — possible duplicate pledge</div>`
+      : `<div style="background:rgba(39,201,122,0.07);border:1px solid rgba(39,201,122,0.25);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:600;color:var(--green)">✅ No high-risk duplicates detected</div>`;
+
+    const cards = results.filter(r => r.risk !== 'NONE').map(res => {
+      const loan = otherDescs[res.loanIndex];
+      if (!loan) return '';
+      const cls   = res.risk === 'HIGH' ? 'danger' : res.risk === 'MEDIUM' ? 'warn' : 'safe';
+      const label = res.risk === 'HIGH' ? '⚠ HIGH RISK' : res.risk === 'MEDIUM' ? '⚡ MEDIUM' : '✓ LOW';
+      return `
+        <div class="ai-match-card ${cls}">
+          <div class="ai-match-card-hd">
+            <span class="ai-match-loan">${loan.loanName}</span>
+            <span class="ai-match-badge ${cls}">${label}</span>
+          </div>
+          <div class="ai-match-reason">${res.reason}</div>
+          <div class="ai-match-meta">Confidence: ${res.confidence}% · ${inr(loan.amount)} · ${fmtDate(loan.loanDate)}</div>
+        </div>`;
+    }).join('') || `<div class="ai-match-card safe"><div class="ai-match-card-hd"><span class="ai-match-loan">All loans checked</span><span class="ai-match-badge safe">ALL CLEAR</span></div><div class="ai-match-reason">No matching ornaments found across ${otherLoans.length} loans.</div></div>`;
+
+    $('ai-match-body').innerHTML = `
+      <div class="ai-desc-box">
+        <div class="ai-desc-lbl">🔍 Detected Ornaments</div>
+        ${currentDesc.description}
+        ${currentDesc.distinctive ? `<div style="margin-top:6px;font-weight:600;color:var(--g2)">${currentDesc.distinctive}</div>` : ''}
+      </div>
+      ${summary}${cards}
+      <div style="text-align:center;margin-top:16px">
+        <button onclick="$('gemini-key-input').value='';localStorage.removeItem('${GEMINI_KEY_STORE}');$('gemini-ov').classList.add('open');closeAiMatch()" style="font-size:11px;color:var(--tx2);background:none;border:none;cursor:pointer;text-decoration:underline">Change Gemini API Key</button>
+      </div>`;
+
+  } catch(err) {
+    $('ai-match-body').innerHTML = `
+      <div class="ai-match-card danger">
+        <div class="ai-match-card-hd"><span class="ai-match-loan">⚠ Scan Failed</span></div>
+        <div class="ai-match-reason">${err.message}</div>
+        <div class="ai-match-meta" style="margin-top:8px">
+          ${err.message.includes('API_KEY') || err.message.includes('invalid') ? `
+          <button onclick="localStorage.removeItem('${GEMINI_KEY_STORE}');closeAiMatch();runOrnamentScan()" style="background:rgba(212,161,42,0.1);border:1px solid var(--bd);border-radius:var(--rs);color:var(--g1);padding:8px 14px;font-size:12px;cursor:pointer">🔑 Update API Key</button>` : 'Check your internet connection and try again.'}
+        </div>
+      </div>`;
+  }
+};
   $('receipt-ov').classList.remove('open');
   $('receipt-ov-content').innerHTML = '';
 };
