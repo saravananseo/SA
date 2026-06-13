@@ -981,7 +981,7 @@ body::before {
 .card-items-toggle.open .card-items-toggle-ic { transform: rotate(180deg); }
 .card-items-body { display: none; padding: 0 12px 12px; overflow-x: auto; }
 .card-items-body.open { display: block; }
-.items-tbl { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 460px; }
+.items-tbl { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 560px; }
 .items-tbl th {
   background: rgba(212,161,42,0.08); color: var(--tx1); padding: 7px 8px;
   text-align: left; font-weight: 600; text-transform: uppercase;
@@ -1840,7 +1840,7 @@ function renderLoans() {
       </div>
       <div class="card-items-body" id="cibody-${l.id}">
         <table class="items-tbl">
-          <thead><tr><th>Type</th><th>Item</th><th>Qty</th><th>Wt (g)</th><th>Purity</th><th>Value</th><th>80% Val</th><th>P/L</th></tr></thead>
+          <thead><tr><th>Type</th><th>Item</th><th>Qty</th><th>Gross Wt</th><th>Net Wt</th><th>Purity</th><th>Value</th><th>80% Val</th><th>P/L</th></tr></thead>
           <tbody>
             ${(()=>{
               const GOLD_RATE_22K = 14310;
@@ -1862,13 +1862,14 @@ function renderLoans() {
                 return {...it, _val: val};
               });
 
-              const totalWt = l.items.reduce((s,it)=>s+(parseFloat(it.wt)||0),0);
+              const totalNetWt = l.items.reduce((s,it)=>s+(parseFloat(it.wt)||0),0);
 
               return itemsWithVal.map(it => {
                 const val = it._val;
                 const val80 = val ? Math.round(val * 0.8) : 0;
-                const wt = parseFloat(it.wt)||0;
-                const wtShare = totalWt > 0 ? (wt/totalWt) * (l.amount||0) : 0;
+                const nwt = parseFloat(it.wt)||0;
+                const gwt = parseFloat(it.gwt)||0;
+                const wtShare = totalNetWt > 0 ? (nwt/totalNetWt) * (l.amount||0) : 0;
                 const pl = val > 0 && wtShare > 0 ? val - wtShare : null;
                 const plHtml = pl !== null
                   ? `<span class="${pl>=0?'itbl-profit':'itbl-loss'}">${pl>=0?'+':''}${inr(pl)}</span>`
@@ -1881,7 +1882,8 @@ function renderLoans() {
                   <td>${typeHtml}</td>
                   <td>${it.item||'—'}</td>
                   <td>${it.qty||'—'}</td>
-                  <td>${wt?wt+'g':'—'}</td>
+                  <td style="color:var(--tx2)">${gwt?gwt+'g':'—'}</td>
+                  <td style="font-weight:600">${nwt?nwt+'g':'—'}</td>
                   <td>${it.purity||'—'}</td>
                   <td>${val?inr(val):'—'}</td>
                   <td style="color:var(--g2)">${val80?inr(val80):'—'}</td>
@@ -1896,7 +1898,7 @@ function renderLoans() {
               const goldFactors = {'24K':24/22,'22K':1,'18K':18/22,'14K':14/22};
               const silverBase = 105;
               const silverFactors = {'Silver 999':1,'Silver 925':0.925,'Silver 800':0.8};
-              let totalVal=0, totalQty=0, totalWt=0;
+              let totalVal=0, totalQty=0, totalGwt=0, totalNwt=0;
               l.items.forEach(it => {
                 let val = parseFloat(it.value)||0;
                 if (!val && it.wt) {
@@ -1906,9 +1908,10 @@ function renderLoans() {
                     ? Math.round(wt * silverBase * (silverFactors[p]??1))
                     : Math.round(wt * GOLD_RATE_22K * (goldFactors[p]??(22/22)));
                 }
-                totalVal += val;
-                totalQty += parseFloat(it.qty)||0;
-                totalWt  += parseFloat(it.wt)||0;
+                totalVal  += val;
+                totalQty  += parseFloat(it.qty)||0;
+                totalGwt  += parseFloat(it.gwt)||0;
+                totalNwt  += parseFloat(it.wt)||0;
               });
               const total80 = Math.round(totalVal * 0.8);
               const diff = totalVal - (l.amount||0);
@@ -1918,7 +1921,8 @@ function renderLoans() {
               return `<tr style="border-top:1px solid var(--bd)">
                 <td colspan="2" style="font-weight:700;color:var(--tx1);padding-top:8px">Total</td>
                 <td style="font-weight:700;color:var(--g1);padding-top:8px">${totalQty}</td>
-                <td style="font-weight:700;color:var(--g1);padding-top:8px">${totalWt.toFixed(2)}g</td>
+                <td style="font-weight:700;color:var(--tx2);padding-top:8px">${totalGwt?totalGwt.toFixed(2)+'g':'—'}</td>
+                <td style="font-weight:700;color:var(--g1);padding-top:8px">${totalNwt?totalNwt.toFixed(2)+'g':'—'}</td>
                 <td style="padding-top:8px"></td>
                 <td style="font-weight:700;color:var(--g1);padding-top:8px">${inr(totalVal)}</td>
                 <td style="font-weight:700;color:var(--g2);padding-top:8px">${inr(total80)}</td>
@@ -2130,15 +2134,20 @@ function renderItemsForm() {
           </select>
         </div>
       </div>
-      <div class="item-row-grid3">
+      <div class="item-row-grid3" style="grid-template-columns:1fr 1fr 1fr 1fr">
         <div>
           <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Qty</div>
           <input class="item-fi" type="number" placeholder="1" value="${it.qty||''}"
             oninput="itemUpdate(${i},'qty',this.value)"/>
         </div>
         <div>
-          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Weight (g)</div>
-          <input class="item-fi" type="number" step="0.01" placeholder="0.00" value="${it.wt||''}"
+          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Gross Wt (g)</div>
+          <input class="item-fi" type="number" step="0.01" placeholder="0.00" value="${it.gwt||''}"
+            oninput="itemUpdate(${i},'gwt',this.value)"/>
+        </div>
+        <div>
+          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Net Wt (g)</div>
+          <input class="item-fi" type="number" step="0.01" placeholder="0.00" id="item-nwt-${i}" value="${it.wt||''}"
             oninput="itemUpdate(${i},'wt',this.value)"/>
         </div>
         <div>
@@ -2254,7 +2263,7 @@ function updateCollateralSummary() {
 }
 
 window.addItemRow = function() {
-  itemRows.push({ type: '', item: '', qty: 1, wt: '', purity: '22K', value: '', autoVal: true });
+  itemRows.push({ type: '', item: '', qty: 1, gwt: '', wt: '', purity: '22K', value: '', autoVal: true });
   renderItemsForm();
 };
 
@@ -2264,12 +2273,12 @@ window.removeItemRow = function(i) {
 };
 
 window.itemUpdate = function(i, field, val, manual = false) {
-  itemRows[i][field] = field === 'qty' || field === 'wt' || field === 'value' ? parseFloat(val)||'' : val;
+  itemRows[i][field] = field === 'qty' || field === 'wt' || field === 'gwt' || field === 'value' ? parseFloat(val)||'' : val;
   if (field === 'value' && manual) {
-    itemRows[i].autoVal = false; // user typed manually — stop auto-updating
+    itemRows[i].autoVal = false;
   }
   if (field === 'type') { renderItemsForm(); return; }
-  // auto-recalc value when wt or purity changes (unless manually set)
+  // auto-recalc value when net wt or purity changes
   if ((field === 'wt' || field === 'purity') && itemRows[i].autoVal !== false) {
     const v = calcAutoValue(itemRows[i]);
     if (v !== null) {
