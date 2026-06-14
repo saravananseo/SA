@@ -1496,6 +1496,37 @@ const firebaseConfig = {
 <!-- ══════════════════════════════════════════
      FIREBASE + APP SCRIPT
      ══════════════════════════════════════════ -->
+<!-- Global function proxy — bridges inline onclick="" with deferred module scope -->
+<script>
+// Proxy stubs — allow onclick= handlers to call module functions before module loads
+// Once module loads, each window.X is overwritten; queued calls are flushed.
+(function() {
+  const fns = ['toggleTheme','switchNav','openLoanSheet','closeLoanSheet','openUpload',
+    'closeUpload','openRoles','closeRoles','doLogout','toggleSearch','clearSearch',
+    'setStatusFilter','openReceiptViewer','closeReceiptViewer','closeAiMatch',
+    'runOrnamentScan','saveGeminiKey','addItemRow','removeItemRow','itemUpdate',
+    'onGoldRateChange','fetchLiveGoldRate','receiptFileChosen','removeReceipt',
+    'editLoan','askDelete','closeConf','doDelete','saveLoan','livePreview',
+    'onStatusChange','sheetOvClick','openCfg','saveFirebaseCfg','useLocal',
+    'resetFbCfg','selectRole','pinKey','pinDel','saveRolePin','goStep',
+    'goMapStep','goPreviewStep','doImport','fileChosen','dzOver','dzDrop',
+    'toggleItemsCard','onSearchInput','toast'];
+  window._pendingCalls = [];
+  fns.forEach(name => {
+    window[name] = function(...args) {
+      window._pendingCalls.push({ name, args });
+    };
+  });
+  // Flush pending calls once module signals ready
+  window._moduleReady = function() {
+    (window._pendingCalls || []).forEach(({ name, args }) => {
+      if (typeof window[name] === 'function') window[name](...args);
+    });
+    window._pendingCalls = [];
+  };
+})();
+</script>
+
 <script type="module">
 import { initializeApp }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, collection,
@@ -3041,6 +3072,9 @@ if (!storedCfg) {
 } else {
   initFb(storedCfg);
 }
+
+// Signal module is ready — flush any queued onclick calls
+if (typeof window._moduleReady === 'function') window._moduleReady();
 
 </script>
 </body>
