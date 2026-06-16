@@ -1398,7 +1398,7 @@ const firebaseConfig = {
       <strong>Free limits:</strong> 1,500 scans/day · 15/minute — plenty for daily use ✅
     </div>
     <input class="cfg-ta" id="gemini-key-input" type="password"
-      placeholder="Paste your Gemini API key here (AIza...)"
+      placeholder="Paste your Gemini API key here (AIza… or AQ.…)"
       style="min-height:56px;font-family:'Inter',sans-serif;font-size:14px;letter-spacing:1px"/>
     <button class="btn-primary" style="margin-top:14px" onclick="saveGeminiKey()">✅ Save & Enable AI Scan</button>
     <button class="btn-ghost" style="margin-top:10px" onclick="$('gemini-ov').classList.remove('open')">Cancel</button>
@@ -2400,7 +2400,7 @@ function getGeminiKey() { return localStorage.getItem(GEMINI_KEY_STORE) || ''; }
 
 window.saveGeminiKey = function() {
   const key = $('gemini-key-input').value.trim();
-  if (!key.startsWith('AIza')) { toast('⚠️ Invalid key — should start with AIza'); return; }
+  if (!key) { toast('⚠️ Please paste your API key'); return; }
   localStorage.setItem(GEMINI_KEY_STORE, key);
   $('gemini-ov').classList.remove('open');
   toast('✅ Gemini API key saved');
