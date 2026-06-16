@@ -2410,7 +2410,7 @@ window.saveGeminiKey = function() {
 window.closeAiMatch = function() { $('ai-match-ov').classList.remove('open'); };
 
 async function geminiDescribeImage(base64, mimeType, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -2432,7 +2432,7 @@ async function geminiDescribeImage(base64, mimeType, apiKey) {
 }
 
 async function geminiCompare(currentDesc, otherDescs, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
   const prompt = `You are a fraud detection expert for a gold loan business.
 
 Current ornament being pledged:
