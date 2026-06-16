@@ -62,6 +62,150 @@
   --glow:   0 0 24px rgba(212,161,42,0.15);
 }
 
+/* ══ LIGHT THEME ══ */
+html[data-theme="light"] {
+  /* Warm ivory backgrounds — layered depth */
+  --bg0: #FFFFFF;
+  --bg1: #FAF6F0;
+  --bg2: #F2EAE0;
+  --bg3: #E8DDD0;
+
+  /* Burnished gold — richer, deeper */
+  --g0:  #F5C842;
+  --g1:  #B8730A;
+  --g2:  #9A5E06;
+  --g3:  #7A4A04;
+  --g4:  #5C3802;
+
+  /* Deep readable text */
+  --tx0: #1C1008;
+  --tx1: #3D2410;
+  --tx2: #7A5030;
+  --tx3: #B88050;
+
+  /* Semantic — saturated for light bg */
+  --green:  #1A7A45;
+  --red:    #B52B1E;
+  --blue:   #1D4ED8;
+
+  /* Subtle warm borders */
+  --glass:  rgba(139,90,40,0.06);
+  --glassH: rgba(139,90,40,0.12);
+  --bd:     rgba(139,90,40,0.18);
+  --bdH:    rgba(139,90,40,0.45);
+
+  --shadow: 0 2px 16px rgba(60,30,10,0.10), 0 1px 4px rgba(60,30,10,0.06);
+  --glow:   0 0 20px rgba(184,115,10,0.15);
+}
+
+html[data-theme="light"] body {
+  background: var(--bg0);
+  color: var(--tx0);
+  background-image:
+    radial-gradient(ellipse at 80% 0%, rgba(184,115,10,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 100%, rgba(139,90,40,0.05) 0%, transparent 50%);
+}
+html[data-theme="light"] body::before { opacity: 0.08; }
+html[data-theme="light"] .orb1 { background: radial-gradient(circle, rgba(184,115,10,0.1) 0%, transparent 70%); }
+html[data-theme="light"] .orb2 { background: radial-gradient(circle, rgba(139,90,40,0.07) 0%, transparent 70%); }
+
+html[data-theme="light"] .hdr {
+  background: linear-gradient(180deg, rgba(250,246,240,0.97) 0%, rgba(242,235,224,0.95) 100%);
+  border-bottom: 1px solid rgba(139,90,40,0.15);
+  box-shadow: 0 2px 12px rgba(60,30,10,0.08);
+}
+html[data-theme="light"] .bnav {
+  background: rgba(250,246,240,0.97);
+  border-top: 1px solid rgba(139,90,40,0.15);
+  box-shadow: 0 -2px 12px rgba(60,30,10,0.06);
+}
+html[data-theme="light"] .lcard {
+  background: linear-gradient(145deg, #FFFFFF, #F7F1E8);
+  border: 1px solid rgba(139,90,40,0.14);
+  box-shadow: 0 2px 12px rgba(60,30,10,0.08), 0 1px 3px rgba(60,30,10,0.04);
+}
+html[data-theme="light"] .lcard:active { box-shadow: 0 1px 4px rgba(60,30,10,0.06); }
+html[data-theme="light"] .stat-hero {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5EDE0 100%);
+  border: 1px solid rgba(139,90,40,0.14);
+  box-shadow: 0 2px 16px rgba(60,30,10,0.10);
+}
+html[data-theme="light"] .stat-hero::before {
+  background: linear-gradient(90deg, transparent, var(--g1), transparent);
+  opacity: 0.5;
+}
+html[data-theme="light"] .stat-box {
+  background: linear-gradient(145deg, #FFFFFF, #F7F1E8);
+  border: 1px solid rgba(139,90,40,0.14);
+  box-shadow: 0 1px 8px rgba(60,30,10,0.07);
+}
+html[data-theme="light"] .sheet {
+  background: linear-gradient(180deg, var(--bg1) 0%, var(--bg0) 100%);
+  border: 1px solid rgba(139,90,40,0.15);
+}
+html[data-theme="light"] .pin-ov { background: var(--bg0); }
+html[data-theme="light"] .pin-key { background: rgba(139,90,40,0.06); color: var(--tx0); border-color: rgba(139,90,40,0.15); }
+html[data-theme="light"] .pin-key:active { background: rgba(184,115,10,0.15); }
+html[data-theme="light"] .fi {
+  background: rgba(255,255,255,0.8);
+  color: var(--tx0);
+  border-color: rgba(139,90,40,0.2);
+}
+html[data-theme="light"] .fi:focus { border-color: var(--g1); box-shadow: 0 0 0 3px rgba(184,115,10,0.1); }
+html[data-theme="light"] .fi option { background: var(--bg1); color: var(--tx0); }
+html[data-theme="light"] .item-fi {
+  background: rgba(255,255,255,0.8);
+  color: var(--tx0);
+  border-color: rgba(139,90,40,0.2);
+}
+html[data-theme="light"] .item-fi option { background: var(--bg1); }
+html[data-theme="light"] .metrics {
+  background: linear-gradient(90deg, rgba(242,235,224,0.95), rgba(232,221,208,0.95));
+  border-top: 1px solid rgba(139,90,40,0.12);
+}
+html[data-theme="light"] .met { border-right-color: rgba(139,90,40,0.12); }
+html[data-theme="light"] .conf-box,
+html[data-theme="light"] .cfg-box {
+  background: var(--bg1);
+  border-color: rgba(139,90,40,0.2);
+}
+html[data-theme="light"] .toast {
+  background: rgba(28,16,8,0.88);
+  color: #FAF6F0;
+  border-color: rgba(139,90,40,0.3);
+}
+html[data-theme="light"] .preview-box {
+  background: linear-gradient(145deg, #FFFFFF, #F2E8D8);
+  border-color: rgba(139,90,40,0.25);
+}
+html[data-theme="light"] .note-box { background: rgba(184,115,10,0.07); border-left-color: var(--g2); }
+html[data-theme="light"] .rule-box { background: rgba(184,115,10,0.06); border-left-color: var(--g2); }
+html[data-theme="light"] .items-tbl th { background: rgba(184,115,10,0.1); color: var(--tx1); }
+html[data-theme="light"] .items-tbl td { color: var(--tx0); }
+html[data-theme="light"] .search-inline { background: rgba(255,255,255,0.8); border-color: rgba(139,90,40,0.2); }
+html[data-theme="light"] .sync-bar.syncing { background: rgba(184,115,10,0.1); color: var(--g1); }
+html[data-theme="light"] .sync-bar.synced  { background: rgba(26,122,69,0.08); color: var(--green); }
+html[data-theme="light"] .nv-lb { color: var(--tx2); }
+html[data-theme="light"] .nv.act .nv-lb { color: var(--g1); }
+html[data-theme="light"] .nv.act::before { background: linear-gradient(90deg, transparent, var(--g1), transparent); }
+html[data-theme="light"] .badge.active { background: rgba(26,122,69,0.1); color: var(--green); border-color: rgba(26,122,69,0.25); }
+html[data-theme="light"] .badge.closed { background: rgba(181,43,30,0.08); color: var(--red); border-color: rgba(181,43,30,0.22); }
+html[data-theme="light"] .hdr-btn { color: var(--tx1); background: rgba(139,90,40,0.07); border-color: rgba(139,90,40,0.15); }
+html[data-theme="light"] .hdr-btn:hover { background: rgba(139,90,40,0.13); }
+html[data-theme="light"] .receipt-ov { background: rgba(28,16,8,0.90); }
+html[data-theme="light"] .cfg-ta { background: rgba(255,255,255,0.6); color: var(--tx0); border-color: rgba(139,90,40,0.2); }
+html[data-theme="light"] .card-head { border-bottom-color: rgba(139,90,40,0.08); }
+html[data-theme="light"] .card-foot { background: rgba(139,90,40,0.04); border-top-color: rgba(139,90,40,0.08); }
+html[data-theme="light"] .card-items-toggle { background: rgba(184,115,10,0.05); border-top-color: rgba(139,90,40,0.1); }
+html[data-theme="light"] .item-row { background: rgba(255,255,255,0.6); }
+html[data-theme="light"] .drop-zone { background: rgba(184,115,10,0.04); border-color: rgba(139,90,40,0.2); }
+html[data-theme="light"] .role-row { background: rgba(255,255,255,0.6); }
+html[data-theme="light"] .stat-section-lbl { color: var(--tx1); }
+html[data-theme="light"] .sl-count { background: rgba(139,90,40,0.08); color: var(--tx1); }
+html[data-theme="light"] .divider { background: linear-gradient(90deg, transparent, rgba(139,90,40,0.2), transparent); }
+html[data-theme="light"] .over-year-badge { background: linear-gradient(135deg, rgba(181,43,30,0.1), rgba(181,43,30,0.06)); }
+html[data-theme="light"] .next-interest-row { background: rgba(184,115,10,0.05); border-top-color: rgba(139,90,40,0.15); }
+
 /* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--bg0); color: var(--tx0); overscroll-behavior: none; -webkit-font-smoothing: antialiased; }
@@ -134,20 +278,19 @@ body::before {
 .hdr-btn:active { background: var(--glassH); transform: scale(0.9); }
 
 /* search */
-.search-wrap { overflow: hidden; max-height: 0; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1); }
-.search-wrap.open { max-height: 60px; }
-.search-inner {
-  margin: 0 18px 12px;
+/* inline search bar — always visible in loans page */
+.search-inline {
   display: flex; align-items: center; gap: 10px;
-  background: var(--glass); border: 1px solid var(--bd); border-radius: var(--rs);
-  padding: 0 14px;
+  margin: 12px 16px 8px;
+  background: var(--glass); border: 1px solid var(--bd);
+  border-radius: var(--rs); padding: 0 14px;
 }
-.search-inner input {
+.search-inline input {
   flex: 1; background: none; border: none; outline: none;
   font-family: 'Inter', sans-serif; font-size: 14px; color: var(--tx0);
   padding: 12px 0;
 }
-.search-inner input::placeholder { color: var(--tx2); }
+.search-inline input::placeholder { color: var(--tx2); }
 .search-x { color: var(--tx2); cursor: pointer; font-size: 14px; padding: 4px; line-height: 1; }
 
 /* metrics strip */
@@ -617,7 +760,73 @@ body::before {
 .sheet-close:hover { background: var(--glassH); }
 .hdr-btn:hover { background: var(--glassH); }
 
-/* ── OVER 1 YEAR INDICATOR ── */
+/* ── AI ORNAMENT MATCH OVERLAY ── */
+.ai-match-ov {
+  display: none; position: fixed; inset: 0; z-index: 550;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+  align-items: flex-end; justify-content: center;
+}
+.ai-match-ov.open { display: flex; }
+.ai-match-sheet {
+  background: linear-gradient(180deg, var(--bg3) 0%, var(--bg2) 100%);
+  border: 1px solid var(--bd); border-bottom: none;
+  border-radius: var(--rx) var(--rx) 0 0;
+  width: 100%; max-width: 520px; max-height: 88vh; overflow-y: auto;
+  animation: sheetUp 0.35s cubic-bezier(0.22,1,0.36,1);
+  padding-bottom: 24px;
+}
+.ai-match-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px 14px; border-bottom: 1px solid var(--bd);
+}
+.ai-match-title { font-family: 'Manrope', sans-serif; font-size: 18px; font-weight: 700; color: var(--g1); }
+.ai-match-body { padding: 16px 20px; }
+.ai-scanning {
+  text-align: center; padding: 32px 20px;
+}
+.ai-scan-ic { font-size: 48px; margin-bottom: 12px; animation: aiSpin 2s linear infinite; }
+@keyframes aiSpin { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.15);opacity:0.7} }
+.ai-scan-t { font-size: 15px; font-weight: 600; color: var(--tx0); margin-bottom: 6px; }
+.ai-scan-s { font-size: 12px; color: var(--tx2); line-height: 1.6; }
+.ai-match-card {
+  border-radius: var(--rs); padding: 14px; margin-bottom: 10px;
+  border: 1px solid var(--bd);
+}
+.ai-match-card.danger {
+  background: rgba(232,85,85,0.08); border-color: rgba(232,85,85,0.4);
+}
+.ai-match-card.warn {
+  background: rgba(245,166,35,0.08); border-color: rgba(245,166,35,0.35);
+}
+.ai-match-card.safe {
+  background: rgba(39,201,122,0.06); border-color: rgba(39,201,122,0.3);
+}
+.ai-match-card-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.ai-match-loan { font-weight: 700; font-size: 14px; color: var(--tx0); }
+.ai-match-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px;
+}
+.ai-match-badge.danger { background: rgba(232,85,85,0.2); color: var(--red); }
+.ai-match-badge.warn   { background: rgba(245,166,35,0.2); color: #F5A623; }
+.ai-match-badge.safe   { background: rgba(39,201,122,0.15); color: var(--green); }
+.ai-match-reason { font-size: 12px; color: var(--tx1); line-height: 1.6; }
+.ai-match-meta { font-size: 11px; color: var(--tx2); margin-top: 6px; }
+.ai-desc-box {
+  background: rgba(212,161,42,0.05); border: 1px solid var(--bd);
+  border-radius: var(--rs); padding: 12px 14px; margin-bottom: 14px;
+  font-size: 12px; color: var(--tx1); line-height: 1.7;
+}
+.ai-desc-lbl { font-size: 10px; font-weight: 700; color: var(--g2); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+.receipt-scan-btn {
+  width: 100%; padding: 10px; margin-top: 8px;
+  background: linear-gradient(135deg, rgba(91,141,239,0.15), rgba(91,141,239,0.08));
+  border: 1px solid rgba(91,141,239,0.35); border-radius: var(--rs);
+  color: var(--blue); font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background 0.2s;
+}
+.receipt-scan-btn:active { background: rgba(91,141,239,0.22); }
 .over-year-badge {
   display: inline-flex; align-items: center; gap: 5px;
   background: linear-gradient(135deg, rgba(232,85,85,0.15), rgba(232,85,85,0.08));
@@ -771,7 +980,7 @@ body::before {
 .card-items-toggle.open .card-items-toggle-ic { transform: rotate(180deg); }
 .card-items-body { display: none; padding: 0 12px 12px; overflow-x: auto; }
 .card-items-body.open { display: block; }
-.items-tbl { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 460px; }
+.items-tbl { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 560px; }
 .items-tbl th {
   background: rgba(212,161,42,0.08); color: var(--tx1); padding: 7px 8px;
   text-align: left; font-weight: 600; text-transform: uppercase;
@@ -841,19 +1050,9 @@ body::before {
         </div>
       </div>
       <div class="hdr-btns">
-        <button class="hdr-btn" onclick="toggleSearch()" title="Search">🔍</button>
+        <button class="hdr-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle Theme">🌙</button>
         <button class="hdr-btn" id="roles-btn" onclick="openRoles()" title="Manage Roles" style="display:none">⚙️</button>
         <button class="hdr-btn" id="logout-btn" onclick="doLogout()" title="Logout" style="display:none">🚪</button>
-        <button class="hdr-btn" onclick="openLoanSheet()" title="Add">✦</button>
-      </div>
-    </div>
-
-    <!-- Search -->
-    <div class="search-wrap" id="sw">
-      <div class="search-inner">
-        <span style="color:var(--tx2);font-size:15px">🔍</span>
-        <input type="text" id="si" placeholder="Search loan number…" oninput="onSearchInput()"/>
-        <span class="search-x" onclick="clearSearch()">✕</span>
       </div>
     </div>
 
@@ -868,6 +1067,11 @@ body::before {
 
   <!-- ══ LOANS PAGE ══ -->
   <div class="pg act" id="pg-loans">
+    <div class="search-inline">
+      <span style="color:var(--tx2);font-size:15px;flex-shrink:0">🔍</span>
+      <input type="text" id="si" placeholder="Search loan number…" oninput="onSearchInput()"/>
+      <span class="search-x" id="search-clear-btn" onclick="clearSearch()" style="display:none">✕</span>
+    </div>
     <div id="loan-list"></div>
   </div>
 
@@ -1169,7 +1373,42 @@ const firebaseConfig = {
   </div>
 </div>
 
-<!-- RECEIPT VIEWER OVERLAY -->
+<!-- AI ORNAMENT MATCH OVERLAY -->
+<div class="ai-match-ov" id="ai-match-ov">
+  <div class="ai-match-sheet">
+    <div class="sheet-handle"></div>
+    <div class="ai-match-hd">
+      <div class="ai-match-title">🔍 Ornament Match Analysis</div>
+      <button class="sheet-close" onclick="closeAiMatch()">✕</button>
+    </div>
+    <div class="ai-match-body" id="ai-match-body"></div>
+  </div>
+</div>
+
+<!-- GEMINI API KEY SETUP -->
+<div class="cfg-ov" id="gemini-ov">
+  <div class="cfg-box">
+    <div class="cfg-title">🤖 Gemini AI Setup</div>
+    <div class="cfg-sub">Free API key required for ornament duplicate detection.<br/>No credit card needed.</div>
+    <div class="cfg-steps">
+      <strong>Get your free key (1 min):</strong><br/>
+      1. Go to <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a><br/>
+      2. Click <strong>Create API Key</strong><br/>
+      3. Copy and paste it below<br/><br/>
+      <strong>Free limits:</strong> 1,500 scans/day · 15/minute — plenty for daily use ✅
+    </div>
+    <input class="cfg-ta" id="gemini-key-input" type="password"
+      placeholder="Paste your Gemini API key here (AIza… or AQ.…)"
+      style="min-height:56px;font-family:'Inter',sans-serif;font-size:14px;letter-spacing:1px"/>
+    <button class="btn-primary" style="margin-top:14px" onclick="saveGeminiKey()">✅ Save & Enable AI Scan</button>
+    <button class="btn-ghost" style="margin-top:10px" onclick="$('gemini-ov').classList.remove('open')">Cancel</button>
+    <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--tx2)">
+      Key stored locally on this device only. Never sent anywhere except Google.
+    </div>
+  </div>
+</div>
+
+<!-- AI MATCH OVERLAY -->
 <div class="receipt-ov" id="receipt-ov">
   <div class="receipt-ov-hd">
     <div class="receipt-ov-title">📎 Receipt</div>
@@ -1250,6 +1489,37 @@ const firebaseConfig = {
 <!-- ══════════════════════════════════════════
      FIREBASE + APP SCRIPT
      ══════════════════════════════════════════ -->
+<!-- Global function proxy — bridges inline onclick="" with deferred module scope -->
+<script>
+// Proxy stubs — allow onclick= handlers to call module functions before module loads
+// Once module loads, each window.X is overwritten; queued calls are flushed.
+(function() {
+  const fns = ['toggleTheme','switchNav','openLoanSheet','closeLoanSheet','openUpload',
+    'closeUpload','openRoles','closeRoles','doLogout','toggleSearch','clearSearch',
+    'setStatusFilter','openReceiptViewer','closeReceiptViewer','closeAiMatch',
+    'runOrnamentScan','saveGeminiKey','addItemRow','removeItemRow','itemUpdate',
+    'onGoldRateChange','fetchLiveGoldRate','receiptFileChosen','removeReceipt',
+    'editLoan','askDelete','closeConf','doDelete','saveLoan','livePreview',
+    'onStatusChange','sheetOvClick','openCfg','saveFirebaseCfg','useLocal',
+    'resetFbCfg','selectRole','pinKey','pinDel','saveRolePin','goStep',
+    'goMapStep','goPreviewStep','doImport','fileChosen','dzOver','dzDrop',
+    'toggleItemsCard','onSearchInput','toast'];
+  window._pendingCalls = [];
+  fns.forEach(name => {
+    window[name] = function(...args) {
+      window._pendingCalls.push({ name, args });
+    };
+  });
+  // Flush pending calls once module signals ready
+  window._moduleReady = function() {
+    (window._pendingCalls || []).forEach(({ name, args }) => {
+      if (typeof window[name] === 'function') window[name](...args);
+    });
+    window._pendingCalls = [];
+  };
+})();
+</script>
+
 <script type="module">
 import { initializeApp }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getFirestore, collection,
@@ -1464,15 +1734,19 @@ window.switchNav = function(tab) {
   $('fab').style.display = tab === 'loans' ? 'flex' : 'none';
 };
 
-window.toggleSearch = function() {
-  const w = $('sw');
-  w.classList.toggle('open');
-  if (w.classList.contains('open')) $('si').focus();
-  else clearSearch();
+window.toggleSearch = function() {}; // no-op — search is now always visible inline
+
+window.clearSearch = function() {
+  const si = $('si'); if (si) si.value = '';
+  statusFilter = null;
+  ['met-active','met-closed','met-active-p','met-overdue'].forEach(id => { const el=$(id); if(el) el.style.background=''; });
+  const cb = $('search-clear-btn'); if (cb) cb.style.display = 'none';
+  renderLoans();
 };
-window.clearSearch = function() { $('si').value = ''; statusFilter = null; ['met-active','met-closed','met-active-p','met-overdue'].forEach(id => { const el=$(id); if(el) el.style.background=''; }); renderLoans(); };
 
 window.onSearchInput = function() {
+  const val = ($('si').value || '');
+  const cb = $('search-clear-btn'); if (cb) cb.style.display = val ? 'block' : 'none';
   if (statusFilter) {
     statusFilter = null;
     ['met-active','met-closed','met-active-p','met-overdue'].forEach(id => {
@@ -1594,7 +1868,7 @@ function renderLoans() {
       </div>
       <div class="card-items-body" id="cibody-${l.id}">
         <table class="items-tbl">
-          <thead><tr><th>Type</th><th>Item</th><th>Qty</th><th>Wt (g)</th><th>Purity</th><th>Value</th><th>80% Val</th><th>P/L</th></tr></thead>
+          <thead><tr><th>Type</th><th>Item</th><th>Qty</th><th>Gross Wt</th><th>Net Wt</th><th>Purity</th><th>Value</th><th>80% Val</th><th>P/L</th></tr></thead>
           <tbody>
             ${(()=>{
               const GOLD_RATE_22K = 14310;
@@ -1616,13 +1890,14 @@ function renderLoans() {
                 return {...it, _val: val};
               });
 
-              const totalWt = l.items.reduce((s,it)=>s+(parseFloat(it.wt)||0),0);
+              const totalNetWt = l.items.reduce((s,it)=>s+(parseFloat(it.wt)||0),0);
 
               return itemsWithVal.map(it => {
                 const val = it._val;
                 const val80 = val ? Math.round(val * 0.8) : 0;
-                const wt = parseFloat(it.wt)||0;
-                const wtShare = totalWt > 0 ? (wt/totalWt) * (l.amount||0) : 0;
+                const nwt = parseFloat(it.wt)||0;
+                const gwt = parseFloat(it.gwt)||0;
+                const wtShare = totalNetWt > 0 ? (nwt/totalNetWt) * (l.amount||0) : 0;
                 const pl = val > 0 && wtShare > 0 ? val - wtShare : null;
                 const plHtml = pl !== null
                   ? `<span class="${pl>=0?'itbl-profit':'itbl-loss'}">${pl>=0?'+':''}${inr(pl)}</span>`
@@ -1635,7 +1910,8 @@ function renderLoans() {
                   <td>${typeHtml}</td>
                   <td>${it.item||'—'}</td>
                   <td>${it.qty||'—'}</td>
-                  <td>${wt?wt+'g':'—'}</td>
+                  <td style="color:var(--tx2)">${gwt?gwt+'g':'—'}</td>
+                  <td style="font-weight:600">${nwt?nwt+'g':'—'}</td>
                   <td>${it.purity||'—'}</td>
                   <td>${val?inr(val):'—'}</td>
                   <td style="color:var(--g2)">${val80?inr(val80):'—'}</td>
@@ -1650,7 +1926,7 @@ function renderLoans() {
               const goldFactors = {'24K':24/22,'22K':1,'18K':18/22,'14K':14/22};
               const silverBase = 105;
               const silverFactors = {'Silver 999':1,'Silver 925':0.925,'Silver 800':0.8};
-              let totalVal=0, totalQty=0, totalWt=0;
+              let totalVal=0, totalQty=0, totalGwt=0, totalNwt=0;
               l.items.forEach(it => {
                 let val = parseFloat(it.value)||0;
                 if (!val && it.wt) {
@@ -1660,9 +1936,10 @@ function renderLoans() {
                     ? Math.round(wt * silverBase * (silverFactors[p]??1))
                     : Math.round(wt * GOLD_RATE_22K * (goldFactors[p]??(22/22)));
                 }
-                totalVal += val;
-                totalQty += parseFloat(it.qty)||0;
-                totalWt  += parseFloat(it.wt)||0;
+                totalVal  += val;
+                totalQty  += parseFloat(it.qty)||0;
+                totalGwt  += parseFloat(it.gwt)||0;
+                totalNwt  += parseFloat(it.wt)||0;
               });
               const total80 = Math.round(totalVal * 0.8);
               const diff = totalVal - (l.amount||0);
@@ -1672,7 +1949,8 @@ function renderLoans() {
               return `<tr style="border-top:1px solid var(--bd)">
                 <td colspan="2" style="font-weight:700;color:var(--tx1);padding-top:8px">Total</td>
                 <td style="font-weight:700;color:var(--g1);padding-top:8px">${totalQty}</td>
-                <td style="font-weight:700;color:var(--g1);padding-top:8px">${totalWt.toFixed(2)}g</td>
+                <td style="font-weight:700;color:var(--tx2);padding-top:8px">${totalGwt?totalGwt.toFixed(2)+'g':'—'}</td>
+                <td style="font-weight:700;color:var(--g1);padding-top:8px">${totalNwt?totalNwt.toFixed(2)+'g':'—'}</td>
                 <td style="padding-top:8px"></td>
                 <td style="font-weight:700;color:var(--g1);padding-top:8px">${inr(totalVal)}</td>
                 <td style="font-weight:700;color:var(--g2);padding-top:8px">${inr(total80)}</td>
@@ -1884,15 +2162,20 @@ function renderItemsForm() {
           </select>
         </div>
       </div>
-      <div class="item-row-grid3">
+      <div class="item-row-grid3" style="grid-template-columns:1fr 1fr 1fr 1fr">
         <div>
           <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Qty</div>
           <input class="item-fi" type="number" placeholder="1" value="${it.qty||''}"
             oninput="itemUpdate(${i},'qty',this.value)"/>
         </div>
         <div>
-          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Weight (g)</div>
-          <input class="item-fi" type="number" step="0.01" placeholder="0.00" value="${it.wt||''}"
+          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Gross Wt (g)</div>
+          <input class="item-fi" type="number" step="0.01" placeholder="0.00" value="${it.gwt||''}"
+            oninput="itemUpdate(${i},'gwt',this.value)"/>
+        </div>
+        <div>
+          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Net Wt (g)</div>
+          <input class="item-fi" type="number" step="0.01" placeholder="0.00" id="item-nwt-${i}" value="${it.wt||''}"
             oninput="itemUpdate(${i},'wt',this.value)"/>
         </div>
         <div>
@@ -2008,7 +2291,7 @@ function updateCollateralSummary() {
 }
 
 window.addItemRow = function() {
-  itemRows.push({ type: '', item: '', qty: 1, wt: '', purity: '22K', value: '', autoVal: true });
+  itemRows.push({ type: '', item: '', qty: 1, gwt: '', wt: '', purity: '22K', value: '', autoVal: true });
   renderItemsForm();
 };
 
@@ -2018,12 +2301,12 @@ window.removeItemRow = function(i) {
 };
 
 window.itemUpdate = function(i, field, val, manual = false) {
-  itemRows[i][field] = field === 'qty' || field === 'wt' || field === 'value' ? parseFloat(val)||'' : val;
+  itemRows[i][field] = field === 'qty' || field === 'wt' || field === 'gwt' || field === 'value' ? parseFloat(val)||'' : val;
   if (field === 'value' && manual) {
-    itemRows[i].autoVal = false; // user typed manually — stop auto-updating
+    itemRows[i].autoVal = false;
   }
   if (field === 'type') { renderItemsForm(); return; }
-  // auto-recalc value when wt or purity changes (unless manually set)
+  // auto-recalc value when net wt or purity changes
   if ((field === 'wt' || field === 'purity') && itemRows[i].autoVal !== false) {
     const v = calcAutoValue(itemRows[i]);
     if (v !== null) {
@@ -2052,6 +2335,7 @@ function renderReceiptArea(existingReceipt) {
   if (pendingReceipt || existingReceipt) {
     const r = pendingReceipt || existingReceipt;
     const isPdf = r.type === 'application/pdf';
+    const canScan = !isPdf; // only scan images, not PDFs
     area.innerHTML = `
       <div class="receipt-uploaded">
         <div class="receipt-uploaded-info">
@@ -2065,7 +2349,8 @@ function renderReceiptArea(existingReceipt) {
           <button class="receipt-btn receipt-view-btn" onclick="openReceiptViewer()">👁 View</button>
           <button class="receipt-btn receipt-remove-btn" onclick="removeReceipt()">✕</button>
         </div>
-      </div>`;
+      </div>
+      ${canScan ? `<button class="receipt-scan-btn" onclick="runOrnamentScan()">🤖 AI Scan — Check for duplicate ornaments across loans</button>` : ''}`;
   } else {
     area.innerHTML = `
       <div class="receipt-zone">
@@ -2106,6 +2391,179 @@ window.openReceiptViewer = function(loanId) {
   $('receipt-ov').classList.add('open');
 };
 
+// ══════════════════════════════════════════
+// GEMINI AI ORNAMENT SCAN
+// ══════════════════════════════════════════
+const GEMINI_KEY_STORE = 'ak_gemini_key_v1';
+
+function getGeminiKey() { return localStorage.getItem(GEMINI_KEY_STORE) || ''; }
+
+window.saveGeminiKey = function() {
+  const key = $('gemini-key-input').value.trim();
+  if (!key) { toast('⚠️ Please paste your API key'); return; }
+  localStorage.setItem(GEMINI_KEY_STORE, key);
+  $('gemini-ov').classList.remove('open');
+  toast('✅ Gemini API key saved');
+  runOrnamentScan(); // proceed with scan
+};
+
+window.closeAiMatch = function() { $('ai-match-ov').classList.remove('open'); };
+
+async function geminiDescribeImage(base64, mimeType, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{
+        parts: [
+          { inline_data: { mime_type: mimeType, data: base64 } },
+          { text: `You are an expert jewellery analyst. Examine this image and describe the gold/silver ornaments in detail for identification purposes. Focus on: type (ring/chain/bangle/necklace etc), distinctive features, engravings, stones, clasps, design patterns, approximate size, unique marks. Be specific. Respond ONLY with a JSON object (no markdown): {"description": "...", "types": ["ring","chain",...], "distinctive": "key identifying features in one sentence"}` }
+        ]
+      }],
+      generationConfig: { temperature: 0.1, maxOutputTokens: 500 }
+    })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e?.error?.message || 'Gemini error'); }
+  const data = await res.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+  try { return JSON.parse(text.replace(/```json|```/g,'').trim()); }
+  catch { return { description: text, types: [], distinctive: text }; }
+}
+
+async function geminiCompare(currentDesc, otherDescs, apiKey) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  const prompt = `You are a fraud detection expert for a gold loan business.
+
+Current ornament being pledged:
+${JSON.stringify(currentDesc)}
+
+Compare against these existing loans:
+${JSON.stringify(otherDescs.map((l,i) => ({
+  index: i,
+  loan: l.loanName,
+  date: l.loanDate,
+  amount: l.amount,
+  description: l.aiDesc ? l.aiDesc.description : 'No photo description available'
+})), null, 2)}
+
+For each existing loan, assess if the same physical ornament could have been pledged. Consider type, design, distinctive features. Respond ONLY with JSON array (no markdown): [{"loanIndex": 0, "risk": "HIGH|MEDIUM|LOW|NONE", "confidence": 0-100, "reason": "one sentence"}]`;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.1, maxOutputTokens: 1000 }
+    })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e?.error?.message || 'Gemini error'); }
+  const data = await res.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
+  try { return JSON.parse(text.replace(/```json|```/g,'').trim()); }
+  catch { return []; }
+}
+
+window.runOrnamentScan = async function() {
+  const r = pendingReceipt;
+  if (!r?.data || r.type === 'application/pdf') { toast('⚠️ Image receipt required for AI scan'); return; }
+
+  // Check for Gemini API key
+  const apiKey = getGeminiKey();
+  if (!apiKey) {
+    $('gemini-key-input').value = '';
+    $('gemini-ov').classList.add('open');
+    return;
+  }
+
+  const otherLoans = loans.filter(l => l.receipt?.data && l.receipt.type !== 'application/pdf');
+
+  $('ai-match-body').innerHTML = `
+    <div class="ai-scanning">
+      <div class="ai-scan-ic">🤖</div>
+      <div class="ai-scan-t">Analysing ornaments…</div>
+      <div class="ai-scan-s">Gemini AI is examining the image and comparing against ${otherLoans.length} loan${otherLoans.length!==1?'s':''} with photos.</div>
+    </div>`;
+  $('ai-match-ov').classList.add('open');
+
+  try {
+    const base64  = r.data.split(',')[1];
+    const mimeType = r.type;
+
+    // Step 1: Describe current image
+    const currentDesc = await geminiDescribeImage(base64, mimeType, apiKey);
+    pendingReceipt.aiDesc = currentDesc;
+
+    if (!otherLoans.length) {
+      $('ai-match-body').innerHTML = `
+        <div class="ai-desc-box">
+          <div class="ai-desc-lbl">🔍 Ornament Description</div>
+          ${currentDesc.description}
+        </div>
+        <div class="ai-match-card safe">
+          <div class="ai-match-card-hd">
+            <span class="ai-match-loan">✅ No Other Loans to Compare</span>
+            <span class="ai-match-badge safe">CLEAR</span>
+          </div>
+          <div class="ai-match-reason">No other loans with photos found. Description saved for future comparisons.</div>
+        </div>`;
+      return;
+    }
+
+    // Step 2: Compare descriptions
+    const otherDescs = otherLoans.map(l => ({
+      loanName: l.name,
+      loanDate: l.loanDate,
+      amount:   l.amount,
+      aiDesc:   l.receipt.aiDesc || null,
+    }));
+
+    const results = await geminiCompare(currentDesc, otherDescs, apiKey);
+
+    const highRisk = results.filter(r => r.risk === 'HIGH');
+    const summary  = highRisk.length > 0
+      ? `<div style="background:rgba(232,85,85,0.1);border:1px solid rgba(232,85,85,0.4);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:600;color:var(--red)">⚠️ ${highRisk.length} HIGH RISK match${highRisk.length>1?'es':''} found — possible duplicate pledge</div>`
+      : `<div style="background:rgba(39,201,122,0.07);border:1px solid rgba(39,201,122,0.25);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:600;color:var(--green)">✅ No high-risk duplicates detected</div>`;
+
+    const cards = results.filter(r => r.risk !== 'NONE').map(res => {
+      const loan = otherDescs[res.loanIndex];
+      if (!loan) return '';
+      const cls   = res.risk === 'HIGH' ? 'danger' : res.risk === 'MEDIUM' ? 'warn' : 'safe';
+      const label = res.risk === 'HIGH' ? '⚠ HIGH RISK' : res.risk === 'MEDIUM' ? '⚡ MEDIUM' : '✓ LOW';
+      return `
+        <div class="ai-match-card ${cls}">
+          <div class="ai-match-card-hd">
+            <span class="ai-match-loan">${loan.loanName}</span>
+            <span class="ai-match-badge ${cls}">${label}</span>
+          </div>
+          <div class="ai-match-reason">${res.reason}</div>
+          <div class="ai-match-meta">Confidence: ${res.confidence}% · ${inr(loan.amount)} · ${fmtDate(loan.loanDate)}</div>
+        </div>`;
+    }).join('') || `<div class="ai-match-card safe"><div class="ai-match-card-hd"><span class="ai-match-loan">All loans checked</span><span class="ai-match-badge safe">ALL CLEAR</span></div><div class="ai-match-reason">No matching ornaments found across ${otherLoans.length} loans.</div></div>`;
+
+    $('ai-match-body').innerHTML = `
+      <div class="ai-desc-box">
+        <div class="ai-desc-lbl">🔍 Detected Ornaments</div>
+        ${currentDesc.description}
+        ${currentDesc.distinctive ? `<div style="margin-top:6px;font-weight:600;color:var(--g2)">${currentDesc.distinctive}</div>` : ''}
+      </div>
+      ${summary}${cards}
+      <div style="text-align:center;margin-top:16px">
+        <button onclick="$('gemini-key-input').value='';localStorage.removeItem('${GEMINI_KEY_STORE}');$('gemini-ov').classList.add('open');closeAiMatch()" style="font-size:11px;color:var(--tx2);background:none;border:none;cursor:pointer;text-decoration:underline">Change Gemini API Key</button>
+      </div>`;
+
+  } catch(err) {
+    $('ai-match-body').innerHTML = `
+      <div class="ai-match-card danger">
+        <div class="ai-match-card-hd"><span class="ai-match-loan">⚠ Scan Failed</span></div>
+        <div class="ai-match-reason">${err.message}</div>
+        <div class="ai-match-meta" style="margin-top:8px">
+          ${err.message.includes('API_KEY') || err.message.includes('invalid') ? `
+          <button onclick="localStorage.removeItem('${GEMINI_KEY_STORE}');closeAiMatch();runOrnamentScan()" style="background:rgba(212,161,42,0.1);border:1px solid var(--bd);border-radius:var(--rs);color:var(--g1);padding:8px 14px;font-size:12px;cursor:pointer">🔑 Update API Key</button>` : 'Check your internet connection and try again.'}
+        </div>
+      </div>`;
+  }
+};
 window.closeReceiptViewer = function() {
   $('receipt-ov').classList.remove('open');
   $('receipt-ov-content').innerHTML = '';
@@ -2581,8 +3039,26 @@ function bootAuth(){
 // ROLES_PLACEHOLDER_END
 
 // ══════════════════════════════════════════
-// BOOT
+// THEME SWITCHER
 // ══════════════════════════════════════════
+const THEME_KEY = 'ak_theme_v1';
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  document.querySelector('meta[name="theme-color"]')
+    ?.setAttribute('content', theme === 'light' ? '#FBF7EE' : '#080601');
+  const btn = $('theme-btn');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+  localStorage.setItem(THEME_KEY, theme);
+}
+
+window.toggleTheme = function() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+};
+
+// Restore saved theme on boot
+applyTheme(localStorage.getItem(THEME_KEY) || 'light');
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 
 const storedCfg = loadFbCfg();
@@ -2593,6 +3069,9 @@ if (!storedCfg) {
 } else {
   initFb(storedCfg);
 }
+
+// Signal module is ready — flush any queued onclick calls
+if (typeof window._moduleReady === 'function') window._moduleReady();
 
 </script>
 </body>
