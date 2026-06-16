@@ -2409,30 +2409,44 @@ window.saveGeminiKey = function() {
 
 window.closeAiMatch = function() { $('ai-match-ov').classList.remove('open'); };
 
+async function geminiPost(payload, apiKey) {
+  // Try v1beta first (works for most AQ. keys), fall back to v1
+  const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+  const versions = ['v1beta', 'v1'];
+  let lastErr = '';
+  for (const model of models) {
+    for (const ver of versions) {
+      try {
+        const url = `https://generativelanguage.googleapis.com/${ver}/models/${model}:generateContent?key=${apiKey}`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...payload, generationConfig: { temperature: 0.1, maxOutputTokens: 1000 } })
+        });
+        const data = await res.json();
+        if (!res.ok) { lastErr = data?.error?.message || `HTTP ${res.status}`; continue; }
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        return text;
+      } catch(e) { lastErr = e.message; }
+    }
+  }
+  throw new Error(lastErr || 'All models failed');
+}
+
 async function geminiDescribeImage(base64, mimeType, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{
-        parts: [
-          { inline_data: { mime_type: mimeType, data: base64 } },
-          { text: `You are an expert jewellery analyst. Examine this image and describe the gold/silver ornaments in detail for identification purposes. Focus on: type (ring/chain/bangle/necklace etc), distinctive features, engravings, stones, clasps, design patterns, approximate size, unique marks. Be specific. Respond ONLY with a JSON object (no markdown): {"description": "...", "types": ["ring","chain",...], "distinctive": "key identifying features in one sentence"}` }
-        ]
-      }],
-      generationConfig: { temperature: 0.1, maxOutputTokens: 500 }
-    })
-  });
-  if (!res.ok) { const e = await res.json(); throw new Error(e?.error?.message || 'Gemini error'); }
-  const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+  const text = await geminiPost({
+    contents: [{
+      parts: [
+        { inline_data: { mime_type: mimeType, data: base64 } },
+        { text: `You are an expert jewellery analyst. Examine this image and describe the gold/silver ornaments in detail for identification purposes. Focus on: type (ring/chain/bangle/necklace etc), distinctive features, engravings, stones, clasps, design patterns, approximate size, unique marks. Be specific. Respond ONLY with a JSON object (no markdown): {"description": "...", "types": ["ring","chain",...], "distinctive": "key identifying features in one sentence"}` }
+      ]
+    }]
+  }, apiKey);
   try { return JSON.parse(text.replace(/```json|```/g,'').trim()); }
   catch { return { description: text, types: [], distinctive: text }; }
 }
 
 async function geminiCompare(currentDesc, otherDescs, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
   const prompt = `You are a fraud detection expert for a gold loan business.
 
 Current ornament being pledged:
@@ -2449,17 +2463,7 @@ ${JSON.stringify(otherDescs.map((l,i) => ({
 
 For each existing loan, assess if the same physical ornament could have been pledged. Consider type, design, distinctive features. Respond ONLY with JSON array (no markdown): [{"loanIndex": 0, "risk": "HIGH|MEDIUM|LOW|NONE", "confidence": 0-100, "reason": "one sentence"}]`;
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.1, maxOutputTokens: 1000 }
-    })
-  });
-  if (!res.ok) { const e = await res.json(); throw new Error(e?.error?.message || 'Gemini error'); }
-  const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
+  const text = await geminiPost({ contents: [{ parts: [{ text: prompt }] }] }, apiKey);
   try { return JSON.parse(text.replace(/```json|```/g,'').trim()); }
   catch { return []; }
 }
@@ -2482,7 +2486,7 @@ window.runOrnamentScan = async function() {
     <div class="ai-scanning">
       <div class="ai-scan-ic">🤖</div>
       <div class="ai-scan-t">Analysing ornaments…</div>
-      <div class="ai-scan-s">Gemini AI is examining the image and comparing against ${otherLoans.length} loan${otherLoans.length!==1?'s':''} with photos.</div>
+      <div class="ai-scan-s">Gemini 2.5 Flash is examining the image and comparing against ${otherLoans.length} loan${otherLoans.length!==1?'s':''} with photos.</div>
     </div>`;
   $('ai-match-ov').classList.add('open');
 
