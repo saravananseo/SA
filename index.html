@@ -1119,6 +1119,16 @@ body::before {
         <div class="stat-box-v" id="s-act-rate">0%</div>
       </div>
     </div>
+    <div class="stat-grid" style="margin-bottom:14px">
+      <div class="stat-box">
+        <div class="stat-box-l">⚖️ Total Net Weight</div>
+        <div class="stat-box-v" id="s-act-nwt">—</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-l">⚖️ Total Gross Weight</div>
+        <div class="stat-box-v" id="s-act-gwt">—</div>
+      </div>
+    </div>
 
     <!-- CLOSED block -->
     <div class="stat-section-lbl" id="sl-closed">
@@ -1892,12 +1902,18 @@ function renderLoans() {
 
               const totalNetWt = l.items.reduce((s,it)=>s+(parseFloat(it.wt)||0),0);
 
+              // Total due = principal + interest accrued to date
+              const effRd2 = l.releaseDate || (l.status==='Active' ? localDate() : null);
+              const m2 = effRd2 ? calcMonths(l.loanDate, effRd2) : 0;
+              const totalDue = (l.amount||0) + (m2 ? calcInterest(l.amount, l.rate, m2) : 0);
+
               return itemsWithVal.map(it => {
                 const val = it._val;
                 const val80 = val ? Math.round(val * 0.8) : 0;
                 const nwt = parseFloat(it.wt)||0;
                 const gwt = parseFloat(it.gwt)||0;
-                const wtShare = totalNetWt > 0 ? (nwt/totalNetWt) * (l.amount||0) : 0;
+                // P/L = item market value − item's proportional share of total due (by net weight)
+                const wtShare = totalNetWt > 0 ? (nwt/totalNetWt) * totalDue : 0;
                 const pl = val > 0 && wtShare > 0 ? val - wtShare : null;
                 const plHtml = pl !== null
                   ? `<span class="${pl>=0?'itbl-profit':'itbl-loss'}">${pl>=0?'+':''}${inr(pl)}</span>`
@@ -1942,7 +1958,11 @@ function renderLoans() {
                 totalNwt  += parseFloat(it.wt)||0;
               });
               const total80 = Math.round(totalVal * 0.8);
-              const diff = totalVal - (l.amount||0);
+              // Total P/L = total market value − total due (principal + interest)
+              const effRd3 = l.releaseDate || (l.status==='Active' ? localDate() : null);
+              const m3 = effRd3 ? calcMonths(l.loanDate, effRd3) : 0;
+              const loanTotalDue = (l.amount||0) + (m3 ? calcInterest(l.amount, l.rate, m3) : 0);
+              const diff = totalVal - loanTotalDue;
               const plHtml = totalVal > 0
                 ? `<span class="${diff>=0?'itbl-profit':'itbl-loss'}">${diff>=0?'+':''}${inr(diff)}</span>`
                 : '—';
@@ -1972,7 +1992,7 @@ function renderStats() {
   const clLoans  = loans.filter(l => l.status === 'Closed');
 
   // Active totals — interest calculated till today
-  let actP=0, actI=0, actSR=0;
+  let actP=0, actI=0, actSR=0, actNwt=0, actGwt=0;
   let nextDateMs = Infinity, nextDateStr = null, nextAddedAmt = 0;
 
   // First pass: accumulate totals and per-loan current interest
@@ -1983,6 +2003,13 @@ function renderStats() {
     actP  += l.amount;
     actI  += i;
     actSR += l.rate;
+    // Sum net and gross weight from items
+    if (l.items && l.items.length) {
+      l.items.forEach(it => {
+        actNwt += parseFloat(it.wt)  || 0;
+        actGwt += parseFloat(it.gwt) || 0;
+      });
+    }
 
     // Find the exact next date when calcMonths increments
     // by scanning forward day by day from tomorrow
@@ -2053,6 +2080,8 @@ function renderStats() {
   $('s-act-i').textContent     = inr(actI);
   $('s-act-total').textContent = inr(actP + actI);
   $('s-act-rate').textContent  = actLoans.length ? (actSR / actLoans.length).toFixed(1) + '%' : '0%';
+  $('s-act-nwt').textContent   = actNwt > 0 ? actNwt.toFixed(2) + ' g' : '—';
+  $('s-act-gwt').textContent   = actGwt > 0 ? actGwt.toFixed(2) + ' g' : '—';
   $('s-next-date').textContent = actLoans.length ? nextDateStr : '—';
   $('s-next-amt').textContent  = actLoans.length ? '+' + inr(nextAddedAmt) : '—';
 
