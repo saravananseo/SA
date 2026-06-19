@@ -1125,8 +1125,8 @@ body::before {
         <div class="stat-box-v" id="s-act-nwt">—</div>
       </div>
       <div class="stat-box">
-        <div class="stat-box-l">⚖️ Total Gross Weight</div>
-        <div class="stat-box-v" id="s-act-gwt">—</div>
+        <div class="stat-box-l">💰 Net Value (Wt × Rate −20%)</div>
+        <div class="stat-box-v" id="s-act-netval" style="color:var(--green)">—</div>
       </div>
     </div>
 
@@ -2081,7 +2081,10 @@ function renderStats() {
   $('s-act-total').textContent = inr(actP + actI);
   $('s-act-rate').textContent  = actLoans.length ? (actSR / actLoans.length).toFixed(1) + '%' : '0%';
   $('s-act-nwt').textContent   = actNwt > 0 ? actNwt.toFixed(2) + ' g' : '—';
-  $('s-act-gwt').textContent   = actGwt > 0 ? actGwt.toFixed(2) + ' g' : '—';
+  // Net realizable value = total net weight × current 22K rate × 0.80 (20% wastage for old gold)
+  const RATE_22K = parseFloat($('gold-rate-input')?.value) || 14310;
+  const netRealVal = actNwt > 0 ? Math.round(actNwt * RATE_22K * 0.80) : 0;
+  $('s-act-netval') && ($('s-act-netval').textContent = netRealVal > 0 ? inr(netRealVal) : '—');
   $('s-next-date').textContent = actLoans.length ? nextDateStr : '—';
   $('s-next-amt').textContent  = actLoans.length ? '+' + inr(nextAddedAmt) : '—';
 
