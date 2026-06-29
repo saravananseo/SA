@@ -1742,6 +1742,8 @@ window.switchNav = function(tab) {
   $('pg-' + tab)?.classList.add('act');
   $('nv-' + tab)?.classList.add('act');
   $('fab').style.display = tab === 'loans' ? 'flex' : 'none';
+  // Refresh live gold rate whenever Summary tab is opened
+  if (tab === 'stats') fetchLiveGoldRate(true);
 };
 
 window.toggleSearch = function() {}; // no-op — search is now always visible inline
@@ -1881,7 +1883,7 @@ function renderLoans() {
           <thead><tr><th>Type</th><th>Item</th><th>Qty</th><th>Gross Wt</th><th>Net Wt</th><th>Purity</th><th>Value</th><th>80% Val</th><th>P/L</th></tr></thead>
           <tbody>
             ${(()=>{
-              const GOLD_RATE_22K = 14310;
+              const GOLD_RATE_22K = liveGoldRate22K;
               const goldFactors = {'24K':24/22,'22K':1,'18K':18/22,'14K':14/22};
               const silverBase = 105;
               const silverFactors = {'Silver 999':1,'Silver 925':0.925,'Silver 800':0.8};
@@ -1938,7 +1940,7 @@ function renderLoans() {
           </tbody>
           <tfoot>
             ${(()=>{
-              const GOLD_RATE_22K = 14310;
+              const GOLD_RATE_22K = liveGoldRate22K;
               const goldFactors = {'24K':24/22,'22K':1,'18K':18/22,'14K':14/22};
               const silverBase = 105;
               const silverFactors = {'Silver 999':1,'Silver 925':0.925,'Silver 800':0.8};
@@ -2082,7 +2084,7 @@ function renderStats() {
   $('s-act-rate').textContent  = actLoans.length ? (actSR / actLoans.length).toFixed(1) + '%' : '0%';
   $('s-act-nwt').textContent   = actNwt > 0 ? actNwt.toFixed(2) + ' g' : '—';
   // Net realizable value = total net weight × current 22K rate × 0.80 (20% wastage for old gold)
-  const RATE_22K = parseFloat($('gold-rate-input')?.value) || 14310;
+  const RATE_22K = parseFloat($('gold-rate-input')?.value) || liveGoldRate22K;
   const netRealVal = actNwt > 0 ? Math.round(actNwt * RATE_22K * 0.80) : 0;
   $('s-act-netval') && ($('s-act-netval').textContent = netRealVal > 0 ? inr(netRealVal) : '—');
   $('s-next-date').textContent = actLoans.length ? nextDateStr : '—';
@@ -2225,48 +2227,39 @@ function renderItemsForm() {
 
 const PURITY_FACTOR = { '24K': 1.0, '22K': 22/24, '18K': 18/24, '14K': 14/24 };
 
-// Fetch live 24K gold rate in INR per gram
-// Uses metals-live API (no key needed) → falls back to latest known rate
-async function fetchLiveGoldRate() {
-  const gri = $('gold-rate-input');
-  if (!gri) return;
+// Module-level live gold rate — updated whenever fetched
+let liveGoldRate22K = 13195; // fallback: today's known rate
 
-  // Show loading state
-  gri.placeholder = '⏳ Fetching live rate...';
-  gri.disabled = true;
+async function fetchLiveGoldRate(silent = false) {
+  const gri = $('gold-rate-input');
+
+  if (!silent && gri) {
+    gri.placeholder = '⏳ Fetching live rate...';
+    gri.disabled = true;
+  }
 
   try {
-    // metals.live is a free no-key API returning XAU price in USD
     const res = await fetch('https://metals.live/api/spot?metals=gold');
     if (!res.ok) throw new Error('fetch failed');
     const data = await res.json();
-    // data = [{ metal:'gold', price: <USD per troy oz> }]
     const usdPerOz = data?.[0]?.price || data?.gold;
     if (!usdPerOz) throw new Error('no price');
 
-    // Convert: USD/troy oz → USD/gram → INR/gram → 22K rate
     const usdPerGram24k = usdPerOz / 31.1035;
-    // Fetch USD→INR rate from frankfurter (no key needed)
     const fxRes = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
     const fxData = await fxRes.json();
     const usdToInr = fxData?.rates?.INR;
     if (!usdToInr) throw new Error('no fx rate');
 
-    const inrPer24k = usdPerGram24k * usdToInr;
-    const inrPer22k = Math.round(inrPer24k * (22/24));
-    gri.value = inrPer22k;
-    gri.disabled = false;
-    gri.placeholder = 'e.g. 14300';
-    onGoldRateChange();
-    toast('✅ Live 22K rate: ₹' + inrPer22k.toLocaleString('en-IN') + '/g');
+    const inrPer22k = Math.round(usdPerGram24k * usdToInr * (22/24));
+    liveGoldRate22K = inrPer22k; // store globally for Summary tab
+
+    if (gri) { gri.value = inrPer22k; gri.disabled = false; gri.placeholder = 'e.g. 13195'; onGoldRateChange(); }
+    if (!silent) toast('✅ Live 22K rate: ₹' + inrPer22k.toLocaleString('en-IN') + '/g');
+    else renderStats(); // re-render summary with updated rate
   } catch(e) {
-    // Fallback to today's known 22K market rate (4 Jun 2026)
-    const fallbackRate = 14310;
-    gri.value = fallbackRate;
-    gri.disabled = false;
-    gri.placeholder = 'e.g. 14300';
-    onGoldRateChange();
-    toast('📌 Using latest known 22K rate: ₹' + fallbackRate.toLocaleString('en-IN') + '/g');
+    if (gri) { gri.disabled = false; gri.placeholder = 'e.g. 13195'; if (!gri.value) { gri.value = liveGoldRate22K; onGoldRateChange(); } }
+    if (!silent) toast('📌 Using rate: ₹' + liveGoldRate22K.toLocaleString('en-IN') + '/g');
   }
 }
 
@@ -3108,6 +3101,9 @@ if (!storedCfg) {
 
 // Signal module is ready — flush any queued onclick calls
 if (typeof window._moduleReady === 'function') window._moduleReady();
+
+// Auto-fetch live gold rate on boot (silent)
+setTimeout(() => fetchLiveGoldRate(true), 1500);
 
 </script>
 </body>
