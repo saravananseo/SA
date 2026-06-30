@@ -1123,6 +1123,7 @@ body::before {
       <div class="stat-box">
         <div class="stat-box-l">⚖️ Total Net Weight</div>
         <div class="stat-box-v" id="s-act-nwt">—</div>
+        <div style="font-size:9px;color:var(--tx2);margin-top:2px" id="s-act-nwt-cov"></div>
       </div>
       <div class="stat-box">
         <div class="stat-box-l">💰 Net Value (Wt × Rate −20%)</div>
@@ -1994,7 +1995,7 @@ function renderStats() {
   const clLoans  = loans.filter(l => l.status === 'Closed');
 
   // Active totals — interest calculated till today
-  let actP=0, actI=0, actSR=0, actNwt=0, actGwt=0;
+  let actP=0, actI=0, actSR=0, actNwt=0, actGwt=0, loansWithItems=0;
   let nextDateMs = Infinity, nextDateStr = null, nextAddedAmt = 0;
 
   // First pass: accumulate totals and per-loan current interest
@@ -2007,6 +2008,7 @@ function renderStats() {
     actSR += l.rate;
     // Sum net and gross weight from items
     if (l.items && l.items.length) {
+      loansWithItems++;
       l.items.forEach(it => {
         actNwt += parseFloat(it.wt)  || 0;
         actGwt += parseFloat(it.gwt) || 0;
@@ -2083,6 +2085,8 @@ function renderStats() {
   $('s-act-total').textContent = inr(actP + actI);
   $('s-act-rate').textContent  = actLoans.length ? (actSR / actLoans.length).toFixed(1) + '%' : '0%';
   $('s-act-nwt').textContent   = actNwt > 0 ? actNwt.toFixed(2) + ' g' : '—';
+  const covEl = $('s-act-nwt-cov');
+  if (covEl) covEl.textContent = actLoans.length ? `${loansWithItems} of ${actLoans.length} loans have item data` : '';
   // Net realizable value = total net weight × current 22K rate × 0.80 (20% wastage for old gold)
   const RATE_22K = parseFloat($('gold-rate-input')?.value) || liveGoldRate22K;
   const netRealVal = actNwt > 0 ? Math.round(actNwt * RATE_22K * 0.80) : 0;
