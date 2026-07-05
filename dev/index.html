@@ -827,6 +827,59 @@ body::before {
   transition: background 0.2s;
 }
 .receipt-scan-btn:active { background: rgba(91,141,239,0.22); }
+
+/* ════ CUSTOMER MODULE ════ */
+.cust-filter-btn {
+  padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; white-space: nowrap;
+  background: var(--glass); border: 1px solid var(--bd); color: var(--tx2);
+  transition: all 0.2s; flex-shrink: 0;
+}
+.cust-filter-btn.act { background: rgba(212,161,42,0.15); border-color: var(--g1); color: var(--g1); }
+.cust-card {
+  background: linear-gradient(145deg, rgba(22,17,6,0.92), rgba(12,9,2,0.96));
+  border: 1px solid var(--bd); border-radius: var(--r);
+  margin: 0 16px 12px; overflow: hidden; box-shadow: var(--shadow);
+  animation: cardIn 0.28s cubic-bezier(0.22,1,0.36,1) both;
+  cursor: pointer; transition: transform 0.15s;
+}
+.cust-card:active { transform: scale(0.982); }
+.cust-card-head { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-bottom: 1px solid rgba(212,161,42,0.06); }
+.cust-avatar {
+  width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--g4), var(--g3));
+  border: 2px solid var(--bd);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700; color: var(--g1); overflow: hidden;
+}
+.cust-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.cust-info { flex: 1; min-width: 0; }
+.cust-name { font-size: 15px; font-weight: 700; color: var(--tx0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cust-code { font-size: 11px; color: var(--tx2); margin-top: 2px; }
+.cust-mobile { font-size: 12px; color: var(--tx1); margin-top: 3px; }
+.cust-status-badge { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; flex-shrink: 0; }
+.cust-status-Active    { background: rgba(39,201,122,0.1);  color: var(--green); border: 1px solid rgba(39,201,122,0.25); }
+.cust-status-Overdue   { background: rgba(245,166,35,0.1);  color: #F5A623;       border: 1px solid rgba(245,166,35,0.3); }
+.cust-status-Defaulter { background: rgba(232,85,85,0.12);  color: var(--red);    border: 1px solid rgba(232,85,85,0.3); }
+.cust-status-Closed    { background: rgba(120,120,120,0.1); color: var(--tx2);    border: 1px solid rgba(120,120,120,0.2); }
+.cust-card-body { display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 10px 16px; gap: 8px; }
+.cust-cf-l { font-size: 9px; color: var(--tx2); text-transform: uppercase; letter-spacing: 0.7px; }
+.cust-cf-v { font-size: 13px; font-weight: 600; color: var(--tx0); margin-top: 2px; }
+.cust-card-foot { display: flex; gap: 8px; padding: 10px 16px; border-top: 1px solid rgba(212,161,42,0.06); background: rgba(212,161,42,0.03); }
+.cust-img-upload {
+  width: 100%; aspect-ratio: 1; border: 2px dashed var(--bd);
+  border-radius: var(--rs); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 6px;
+  cursor: pointer; position: relative; overflow: hidden;
+  background: var(--glass); transition: border-color 0.2s; min-height: 80px;
+}
+.cust-img-upload:hover { border-color: var(--g2); }
+.cust-img-upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width:100%; height:100%; }
+.cust-img-upload img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.cust-img-upload-ic { font-size: 22px; }
+.cust-img-upload-t  { font-size: 9px; color: var(--tx2); text-align: center; padding: 0 4px; }
+html[data-theme="light"] .cust-card { background: linear-gradient(145deg,#FFFFFF,#F7F1E8); border-color: rgba(139,90,40,0.14); }
+
 .over-year-badge {
   display: inline-flex; align-items: center; gap: 5px;
   background: linear-gradient(135deg, rgba(232,85,85,0.15), rgba(232,85,85,0.08));
@@ -854,6 +907,68 @@ body::before {
   0%   { background-position: 0% 0; }
   100% { background-position: 200% 0; }
 }
+@keyframes stripeScroll {
+  0%   { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ── CUSTOMER MODULE ── */
+.cust-chip {
+  padding: 6px 14px; border-radius: 20px; border: 1px solid var(--bd);
+  background: var(--glass); color: var(--tx1); font-size: 12px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; white-space: nowrap;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.cust-chip.act { background: rgba(212,161,42,0.15); border-color: var(--g1); color: var(--g1); }
+.cust-section-lbl {
+  font-size: 11px; font-weight: 700; color: var(--tx1); text-transform: uppercase;
+  letter-spacing: 0.8px; margin: 16px 0 10px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--bd);
+}
+.cust-card {
+  background: linear-gradient(145deg, rgba(22,17,6,0.92), rgba(12,9,2,0.96));
+  border: 1px solid var(--bd); border-radius: var(--r); margin: 0 16px 12px;
+  overflow: hidden; box-shadow: var(--shadow);
+  animation: cardIn 0.32s cubic-bezier(0.22,1,0.36,1) both;
+}
+.cust-card-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px 12px; border-bottom: 1px solid rgba(212,161,42,0.08);
+}
+.cust-avatar {
+  width: 52px; height: 52px; border-radius: 12px;
+  background: var(--glass); border: 1px solid var(--bd);
+  display: flex; align-items: center; justify-content: center; font-size: 24px;
+  flex-shrink: 0; overflow: hidden;
+}
+.cust-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.cust-info { flex: 1; min-width: 0; }
+.cust-name { font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 700; color: var(--g1); }
+.cust-code { font-size: 11px; color: var(--tx2); margin-top: 2px; }
+.cust-status-badge { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+.cust-status-Active     { background: rgba(39,201,122,0.1);  color: var(--green); border: 1px solid rgba(39,201,122,0.25); }
+.cust-status-Closed     { background: rgba(100,100,100,0.1); color: var(--tx2);   border: 1px solid rgba(100,100,100,0.25); }
+.cust-status-Overdue    { background: rgba(245,166,35,0.12); color: #F5A623;      border: 1px solid rgba(245,166,35,0.3); }
+.cust-status-Defaulter  { background: rgba(232,85,85,0.1);   color: var(--red);   border: 1px solid rgba(232,85,85,0.25); }
+.cust-status-Blacklisted{ background: rgba(80,0,0,0.25);     color: #FF5555;      border: 1px solid rgba(255,68,68,0.4); }
+.cust-card-body { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 12px 16px; }
+.cust-cf-l { font-size: 9px; color: var(--tx2); text-transform: uppercase; letter-spacing: 0.8px; }
+.cust-cf-v { font-size: 13px; font-weight: 600; color: var(--tx0); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cust-card-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; background: rgba(212,161,42,0.04); border-top: 1px solid rgba(212,161,42,0.06);
+}
+.cust-kyc-pill {
+  padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600;
+  background: rgba(212,161,42,0.1); color: var(--g2); border: 1px solid rgba(212,161,42,0.2);
+}
+.cust-loans-badge {
+  font-size: 11px; font-weight: 600; color: var(--tx1);
+  background: var(--glass); border: 1px solid var(--bd);
+  padding: 3px 10px; border-radius: 20px; cursor: pointer;
+}
+html[data-theme="light"] .cust-card { background: linear-gradient(145deg,#fff,#f7f1e8); border-color: rgba(139,90,40,0.14); }
+
 .receipt-zone {
   border: 2px dashed var(--bd); border-radius: var(--rs);
   padding: 18px 16px; text-align: center; cursor: pointer;
@@ -1075,7 +1190,22 @@ body::before {
     <div id="loan-list"></div>
   </div>
 
-  <!-- ══ STATS PAGE ══ -->
+  <!-- ══ CUSTOMERS PAGE ══ -->
+  <div class="pg" id="pg-customers">
+    <div class="search-inline" id="cust-search-wrap">
+      <span style="color:var(--tx2);font-size:15px;flex-shrink:0">🔍</span>
+      <input type="text" id="csi" placeholder="Search customer name or code…" oninput="renderCustomers()"/>
+      <span class="search-x" onclick="$('csi').value='';renderCustomers()" style="cursor:pointer">✕</span>
+    </div>
+    <div style="display:flex;gap:8px;padding:0 16px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch">
+      <button class="cust-filter-btn act" id="cf-all"      onclick="setCustFilter('all')">All</button>
+      <button class="cust-filter-btn"     id="cf-active"   onclick="setCustFilter('active')">Active</button>
+      <button class="cust-filter-btn"     id="cf-overdue"  onclick="setCustFilter('overdue')">Overdue</button>
+      <button class="cust-filter-btn"     id="cf-defaulter" onclick="setCustFilter('defaulter')">Defaulter</button>
+      <button class="cust-filter-btn"     id="cf-closed"   onclick="setCustFilter('closed')">Closed</button>
+    </div>
+    <div id="cust-list"></div>
+  </div>
   <div class="pg" id="pg-stats">
     <!-- Grand total hero -->
     <div class="stat-hero">
@@ -1117,6 +1247,17 @@ body::before {
       <div class="stat-box">
         <div class="stat-box-l">Avg Rate / Month</div>
         <div class="stat-box-v" id="s-act-rate">0%</div>
+      </div>
+    </div>
+    <div class="stat-grid" style="margin-bottom:14px">
+      <div class="stat-box">
+        <div class="stat-box-l">⚖️ Total Net Weight</div>
+        <div class="stat-box-v" id="s-act-nwt">—</div>
+        <div style="font-size:9px;color:var(--tx2);margin-top:2px" id="s-act-nwt-cov"></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-l">💰 Net Value (Wt × Rate −20%)</div>
+        <div class="stat-box-v" id="s-act-netval" style="color:var(--green)">—</div>
       </div>
     </div>
 
@@ -1167,6 +1308,24 @@ body::before {
     <button class="btn-ghost" style="margin-top:0" onclick="openCfg()">🔥 Change Firebase Config</button>
   </div>
 
+  <!-- ══ CUSTOMERS PAGE ══ -->
+  <div class="pg" id="pg-customers">
+    <div class="search-inline" style="margin-bottom:4px">
+      <span style="color:var(--tx2);font-size:15px;flex-shrink:0">🔍</span>
+      <input type="text" id="cust-si" placeholder="Search name, code, mobile…" oninput="renderCustomers()"/>
+      <span class="search-x" onclick="$('cust-si').value='';renderCustomers()">✕</span>
+    </div>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding:4px 16px 10px;scrollbar-width:none">
+      <button class="cust-chip act" id="cf-All"        onclick="setCustFilter('All')">All</button>
+      <button class="cust-chip"     id="cf-Active"     onclick="setCustFilter('Active')">🟢 Active</button>
+      <button class="cust-chip"     id="cf-Closed"     onclick="setCustFilter('Closed')">⚫ Closed</button>
+      <button class="cust-chip"     id="cf-Overdue"    onclick="setCustFilter('Overdue')">🟡 Overdue</button>
+      <button class="cust-chip"     id="cf-Defaulter"  onclick="setCustFilter('Defaulter')">🔴 Defaulter</button>
+      <button class="cust-chip"     id="cf-Blacklisted" onclick="setCustFilter('Blacklisted')">⛔ Blacklisted</button>
+    </div>
+    <div id="cust-list"></div>
+  </div>
+
 </div><!-- end #app -->
 
 <!-- ══ BOTTOM NAV ══ -->
@@ -1179,6 +1338,9 @@ body::before {
   </button>
   <button class="nv" onclick="openLoanSheet()">
     <span class="nv-ic">➕</span><span class="nv-lb">Add</span>
+  </button>
+  <button class="nv" id="nv-customers" onclick="switchNav('customers')">
+    <span class="nv-ic">👥</span><span class="nv-lb">Customers</span>
   </button>
   <button class="nv" id="nv-import" onclick="openUpload()">
     <span class="nv-ic">📤</span><span class="nv-lb">Import</span>
@@ -1328,8 +1490,117 @@ body::before {
 </div>
 
 <!-- ══════════════════════════════════════════
-     FIREBASE CONFIG OVERLAY
+     CUSTOMER SHEET
      ══════════════════════════════════════════ -->
+<div class="sheet-ov" id="cust-ov" onclick="sheetOvClick(event,'cust-ov')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hd">
+      <div class="sheet-title" id="cust-sheet-title">New Customer</div>
+      <button class="sheet-close" onclick="closeCustSheet()">✕</button>
+    </div>
+    <div class="sheet-body">
+      <!-- Photo + ID row -->
+      <div class="frow" style="margin-bottom:16px">
+        <div>
+          <label class="fl">📷 Photo</label>
+          <div id="cust-photo-area"></div>
+        </div>
+        <div>
+          <label class="fl">🪪 ID Proof</label>
+          <div id="cust-id-area"></div>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">Customer Code</label>
+          <input class="fi" id="cf-code" type="text" placeholder="e.g. C001"/>
+        </div>
+        <div class="fg">
+          <label class="fl">Status</label>
+          <select class="fi" id="cf-status">
+            <option value="Active">Active</option>
+            <option value="Overdue">Overdue</option>
+            <option value="Defaulter">Defaulter</option>
+            <option value="Closed">Closed</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">Full Name</label>
+        <input class="fi" id="cf-name" type="text" placeholder="Customer full name"/>
+      </div>
+      <div class="fg">
+        <label class="fl">Mobile Number</label>
+        <input class="fi" id="cf-mobile" type="tel" placeholder="+91 99999 99999"/>
+      </div>
+      <div class="fg">
+        <label class="fl">Alternate Mobile</label>
+        <input class="fi" id="cf-mobile2" type="tel" placeholder="Optional"/>
+      </div>
+      <div class="fg">
+        <label class="fl">Address</label>
+        <textarea class="fi" id="cf-address" rows="2" placeholder="House no, Street, Area, City, Pincode" style="resize:none"></textarea>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">ID Type</label>
+          <select class="fi" id="cf-idtype">
+            <option value="Aadhaar">Aadhaar</option>
+            <option value="PAN">PAN</option>
+            <option value="Voter ID">Voter ID</option>
+            <option value="Passport">Passport</option>
+            <option value="Driving Licence">Driving Licence</option>
+            <option value="Ration Card">Ration Card</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">ID Number</label>
+          <input class="fi" id="cf-idnum" type="text" placeholder="ID number"/>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">Date of Birth</label>
+          <input class="fi" id="cf-dob" type="date"/>
+        </div>
+        <div class="fg">
+          <label class="fl">Occupation</label>
+          <input class="fi" id="cf-occ" type="text" placeholder="e.g. Farmer, Business"/>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">Guarantor Name</label>
+        <input class="fi" id="cf-guarantor" type="text" placeholder="Optional"/>
+      </div>
+      <div class="fg">
+        <label class="fl">Guarantor Mobile</label>
+        <input class="fi" id="cf-gmobile" type="tel" placeholder="Optional"/>
+      </div>
+      <div class="fg">
+        <label class="fl">Remarks</label>
+        <textarea class="fi" id="cf-remarks" rows="2" placeholder="Any notes about this customer" style="resize:none"></textarea>
+      </div>
+      <button class="btn-primary" onclick="saveCustomer()">💾 Save Customer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CUSTOMER DETAIL SHEET
+     ══════════════════════════════════════════ -->
+<div class="sheet-ov" id="cust-detail-ov" onclick="sheetOvClick(event,'cust-detail-ov')">
+  <div class="sheet" style="max-height:96vh">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hd">
+      <div class="sheet-title" id="cust-detail-title">Customer</div>
+      <button class="sheet-close" onclick="$('cust-detail-ov').classList.remove('open')">✕</button>
+    </div>
+    <div class="sheet-body" id="cust-detail-body"></div>
+  </div>
+</div>
+
+<!-- ══ FIREBASE CONFIG ══ -->
 <div class="cfg-ov" id="cfg-ov">
   <div class="cfg-box">
     <div class="cfg-title">🔥 Connect Firebase</div>
@@ -1415,6 +1686,116 @@ const firebaseConfig = {
     <button class="sheet-close" onclick="closeReceiptViewer()">✕</button>
   </div>
   <div id="receipt-ov-content"></div>
+</div>
+
+<!-- ══ CUSTOMER ADD/EDIT SHEET ══ -->
+<div class="sheet-ov" id="cust-ov" onclick="sheetOvClick(event,'cust-ov')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hd">
+      <div class="sheet-title" id="cust-sheet-title">New Customer</div>
+      <button class="sheet-close" onclick="closeCustSheet()">✕</button>
+    </div>
+    <div class="sheet-body">
+
+      <!-- Photo + Code row -->
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px">
+        <div style="position:relative;cursor:pointer" onclick="$('cust-photo-input').click()">
+          <div id="cust-photo-preview" style="width:72px;height:72px;border-radius:12px;background:var(--glass);border:2px dashed var(--bd);display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden">👤</div>
+          <div style="position:absolute;bottom:-4px;right:-4px;width:22px;height:22px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:11px">📷</div>
+          <input type="file" id="cust-photo-input" accept="image/*" style="display:none" onchange="custPhotoChosen(event)"/>
+        </div>
+        <div style="flex:1">
+          <div class="fg" style="margin-bottom:8px">
+            <label class="fl">Customer Code</label>
+            <input class="fi" id="cf-code" type="text" placeholder="e.g. CUST-001"/>
+          </div>
+          <div class="fg" style="margin-bottom:0">
+            <label class="fl">Status</label>
+            <select class="fi" id="cf-status">
+              <option value="Active">🟢 Active</option>
+              <option value="Closed">⚫ Closed</option>
+              <option value="Overdue">🟡 Overdue</option>
+              <option value="Defaulter">🔴 Defaulter</option>
+              <option value="Blacklisted">⛔ Blacklisted</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal Info -->
+      <div class="cust-section-lbl">👤 Personal Information</div>
+      <div class="fg"><label class="fl">Full Name *</label><input class="fi" id="cf-name" type="text" placeholder="Customer full name"/></div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Father / Husband Name</label><input class="fi" id="cf-fathername" type="text" placeholder=""/></div>
+        <div class="fg"><label class="fl">Gender</label>
+          <select class="fi" id="cf-gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Date of Birth</label><input class="fi" id="cf-dob" type="date"/></div>
+        <div class="fg"><label class="fl">Occupation</label><input class="fi" id="cf-occupation" type="text" placeholder="e.g. Farmer"/></div>
+      </div>
+
+      <!-- Contact -->
+      <div class="cust-section-lbl">📱 Contact Details</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Mobile *</label><input class="fi" id="cf-mobile" type="tel" placeholder="10-digit number"/></div>
+        <div class="fg"><label class="fl">Alternate Mobile</label><input class="fi" id="cf-mobile2" type="tel" placeholder="Optional"/></div>
+      </div>
+      <div class="fg"><label class="fl">Address</label><input class="fi" id="cf-address" type="text" placeholder="Street / Area"/></div>
+      <div class="frow">
+        <div class="fg"><label class="fl">City</label><input class="fi" id="cf-city" type="text" placeholder=""/></div>
+        <div class="fg"><label class="fl">Pincode</label><input class="fi" id="cf-pincode" type="text" placeholder=""/></div>
+      </div>
+
+      <!-- KYC -->
+      <div class="cust-section-lbl">🪪 KYC Documents</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Aadhaar Number</label><input class="fi" id="cf-aadhaar" type="text" placeholder="XXXX XXXX XXXX" maxlength="14"/></div>
+        <div class="fg"><label class="fl">PAN Number</label><input class="fi" id="cf-pan" type="text" placeholder="ABCDE1234F" maxlength="10"/></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Voter ID</label><input class="fi" id="cf-voterid" type="text" placeholder="Optional"/></div>
+        <div class="fg"><label class="fl">Driving License</label><input class="fi" id="cf-dl" type="text" placeholder="Optional"/></div>
+      </div>
+
+      <!-- ID Proof Image -->
+      <div class="fg">
+        <label class="fl">ID Proof Image</label>
+        <div id="cust-id-upload-area"></div>
+      </div>
+
+      <!-- Financial -->
+      <div class="cust-section-lbl">💰 Financial Profile</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Annual Income (₹)</label><input class="fi" id="cf-income" type="number" placeholder="0"/></div>
+        <div class="fg"><label class="fl">Credit Limit (₹)</label><input class="fi" id="cf-limit" type="number" placeholder="0"/></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Risk Level</label>
+          <select class="fi" id="cf-risk"><option value="Low">🟢 Low</option><option value="Medium">🟡 Medium</option><option value="High">🔴 High</option></select>
+        </div>
+        <div class="fg"><label class="fl">Customer Since</label><input class="fi" id="cf-since" type="date"/></div>
+      </div>
+
+      <!-- Guarantor -->
+      <div class="cust-section-lbl">🤝 Guarantor (Optional)</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Guarantor Name</label><input class="fi" id="cf-gname" type="text" placeholder=""/></div>
+        <div class="fg"><label class="fl">Guarantor Mobile</label><input class="fi" id="cf-gmobile" type="tel" placeholder=""/></div>
+      </div>
+
+      <!-- Notes -->
+      <div class="fg" style="margin-top:4px">
+        <label class="fl">Notes / Remarks</label>
+        <input class="fi" id="cf-notes" type="text" placeholder="Any additional notes…"/>
+      </div>
+
+      <button class="btn-primary" onclick="saveCustomer()">💾 Save Customer</button>
+      <button class="btn-ghost" id="cf-delete-btn" onclick="deleteCustomer()" style="color:var(--red);border-color:rgba(232,85,85,0.3);display:none;margin-top:8px">🗑️ Delete Customer</button>
+    </div>
+  </div>
 </div>
 
 <!-- PIN LOGIN OVERLAY -->
@@ -1732,6 +2113,8 @@ window.switchNav = function(tab) {
   $('pg-' + tab)?.classList.add('act');
   $('nv-' + tab)?.classList.add('act');
   $('fab').style.display = tab === 'loans' ? 'flex' : 'none';
+  // Refresh live gold rate whenever Summary tab is opened
+  if (tab === 'stats') fetchLiveGoldRate(true);
 };
 
 window.toggleSearch = function() {}; // no-op — search is now always visible inline
@@ -1871,7 +2254,7 @@ function renderLoans() {
           <thead><tr><th>Type</th><th>Item</th><th>Qty</th><th>Gross Wt</th><th>Net Wt</th><th>Purity</th><th>Value</th><th>80% Val</th><th>P/L</th></tr></thead>
           <tbody>
             ${(()=>{
-              const GOLD_RATE_22K = 14310;
+              const GOLD_RATE_22K = liveGoldRate22K;
               const goldFactors = {'24K':24/22,'22K':1,'18K':18/22,'14K':14/22};
               const silverBase = 105;
               const silverFactors = {'Silver 999':1,'Silver 925':0.925,'Silver 800':0.8};
@@ -1892,12 +2275,18 @@ function renderLoans() {
 
               const totalNetWt = l.items.reduce((s,it)=>s+(parseFloat(it.wt)||0),0);
 
+              // Total due = principal + interest accrued to date
+              const effRd2 = l.releaseDate || (l.status==='Active' ? localDate() : null);
+              const m2 = effRd2 ? calcMonths(l.loanDate, effRd2) : 0;
+              const totalDue = (l.amount||0) + (m2 ? calcInterest(l.amount, l.rate, m2) : 0);
+
               return itemsWithVal.map(it => {
                 const val = it._val;
                 const val80 = val ? Math.round(val * 0.8) : 0;
                 const nwt = parseFloat(it.wt)||0;
                 const gwt = parseFloat(it.gwt)||0;
-                const wtShare = totalNetWt > 0 ? (nwt/totalNetWt) * (l.amount||0) : 0;
+                // P/L = item market value − item's proportional share of total due (by net weight)
+                const wtShare = totalNetWt > 0 ? (nwt/totalNetWt) * totalDue : 0;
                 const pl = val > 0 && wtShare > 0 ? val - wtShare : null;
                 const plHtml = pl !== null
                   ? `<span class="${pl>=0?'itbl-profit':'itbl-loss'}">${pl>=0?'+':''}${inr(pl)}</span>`
@@ -1922,7 +2311,7 @@ function renderLoans() {
           </tbody>
           <tfoot>
             ${(()=>{
-              const GOLD_RATE_22K = 14310;
+              const GOLD_RATE_22K = liveGoldRate22K;
               const goldFactors = {'24K':24/22,'22K':1,'18K':18/22,'14K':14/22};
               const silverBase = 105;
               const silverFactors = {'Silver 999':1,'Silver 925':0.925,'Silver 800':0.8};
@@ -1942,7 +2331,11 @@ function renderLoans() {
                 totalNwt  += parseFloat(it.wt)||0;
               });
               const total80 = Math.round(totalVal * 0.8);
-              const diff = totalVal - (l.amount||0);
+              // Total P/L = total market value − total due (principal + interest)
+              const effRd3 = l.releaseDate || (l.status==='Active' ? localDate() : null);
+              const m3 = effRd3 ? calcMonths(l.loanDate, effRd3) : 0;
+              const loanTotalDue = (l.amount||0) + (m3 ? calcInterest(l.amount, l.rate, m3) : 0);
+              const diff = totalVal - loanTotalDue;
               const plHtml = totalVal > 0
                 ? `<span class="${diff>=0?'itbl-profit':'itbl-loss'}">${diff>=0?'+':''}${inr(diff)}</span>`
                 : '—';
@@ -1972,7 +2365,7 @@ function renderStats() {
   const clLoans  = loans.filter(l => l.status === 'Closed');
 
   // Active totals — interest calculated till today
-  let actP=0, actI=0, actSR=0;
+  let actP=0, actI=0, actSR=0, actNwt=0, actGwt=0, loansWithItems=0;
   let nextDateMs = Infinity, nextDateStr = null, nextAddedAmt = 0;
 
   // First pass: accumulate totals and per-loan current interest
@@ -1983,6 +2376,14 @@ function renderStats() {
     actP  += l.amount;
     actI  += i;
     actSR += l.rate;
+    // Sum net and gross weight from items
+    if (l.items && l.items.length) {
+      loansWithItems++;
+      l.items.forEach(it => {
+        actNwt += parseFloat(it.wt)  || 0;
+        actGwt += parseFloat(it.gwt) || 0;
+      });
+    }
 
     // Find the exact next date when calcMonths increments
     // by scanning forward day by day from tomorrow
@@ -2053,6 +2454,13 @@ function renderStats() {
   $('s-act-i').textContent     = inr(actI);
   $('s-act-total').textContent = inr(actP + actI);
   $('s-act-rate').textContent  = actLoans.length ? (actSR / actLoans.length).toFixed(1) + '%' : '0%';
+  $('s-act-nwt').textContent   = actNwt > 0 ? actNwt.toFixed(2) + ' g' : '—';
+  const covEl = $('s-act-nwt-cov');
+  if (covEl) covEl.textContent = actLoans.length ? `${loansWithItems} of ${actLoans.length} loans have item data` : '';
+  // Net realizable value = total net weight × current 22K rate × 0.80 (20% wastage for old gold)
+  const RATE_22K = parseFloat($('gold-rate-input')?.value) || liveGoldRate22K;
+  const netRealVal = actNwt > 0 ? Math.round(actNwt * RATE_22K * 0.80) : 0;
+  $('s-act-netval') && ($('s-act-netval').textContent = netRealVal > 0 ? inr(netRealVal) : '—');
   $('s-next-date').textContent = actLoans.length ? nextDateStr : '—';
   $('s-next-amt').textContent  = actLoans.length ? '+' + inr(nextAddedAmt) : '—';
 
@@ -2193,48 +2601,39 @@ function renderItemsForm() {
 
 const PURITY_FACTOR = { '24K': 1.0, '22K': 22/24, '18K': 18/24, '14K': 14/24 };
 
-// Fetch live 24K gold rate in INR per gram
-// Uses metals-live API (no key needed) → falls back to latest known rate
-async function fetchLiveGoldRate() {
-  const gri = $('gold-rate-input');
-  if (!gri) return;
+// Module-level live gold rate — updated whenever fetched
+let liveGoldRate22K = 13195; // fallback: today's known rate
 
-  // Show loading state
-  gri.placeholder = '⏳ Fetching live rate...';
-  gri.disabled = true;
+async function fetchLiveGoldRate(silent = false) {
+  const gri = $('gold-rate-input');
+
+  if (!silent && gri) {
+    gri.placeholder = '⏳ Fetching live rate...';
+    gri.disabled = true;
+  }
 
   try {
-    // metals.live is a free no-key API returning XAU price in USD
     const res = await fetch('https://metals.live/api/spot?metals=gold');
     if (!res.ok) throw new Error('fetch failed');
     const data = await res.json();
-    // data = [{ metal:'gold', price: <USD per troy oz> }]
     const usdPerOz = data?.[0]?.price || data?.gold;
     if (!usdPerOz) throw new Error('no price');
 
-    // Convert: USD/troy oz → USD/gram → INR/gram → 22K rate
     const usdPerGram24k = usdPerOz / 31.1035;
-    // Fetch USD→INR rate from frankfurter (no key needed)
     const fxRes = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
     const fxData = await fxRes.json();
     const usdToInr = fxData?.rates?.INR;
     if (!usdToInr) throw new Error('no fx rate');
 
-    const inrPer24k = usdPerGram24k * usdToInr;
-    const inrPer22k = Math.round(inrPer24k * (22/24));
-    gri.value = inrPer22k;
-    gri.disabled = false;
-    gri.placeholder = 'e.g. 14300';
-    onGoldRateChange();
-    toast('✅ Live 22K rate: ₹' + inrPer22k.toLocaleString('en-IN') + '/g');
+    const inrPer22k = Math.round(usdPerGram24k * usdToInr * (22/24));
+    liveGoldRate22K = inrPer22k; // store globally for Summary tab
+
+    if (gri) { gri.value = inrPer22k; gri.disabled = false; gri.placeholder = 'e.g. 13195'; onGoldRateChange(); }
+    if (!silent) toast('✅ Live 22K rate: ₹' + inrPer22k.toLocaleString('en-IN') + '/g');
+    else renderStats(); // re-render summary with updated rate
   } catch(e) {
-    // Fallback to today's known 22K market rate (4 Jun 2026)
-    const fallbackRate = 14310;
-    gri.value = fallbackRate;
-    gri.disabled = false;
-    gri.placeholder = 'e.g. 14300';
-    onGoldRateChange();
-    toast('📌 Using latest known 22K rate: ₹' + fallbackRate.toLocaleString('en-IN') + '/g');
+    if (gri) { gri.disabled = false; gri.placeholder = 'e.g. 13195'; if (!gri.value) { gri.value = liveGoldRate22K; onGoldRateChange(); } }
+    if (!silent) toast('📌 Using rate: ₹' + liveGoldRate22K.toLocaleString('en-IN') + '/g');
   }
 }
 
@@ -2409,30 +2808,44 @@ window.saveGeminiKey = function() {
 
 window.closeAiMatch = function() { $('ai-match-ov').classList.remove('open'); };
 
+async function geminiPost(payload, apiKey) {
+  // Try v1beta first (works for most AQ. keys), fall back to v1
+  const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
+  const versions = ['v1beta', 'v1'];
+  let lastErr = '';
+  for (const model of models) {
+    for (const ver of versions) {
+      try {
+        const url = `https://generativelanguage.googleapis.com/${ver}/models/${model}:generateContent?key=${apiKey}`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...payload, generationConfig: { temperature: 0.1, maxOutputTokens: 1000 } })
+        });
+        const data = await res.json();
+        if (!res.ok) { lastErr = data?.error?.message || `HTTP ${res.status}`; continue; }
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        return text;
+      } catch(e) { lastErr = e.message; }
+    }
+  }
+  throw new Error(lastErr || 'All models failed');
+}
+
 async function geminiDescribeImage(base64, mimeType, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{
-        parts: [
-          { inline_data: { mime_type: mimeType, data: base64 } },
-          { text: `You are an expert jewellery analyst. Examine this image and describe the gold/silver ornaments in detail for identification purposes. Focus on: type (ring/chain/bangle/necklace etc), distinctive features, engravings, stones, clasps, design patterns, approximate size, unique marks. Be specific. Respond ONLY with a JSON object (no markdown): {"description": "...", "types": ["ring","chain",...], "distinctive": "key identifying features in one sentence"}` }
-        ]
-      }],
-      generationConfig: { temperature: 0.1, maxOutputTokens: 500 }
-    })
-  });
-  if (!res.ok) { const e = await res.json(); throw new Error(e?.error?.message || 'Gemini error'); }
-  const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+  const text = await geminiPost({
+    contents: [{
+      parts: [
+        { inline_data: { mime_type: mimeType, data: base64 } },
+        { text: `You are an expert jewellery analyst. Examine this image and describe the gold/silver ornaments in detail for identification purposes. Focus on: type (ring/chain/bangle/necklace etc), distinctive features, engravings, stones, clasps, design patterns, approximate size, unique marks. Be specific. Respond ONLY with a JSON object (no markdown): {"description": "...", "types": ["ring","chain",...], "distinctive": "key identifying features in one sentence"}` }
+      ]
+    }]
+  }, apiKey);
   try { return JSON.parse(text.replace(/```json|```/g,'').trim()); }
   catch { return { description: text, types: [], distinctive: text }; }
 }
 
 async function geminiCompare(currentDesc, otherDescs, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
   const prompt = `You are a fraud detection expert for a gold loan business.
 
 Current ornament being pledged:
@@ -2449,17 +2862,7 @@ ${JSON.stringify(otherDescs.map((l,i) => ({
 
 For each existing loan, assess if the same physical ornament could have been pledged. Consider type, design, distinctive features. Respond ONLY with JSON array (no markdown): [{"loanIndex": 0, "risk": "HIGH|MEDIUM|LOW|NONE", "confidence": 0-100, "reason": "one sentence"}]`;
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.1, maxOutputTokens: 1000 }
-    })
-  });
-  if (!res.ok) { const e = await res.json(); throw new Error(e?.error?.message || 'Gemini error'); }
-  const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
+  const text = await geminiPost({ contents: [{ parts: [{ text: prompt }] }] }, apiKey);
   try { return JSON.parse(text.replace(/```json|```/g,'').trim()); }
   catch { return []; }
 }
@@ -2482,7 +2885,7 @@ window.runOrnamentScan = async function() {
     <div class="ai-scanning">
       <div class="ai-scan-ic">🤖</div>
       <div class="ai-scan-t">Analysing ornaments…</div>
-      <div class="ai-scan-s">Gemini AI is examining the image and comparing against ${otherLoans.length} loan${otherLoans.length!==1?'s':''} with photos.</div>
+      <div class="ai-scan-s">Gemini 2.5 Flash is examining the image and comparing against ${otherLoans.length} loan${otherLoans.length!==1?'s':''} with photos.</div>
     </div>`;
   $('ai-match-ov').classList.add('open');
 
@@ -3072,6 +3475,9 @@ if (!storedCfg) {
 
 // Signal module is ready — flush any queued onclick calls
 if (typeof window._moduleReady === 'function') window._moduleReady();
+
+// Auto-fetch live gold rate on boot (silent)
+setTimeout(() => fetchLiveGoldRate(true), 1500);
 
 </script>
 </body>
