@@ -388,7 +388,7 @@ body::before {
   margin-bottom: 13px; overflow: hidden;
   box-shadow: var(--shadow), inset 0 1px 0 rgba(212,161,42,0.06);
   animation: cardIn 0.32s cubic-bezier(0.22,1,0.36,1) both;
-  transition: transform 0.18s, box-shadow 0.18s;
+  transition: transform 0.18s, box-shadow 0.18s, opacity 0.2s;
 }
 .lcard:active { transform: scale(0.983); box-shadow: 0 2px 12px rgba(0,0,0,0.5); }
 @keyframes cardIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
@@ -827,6 +827,59 @@ body::before {
   transition: background 0.2s;
 }
 .receipt-scan-btn:active { background: rgba(91,141,239,0.22); }
+
+/* ════ CUSTOMER MODULE ════ */
+.cust-filter-btn {
+  padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; white-space: nowrap;
+  background: var(--glass); border: 1px solid var(--bd); color: var(--tx2);
+  transition: all 0.2s; flex-shrink: 0;
+}
+.cust-filter-btn.act { background: rgba(212,161,42,0.15); border-color: var(--g1); color: var(--g1); }
+.cust-card {
+  background: linear-gradient(145deg, rgba(22,17,6,0.92), rgba(12,9,2,0.96));
+  border: 1px solid var(--bd); border-radius: var(--r);
+  margin: 0 16px 12px; overflow: hidden; box-shadow: var(--shadow);
+  animation: cardIn 0.28s cubic-bezier(0.22,1,0.36,1) both;
+  cursor: pointer; transition: transform 0.15s;
+}
+.cust-card:active { transform: scale(0.982); }
+.cust-card-head { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-bottom: 1px solid rgba(212,161,42,0.06); }
+.cust-avatar {
+  width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--g4), var(--g3));
+  border: 2px solid var(--bd);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700; color: var(--g1); overflow: hidden;
+}
+.cust-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.cust-info { flex: 1; min-width: 0; }
+.cust-name { font-size: 15px; font-weight: 700; color: var(--tx0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cust-code { font-size: 11px; color: var(--tx2); margin-top: 2px; }
+.cust-mobile { font-size: 12px; color: var(--tx1); margin-top: 3px; }
+.cust-status-badge { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; flex-shrink: 0; }
+.cust-status-Active    { background: rgba(39,201,122,0.1);  color: var(--green); border: 1px solid rgba(39,201,122,0.25); }
+.cust-status-Overdue   { background: rgba(245,166,35,0.1);  color: #F5A623;       border: 1px solid rgba(245,166,35,0.3); }
+.cust-status-Defaulter { background: rgba(232,85,85,0.12);  color: var(--red);    border: 1px solid rgba(232,85,85,0.3); }
+.cust-status-Closed    { background: rgba(120,120,120,0.1); color: var(--tx2);    border: 1px solid rgba(120,120,120,0.2); }
+.cust-card-body { display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 10px 16px; gap: 8px; }
+.cust-cf-l { font-size: 9px; color: var(--tx2); text-transform: uppercase; letter-spacing: 0.7px; }
+.cust-cf-v { font-size: 13px; font-weight: 600; color: var(--tx0); margin-top: 2px; }
+.cust-card-foot { display: flex; gap: 8px; padding: 10px 16px; border-top: 1px solid rgba(212,161,42,0.06); background: rgba(212,161,42,0.03); }
+.cust-img-upload {
+  width: 100%; aspect-ratio: 1; border: 2px dashed var(--bd);
+  border-radius: var(--rs); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 6px;
+  cursor: pointer; position: relative; overflow: hidden;
+  background: var(--glass); transition: border-color 0.2s; min-height: 80px;
+}
+.cust-img-upload:hover { border-color: var(--g2); }
+.cust-img-upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width:100%; height:100%; }
+.cust-img-upload img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.cust-img-upload-ic { font-size: 22px; }
+.cust-img-upload-t  { font-size: 9px; color: var(--tx2); text-align: center; padding: 0 4px; }
+html[data-theme="light"] .cust-card { background: linear-gradient(145deg,#FFFFFF,#F7F1E8); border-color: rgba(139,90,40,0.14); }
+
 .over-year-badge {
   display: inline-flex; align-items: center; gap: 5px;
   background: linear-gradient(135deg, rgba(232,85,85,0.15), rgba(232,85,85,0.08));
@@ -854,6 +907,77 @@ body::before {
   0%   { background-position: 0% 0; }
   100% { background-position: 200% 0; }
 }
+@keyframes stripeScroll {
+  0%   { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ── CUSTOMER MODULE ── */
+.cust-chip {
+  padding: 6px 14px; border-radius: 20px; border: 1px solid var(--bd);
+  background: var(--glass); color: var(--tx1); font-size: 12px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; white-space: nowrap;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.cust-chip.act { background: rgba(212,161,42,0.15); border-color: var(--g1); color: var(--g1); }
+.cust-section-lbl {
+  font-size: 11px; font-weight: 700; color: var(--tx1); text-transform: uppercase;
+  letter-spacing: 0.8px; margin: 16px 0 10px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--bd);
+}
+.cust-card {
+  background: linear-gradient(145deg, rgba(22,17,6,0.92), rgba(12,9,2,0.96));
+  border: 1px solid var(--bd); border-radius: var(--r); margin: 0 16px 12px;
+  overflow: hidden; box-shadow: var(--shadow);
+  animation: cardIn 0.32s cubic-bezier(0.22,1,0.36,1) both;
+}
+.cust-card-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px 12px; border-bottom: 1px solid rgba(212,161,42,0.08);
+}
+.cust-avatar {
+  width: 52px; height: 52px; border-radius: 12px;
+  background: var(--glass); border: 1px solid var(--bd);
+  display: flex; align-items: center; justify-content: center; font-size: 24px;
+  flex-shrink: 0; overflow: hidden;
+}
+.cust-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.cust-info { flex: 1; min-width: 0; }
+.cust-name { font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 700; color: var(--g1); }
+.cust-code { font-size: 11px; color: var(--tx2); margin-top: 2px; }
+.cust-status-badge { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+.cust-status-Active     { background: rgba(39,201,122,0.1);  color: var(--green); border: 1px solid rgba(39,201,122,0.25); }
+.cust-status-Closed     { background: rgba(100,100,100,0.1); color: var(--tx2);   border: 1px solid rgba(100,100,100,0.25); }
+.cust-status-Overdue    { background: rgba(245,166,35,0.12); color: #F5A623;      border: 1px solid rgba(245,166,35,0.3); }
+.cust-status-Defaulter  { background: rgba(232,85,85,0.1);   color: var(--red);   border: 1px solid rgba(232,85,85,0.25); }
+.cust-status-Blacklisted{ background: rgba(80,0,0,0.25);     color: #FF5555;      border: 1px solid rgba(255,68,68,0.4); }
+.cust-card-body { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 12px 16px; }
+.cust-cf-l { font-size: 9px; color: var(--tx2); text-transform: uppercase; letter-spacing: 0.8px; }
+.cust-cf-v { font-size: 13px; font-weight: 600; color: var(--tx0); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cust-card-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; background: rgba(212,161,42,0.04); border-top: 1px solid rgba(212,161,42,0.06);
+}
+.cust-kyc-pill {
+  padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600;
+  background: rgba(212,161,42,0.1); color: var(--g2); border: 1px solid rgba(212,161,42,0.2);
+}
+.cust-loans-badge {
+  font-size: 11px; font-weight: 600; color: var(--tx1);
+  background: var(--glass); border: 1px solid var(--bd);
+  padding: 3px 10px; border-radius: 20px; cursor: pointer;
+}
+html[data-theme="light"] .cust-card { background: linear-gradient(145deg,#fff,#f7f1e8); border-color: rgba(139,90,40,0.14); }
+
+/* ── REMINDER SENT BADGE ── */
+.reminder-sent-badge { display:inline-flex;align-items:center;gap:4px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);color:#25D366;border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700; }
+.reminder-card { background:var(--glass);border:1px solid var(--bd);border-radius:var(--rs);padding:14px;margin-bottom:10px;transition:opacity 0.3s; }
+.reminder-card.sent { opacity:0.5; }
+.reminder-msg-box { background:rgba(37,211,102,0.05);border:1px solid rgba(37,211,102,0.15);border-radius:var(--rs);padding:10px 12px;font-size:12px;color:var(--tx1);line-height:1.6;margin:10px 0;white-space:pre-wrap; }
+.reminder-actions { display:flex;gap:8px;margin-top:10px; }
+.wa-send-btn { flex:1;padding:10px;background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.35);border-radius:var(--rs);color:#25D366;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px; }
+.skip-btn { padding:10px 14px;background:var(--glass);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx2);font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer; }
+
 .receipt-zone {
   border: 2px dashed var(--bd); border-radius: var(--rs);
   padding: 18px 16px; text-align: center; cursor: pointer;
@@ -980,7 +1104,7 @@ body::before {
 .card-items-toggle.open .card-items-toggle-ic { transform: rotate(180deg); }
 .card-items-body { display: none; padding: 0 12px 12px; overflow-x: auto; }
 .card-items-body.open { display: block; }
-.items-tbl { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 560px; }
+.items-tbl { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 660px; }
 .items-tbl th {
   background: rgba(212,161,42,0.08); color: var(--tx1); padding: 7px 8px;
   text-align: left; font-weight: 600; text-transform: uppercase;
@@ -1060,7 +1184,7 @@ body::before {
     <div class="metrics">
       <div class="met" id="met-active" onclick="setStatusFilter('Active')" style="cursor:pointer"><div class="met-v" style="color:var(--green)" id="mc">0</div><div class="met-l">Active Loans</div></div>
       <div class="met" id="met-closed" onclick="setStatusFilter('Closed')" style="cursor:pointer"><div class="met-v" style="color:var(--red)" id="mc-cl">0</div><div class="met-l">Closed Loans</div></div>
-      <div class="met" id="met-active-p" onclick="setStatusFilter('Active')" style="cursor:pointer"><div class="met-v" id="mp">₹0</div><div class="met-l">Active Principal</div></div>
+      <div class="met" id="met-active-p" onclick="setStatusFilter('LowPL')" style="cursor:pointer"><div class="met-v" style="color:#F5A623" id="mp">0</div><div class="met-l">P/L &lt; ₹5K</div></div>
       <div class="met" id="met-overdue" onclick="setStatusFilter('Overdue')" style="cursor:pointer"><div class="met-v" style="color:#F5A623" id="mc-overdue">0</div><div class="met-l">Overdue Loans</div></div>
     </div>
   </div>
@@ -1075,7 +1199,6 @@ body::before {
     <div id="loan-list"></div>
   </div>
 
-  <!-- ══ STATS PAGE ══ -->
   <div class="pg" id="pg-stats">
     <!-- Grand total hero -->
     <div class="stat-hero">
@@ -1178,7 +1301,43 @@ body::before {
     <button class="btn-ghost" style="margin-top:0" onclick="openCfg()">🔥 Change Firebase Config</button>
   </div>
 
-</div><!-- end #app -->
+  <!-- ══ CUSTOMERS PAGE ══ -->
+  <div class="pg" id="pg-customers">
+    <div style="display:flex;align-items:center;gap:8px;padding:12px 16px 4px">
+      <div class="search-inline" style="flex:1;margin:0">
+        <span style="color:var(--tx2);font-size:15px;flex-shrink:0">🔍</span>
+        <input type="text" id="cust-si" placeholder="Search name, code, mobile…" oninput="renderCustomers()"/>
+        <span class="search-x" onclick="$('cust-si').value='';renderCustomers()">✕</span>
+      </div>
+      <button onclick="exportAllCustomers()" style="padding:9px 12px;background:rgba(212,161,42,0.1);border:1px solid var(--bd);border-radius:var(--rs);color:var(--g1);font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap;flex-shrink:0">📤 Export</button>
+    </div>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding:8px 16px 6px;scrollbar-width:none">
+      <button class="cust-chip act" id="cf-All"        onclick="setCustFilter('All')">All</button>
+      <button class="cust-chip"     id="cf-Active"     onclick="setCustFilter('Active')">🟢 Active</button>
+      <button class="cust-chip"     id="cf-Closed"     onclick="setCustFilter('Closed')">⚫ Closed</button>
+      <button class="cust-chip"     id="cf-Overdue"    onclick="setCustFilter('Overdue')">🟡 Overdue</button>
+      <button class="cust-chip"     id="cf-Defaulter"  onclick="setCustFilter('Defaulter')">🔴 Defaulter</button>
+      <button class="cust-chip"     id="cf-Blacklisted" onclick="setCustFilter('Blacklisted')">⛔ Blacklisted</button>
+    </div>
+    <div style="padding:0 16px 10px">
+      <button onclick="openBulkReminder()" style="width:100%;padding:11px;background:linear-gradient(135deg,rgba(37,211,102,0.15),rgba(37,211,102,0.08));border:1px solid rgba(37,211,102,0.35);border-radius:var(--rs);color:#25D366;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        📨 Send WhatsApp Reminders to Overdue &amp; Defaulters
+      </button>
+    </div>
+    <div id="cust-list" style="padding-bottom:80px"></div>
+  </div>
+
+<!-- BULK WHATSAPP REMINDER OVERLAY -->
+<div class="sheet-ov" id="reminder-ov" onclick="sheetOvClick(event,'reminder-ov')">
+  <div class="sheet" style="max-height:92vh">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hd">
+      <div class="sheet-title">📨 WhatsApp Reminders</div>
+      <button class="sheet-close" onclick="closeReminder()">✕</button>
+    </div>
+    <div class="sheet-body" id="reminder-body"></div>
+  </div>
+</div>
 
 <!-- ══ BOTTOM NAV ══ -->
 <div class="bnav">
@@ -1190,6 +1349,9 @@ body::before {
   </button>
   <button class="nv" onclick="openLoanSheet()">
     <span class="nv-ic">➕</span><span class="nv-lb">Add</span>
+  </button>
+  <button class="nv" id="nv-customers" onclick="switchNav('customers')">
+    <span class="nv-ic">👥</span><span class="nv-lb">Customers</span>
   </button>
   <button class="nv" id="nv-import" onclick="openUpload()">
     <span class="nv-ic">📤</span><span class="nv-lb">Import</span>
@@ -1211,8 +1373,16 @@ body::before {
     </div>
     <div class="sheet-body">
       <div class="fg">
+        <label class="fl">Customer <span style="color:var(--tx2);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">(optional — link to existing customer)</span></label>
+        <select class="fi" id="f-cust-id" onchange="onLoanCustChange()">
+          <option value="">— No customer linked —</option>
+        </select>
+        <div id="f-cust-preview" style="margin-top:6px;display:none"></div>
+      </div>
+
+      <div class="fg">
         <label class="fl">Loan Number</label>
-        <input class="fi" id="f-no" type="text" placeholder="e.g. GL-2026-001"/>
+        <input class="fi" id="f-no" type="text" placeholder="e.g. GL-2026-001" oninput="checkLoanNumDup(this)"/>
       </div>
       <div class="frow">
         <div class="fg">
@@ -1221,7 +1391,7 @@ body::before {
         </div>
         <div class="fg">
           <label class="fl" id="f-rd-label">Release Date <span id="f-rd-opt" style="color:var(--tx2);font-weight:400;text-transform:none;letter-spacing:0">(optional for Active)</span></label>
-          <input class="fi" id="f-rd" type="date" oninput="livePreview()" placeholder="Leave blank if Active"/>
+          <input class="fi" id="f-rd" type="date" oninput="livePreview()" onchange="livePreview()" placeholder="Leave blank if Active"/>
         </div>
       </div>
       <div class="frow">
@@ -1260,7 +1430,7 @@ body::before {
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;background:rgba(212,161,42,0.05);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 12px;">
           <span style="font-size:11px;color:var(--tx1);white-space:nowrap">22K Rate (₹/g)</span>
           <input class="item-fi" type="number" id="gold-rate-input" placeholder="Fetching..." style="flex:1;padding:7px 10px;font-size:13px" oninput="onGoldRateChange()" />
-          <button onclick="fetchLiveGoldRate()" style="padding:6px 10px;background:rgba(212,161,42,0.15);border:1px solid var(--bd);border-radius:var(--rs);color:var(--g1);font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap">🔄 Live</button>
+          <button onclick="fetchLiveGoldRateManual()" style="padding:6px 10px;background:rgba(212,161,42,0.15);border:1px solid var(--bd);border-radius:var(--rs);color:var(--g1);font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap">🔄 Live</button>
         </div>
         <div id="items-container">
           <div class="items-empty">No items added yet. Tap "+ Add Item" to begin.</div>
@@ -1338,9 +1508,22 @@ body::before {
   </div>
 </div>
 
+
 <!-- ══════════════════════════════════════════
-     FIREBASE CONFIG OVERLAY
+     CUSTOMER DETAIL SHEET
      ══════════════════════════════════════════ -->
+<div class="sheet-ov" id="cust-detail-ov" onclick="sheetOvClick(event,'cust-detail-ov')">
+  <div class="sheet" style="max-height:96vh">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hd">
+      <div class="sheet-title" id="cust-detail-title">Customer</div>
+      <button class="sheet-close" onclick="closeCustDetail()">✕</button>
+    </div>
+    <div class="sheet-body" id="cust-detail-body"></div>
+  </div>
+</div>
+
+<!-- ══ FIREBASE CONFIG ══ -->
 <div class="cfg-ov" id="cfg-ov">
   <div class="cfg-box">
     <div class="cfg-title">🔥 Connect Firebase</div>
@@ -1396,6 +1579,26 @@ const firebaseConfig = {
   </div>
 </div>
 
+<!-- GOLDAPI KEY SETUP -->
+<div class="cfg-ov" id="goldapi-ov">
+  <div class="cfg-box">
+    <div class="cfg-title">📈 Live Gold Rate Setup</div>
+    <div class="cfg-sub">Get a free GoldAPI.io key for accurate real-time INR gold rates. Takes 30 seconds, no card needed.</div>
+    <div class="cfg-steps">
+      <strong>Get your free key:</strong><br/>
+      1. Go to <a href="https://www.goldapi.io/" target="_blank">goldapi.io</a> → Sign Up Free<br/>
+      2. Copy your API key from the dashboard<br/>
+      3. Paste it below<br/><br/>
+      <strong>Free tier:</strong> Real-time rates · No credit card required ✅
+    </div>
+    <input class="cfg-ta" id="goldapi-key-input" type="password"
+      placeholder="Paste your GoldAPI.io key here"
+      style="min-height:52px;font-family:'Inter',sans-serif;font-size:14px"/>
+    <button class="btn-primary" style="margin-top:14px" onclick="saveGoldApiKey()">✅ Save & Fetch Live Rate</button>
+    <button class="btn-ghost" style="margin-top:8px" onclick="$('goldapi-ov').classList.remove('open');fetchLiveGoldRate()">Skip — use best available rate</button>
+  </div>
+</div>
+
 <!-- GEMINI API KEY SETUP -->
 <div class="cfg-ov" id="gemini-ov">
   <div class="cfg-box">
@@ -1426,6 +1629,117 @@ const firebaseConfig = {
     <button class="sheet-close" onclick="closeReceiptViewer()">✕</button>
   </div>
   <div id="receipt-ov-content"></div>
+</div>
+
+<!-- ══ CUSTOMER ADD/EDIT SHEET ══ -->
+<div class="sheet-ov" id="cust-ov" onclick="sheetOvClick(event,'cust-ov')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hd">
+      <div class="sheet-title" id="cust-sheet-title">New Customer</div>
+      <button class="sheet-close" onclick="closeCustSheet()">✕</button>
+    </div>
+    <div class="sheet-body">
+
+      <!-- Photo + Code row -->
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px">
+        <div style="position:relative;cursor:pointer;width:72px;height:72px">
+          <div id="cust-photo-preview" style="width:72px;height:72px;border-radius:12px;background:var(--glass);border:2px dashed var(--bd);display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden">👤</div>
+          <div style="position:absolute;bottom:-4px;right:-4px;width:22px;height:22px;border-radius:50%;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:11px;pointer-events:none">📷</div>
+          <input type="file" id="cust-photo-input" accept="image/*" onchange="custPhotoChosen(event)"
+            style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2"/>
+        </div>
+        <div style="flex:1">
+          <div class="fg" style="margin-bottom:8px">
+            <label class="fl">Customer Code</label>
+            <input class="fi" id="cf-code" type="text" placeholder="e.g. CUST-001"/>
+          </div>
+          <div class="fg" style="margin-bottom:0">
+            <label class="fl">Status</label>
+            <select class="fi" id="cf-status">
+              <option value="Active">🟢 Active</option>
+              <option value="Closed">⚫ Closed</option>
+              <option value="Overdue">🟡 Overdue</option>
+              <option value="Defaulter">🔴 Defaulter</option>
+              <option value="Blacklisted">⛔ Blacklisted</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal Info -->
+      <div class="cust-section-lbl">👤 Personal Information</div>
+      <div class="fg"><label class="fl">Full Name *</label><input class="fi" id="cf-name" type="text" placeholder="Customer full name"/></div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Father / Husband Name</label><input class="fi" id="cf-fathername" type="text" placeholder=""/></div>
+        <div class="fg"><label class="fl">Gender</label>
+          <select class="fi" id="cf-gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Date of Birth</label><input class="fi" id="cf-dob" type="date"/></div>
+        <div class="fg"><label class="fl">Occupation</label><input class="fi" id="cf-occupation" type="text" placeholder="e.g. Farmer"/></div>
+      </div>
+
+      <!-- Contact -->
+      <div class="cust-section-lbl">📱 Contact Details</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Mobile *</label><input class="fi" id="cf-mobile" type="tel" placeholder="10-digit number"/></div>
+        <div class="fg"><label class="fl">Alternate Mobile</label><input class="fi" id="cf-mobile2" type="tel" placeholder="Optional"/></div>
+      </div>
+      <div class="fg"><label class="fl">Address</label><input class="fi" id="cf-address" type="text" placeholder="Street / Area"/></div>
+      <div class="frow">
+        <div class="fg"><label class="fl">City</label><input class="fi" id="cf-city" type="text" placeholder=""/></div>
+        <div class="fg"><label class="fl">Pincode</label><input class="fi" id="cf-pincode" type="text" placeholder=""/></div>
+      </div>
+
+      <!-- KYC -->
+      <div class="cust-section-lbl">🪪 KYC Documents</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Aadhaar Number</label><input class="fi" id="cf-aadhaar" type="text" placeholder="XXXX XXXX XXXX" maxlength="14"/></div>
+        <div class="fg"><label class="fl">PAN Number</label><input class="fi" id="cf-pan" type="text" placeholder="ABCDE1234F" maxlength="10"/></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Voter ID</label><input class="fi" id="cf-voterid" type="text" placeholder="Optional"/></div>
+        <div class="fg"><label class="fl">Driving License</label><input class="fi" id="cf-dl" type="text" placeholder="Optional"/></div>
+      </div>
+
+      <!-- ID Proof Image -->
+      <div class="fg">
+        <label class="fl">ID Proof Image</label>
+        <div id="cust-id-upload-area"></div>
+      </div>
+
+      <!-- Financial -->
+      <div class="cust-section-lbl">💰 Financial Profile</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Annual Income (₹)</label><input class="fi" id="cf-income" type="number" placeholder="0"/></div>
+        <div class="fg"><label class="fl">Credit Limit (₹)</label><input class="fi" id="cf-limit" type="number" placeholder="0"/></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Risk Level</label>
+          <select class="fi" id="cf-risk"><option value="Low">🟢 Low</option><option value="Medium">🟡 Medium</option><option value="High">🔴 High</option></select>
+        </div>
+        <div class="fg"><label class="fl">Customer Since</label><input class="fi" id="cf-since" type="date"/></div>
+      </div>
+
+      <!-- Guarantor -->
+      <div class="cust-section-lbl">🤝 Guarantor (Optional)</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Guarantor Name</label><input class="fi" id="cf-gname" type="text" placeholder=""/></div>
+        <div class="fg"><label class="fl">Guarantor Mobile</label><input class="fi" id="cf-gmobile" type="tel" placeholder=""/></div>
+      </div>
+
+      <!-- Notes -->
+      <div class="fg" style="margin-top:4px">
+        <label class="fl">Notes / Remarks</label>
+        <input class="fi" id="cf-notes" type="text" placeholder="Any additional notes…"/>
+      </div>
+
+      <button class="btn-primary" onclick="saveCustomer()">💾 Save Customer</button>
+      <button class="btn-ghost" id="cf-delete-btn" onclick="deleteCustomer()" style="color:var(--red);border-color:rgba(232,85,85,0.3);display:none;margin-top:8px">🗑️ Delete Customer</button>
+    </div>
+  </div>
 </div>
 
 <!-- PIN LOGIN OVERLAY -->
@@ -1509,12 +1823,16 @@ const firebaseConfig = {
     'closeUpload','openRoles','closeRoles','doLogout','toggleSearch','clearSearch',
     'setStatusFilter','openReceiptViewer','closeReceiptViewer','closeAiMatch',
     'runOrnamentScan','saveGeminiKey','addItemRow','removeItemRow','itemUpdate',
-    'onGoldRateChange','fetchLiveGoldRate','receiptFileChosen','removeReceipt',
+    'onGoldRateChange','fetchLiveGoldRate','fetchLiveGoldRateManual','saveGoldApiKey','receiptFileChosen','removeReceipt',
     'editLoan','askDelete','closeConf','doDelete','saveLoan','livePreview',
     'onStatusChange','sheetOvClick','openCfg','saveFirebaseCfg','useLocal',
     'resetFbCfg','selectRole','pinKey','pinDel','saveRolePin','goStep',
     'goMapStep','goPreviewStep','doImport','fileChosen','dzOver','dzDrop',
-    'toggleItemsCard','onSearchInput','toast'];
+    'toggleItemsCard','onSearchInput','toast','openCustSheet','closeCustSheet',
+    'saveCustomer','deleteCustomer','setCustFilter','exportCustomer','exportAllCustomers',
+    'openCustDetail','closeCustDetail','custPhotoChosen','custIdFileChosen','openIdImgViewer','openImgViewer',
+    'openBulkReminder','closeReminder','markReminderSent',
+    'hallmarkPhotoChosen','viewHallmarkPhoto','checkLoanNumDup','onLoanCustChange'];
   window._pendingCalls = [];
   fns.forEach(name => {
     window[name] = function(...args) {
@@ -1680,6 +1998,8 @@ function startListener() {
   syncBar('syncing', 'Loading…');
   unsub = onSnapshot(collection(db, 'loans'),
     snap => {
+      // Skip render if we just wrote (local update already applied)
+      if (_suppressNextSnapshot) { _suppressNextSnapshot = false; return; }
       loans = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       loans.sort((a,b) => (b.loanDate||'').localeCompare(a.loanDate||''));
       if (loans.length === 0) { seedData().forEach(l => fbWrite(l)); return; }
@@ -1691,14 +2011,29 @@ function startListener() {
   );
 }
 
+let _suppressNextSnapshot = false;
+
 async function fbWrite(loan) {
   if (!db) return;
   const { id, ...data } = loan;
-  try { await setDoc(doc(db, 'loans', id), data); } catch {}
+  try {
+    _suppressNextSnapshot = true;
+    await setDoc(doc(db, 'loans', id), data);
+    // Update local loans array immediately so UI stays fresh
+    const idx = loans.findIndex(l => l.id === id);
+    if (idx !== -1) loans[idx] = loan; else loans.unshift(loan);
+    loans.sort((a,b) => (b.loanDate||'').localeCompare(a.loanDate||''));
+    render();
+  } catch(e) { _suppressNextSnapshot = false; throw e; }
 }
 async function fbDelete(id) {
   if (!db) return;
-  try { await deleteDoc(doc(db, 'loans', id)); } catch {}
+  try {
+    _suppressNextSnapshot = true;
+    await deleteDoc(doc(db, 'loans', id));
+    loans = loans.filter(l => l.id !== id);
+    render();
+  } catch(e) { _suppressNextSnapshot = false; throw e; }
 }
 async function fbBatchWrite(arr) {
   if (!db) return;
@@ -1742,9 +2077,14 @@ window.switchNav = function(tab) {
   document.querySelectorAll('.nv').forEach(n => n.classList.remove('act'));
   $('pg-' + tab)?.classList.add('act');
   $('nv-' + tab)?.classList.add('act');
-  $('fab').style.display = tab === 'loans' ? 'flex' : 'none';
-  // Refresh live gold rate whenever Summary tab is opened
+  // FAB: show for loans (add loan) and customers (add customer)
+  const fab = $('fab');
+  if (fab) {
+    fab.style.display = (tab === 'loans' || tab === 'customers') ? 'flex' : 'none';
+    fab.onclick = tab === 'customers' ? () => openCustSheet() : () => openLoanSheet();
+  }
   if (tab === 'stats') fetchLiveGoldRate(true);
+  if (tab === 'customers') renderCustomers();
 };
 
 window.toggleSearch = function() {}; // no-op — search is now always visible inline
@@ -1782,11 +2122,14 @@ window.setStatusFilter = function(status) {
   });
   if (statusFilter === 'Active') {
     $('met-active') && ($('met-active').style.background = 'rgba(39,201,122,0.12)');
-    $('met-active-p') && ($('met-active-p').style.background = 'rgba(39,201,122,0.12)');
   } else if (statusFilter === 'Closed') {
     $('met-closed') && ($('met-closed').style.background = 'rgba(232,85,85,0.12)');
   } else if (statusFilter === 'Overdue') {
     $('met-overdue') && ($('met-overdue').style.background = 'rgba(245,166,35,0.15)');
+  } else if (statusFilter === 'LowPL') {
+    $('met-active-p') && ($('met-active-p').style.background = 'rgba(245,166,35,0.15)');
+  } else if (statusFilter === 'LowPL') {
+    $('met-active-p') && ($('met-active-p').style.background = 'rgba(245,166,35,0.15)');
   }
   switchNav('loans');
   renderLoans();
@@ -1806,20 +2149,41 @@ function renderLoans() {
       const days = Math.floor((new Date(localDate()+'T00:00:00') - new Date(l.loanDate+'T00:00:00')) / (1000*60*60*24));
       return days >= 365;
     });
+  } else if (statusFilter === 'LowPL') {
+    const GR = liveGoldRate22K;
+    const gf = {'24K':24/22,'22K':1,'18K':18/22,'14K':14/22};
+    const sf = {'Silver 999':1,'Silver 925':0.925,'Silver 800':0.8};
+    list = list.filter(l => {
+      if (l.status !== 'Active' || !l.items?.length) return false;
+      const m = calcMonths(l.loanDate, localDate());
+      const due = l.amount + (m ? calcInterest(l.amount, l.rate, m) : 0);
+      let val80 = 0;
+      l.items.forEach(it => {
+        let v = parseFloat(it.value)||0;
+        if (!v && it.wt) {
+          const w = parseFloat(it.wt)||0, p = it.purity||'22K';
+          v = p.startsWith('Silver') ? Math.round(w*105*(sf[p]??1)) : Math.round(w*GR*(gf[p]??1));
+        }
+        val80 += Math.round(v*0.8);
+      });
+      return val80 > 0 && (val80 - due) < 5000;
+    });
   }
-  const el   = $('loan-list');
+  const el = $('loan-list');
 
+  // Build HTML first, then set in one shot to avoid blank flash
+  let html = '';
   if (!list.length) {
-    const filterMsg = statusFilter ? `No ${statusFilter === 'Overdue' ? 'overdue' : statusFilter.toLowerCase()} loans found.` : (loans.length === 0 ? 'Tap + to record your first gold loan.' : 'Try a different loan number.');
-    el.innerHTML = `<div class="empty">
+    const filterMsg = statusFilter
+      ? `No ${statusFilter === 'Overdue' ? 'overdue' : statusFilter === 'LowPL' ? 'low P/L' : statusFilter.toLowerCase()} loans found.`
+      : (loans.length === 0 ? 'Tap + to record your first gold loan.' : 'Try a different loan number.');
+    html = `<div class="empty">
       <div class="empty-ic">🪙</div>
       <div class="empty-t">${loans.length === 0 ? 'No Loans Yet' : 'No Results'}</div>
       <div class="empty-s">${filterMsg}${statusFilter ? ' <span onclick="setStatusFilter(\''+statusFilter+'\')" style="color:var(--g1);cursor:pointer;text-decoration:underline">Clear filter</span>' : ''}</div>
     </div>`;
-    return;
-  }
-
-  el.innerHTML = list.map((l, i) => {
+  } else {
+    html = list.map((l, i) => {
     const effRd    = l.releaseDate || (l.status==='Active' ? localDate() : null);
     const m        = calcMonths(l.loanDate, effRd);
     const interest = m !== null ? calcInterest(l.amount, l.rate, m) : null;
@@ -1843,6 +2207,7 @@ function renderLoans() {
       <div class="card-head">
         <div>
           <div class="card-lno">${l.name}</div>
+          ${(()=>{ const c = l.custId ? customers.find(x=>x.id===l.custId) : null; return c ? `<div style="display:flex;align-items:center;gap:5px;margin-top:3px"><span style="font-size:10px;color:var(--tx2)">👤</span><span style="font-size:11px;font-weight:600;color:var(--tx1)">${c.name}</span>${c.code?`<span style="font-size:10px;color:var(--tx2)">${c.code}</span>`:''}</div>` : ''; })()}
           <div class="card-dates">
             <span>${fmtDate(l.loanDate)}</span>
             <span class="card-arrow">→</span>
@@ -1881,7 +2246,7 @@ function renderLoans() {
       </div>
       <div class="card-items-body" id="cibody-${l.id}">
         <table class="items-tbl">
-          <thead><tr><th>Type</th><th>Item</th><th>Qty</th><th>Gross Wt</th><th>Net Wt</th><th>Purity</th><th>Value</th><th>80% Val</th><th>P/L</th></tr></thead>
+          <thead><tr><th>Type</th><th>Item</th><th>Qty</th><th>Gross Wt</th><th>Net Wt</th><th>Purity</th><th>Hallmark</th><th>Value</th><th>80% Val</th><th>P/L (80%)</th></tr></thead>
           <tbody>
             ${(()=>{
               const GOLD_RATE_22K = liveGoldRate22K;
@@ -1917,7 +2282,8 @@ function renderLoans() {
                 const gwt = parseFloat(it.gwt)||0;
                 // P/L = item market value − item's proportional share of total due (by net weight)
                 const wtShare = totalNetWt > 0 ? (nwt/totalNetWt) * totalDue : 0;
-                const pl = val > 0 && wtShare > 0 ? val - wtShare : null;
+                const val80pl = val80; // use 80% value for P/L
+                const pl = val80pl > 0 && wtShare > 0 ? val80pl - wtShare : null;
                 const plHtml = pl !== null
                   ? `<span class="${pl>=0?'itbl-profit':'itbl-loss'}">${pl>=0?'+':''}${inr(pl)}</span>`
                   : '—';
@@ -1925,13 +2291,25 @@ function renderLoans() {
                 const typeHtml = typeObj
                   ? `<span title="${typeObj.label}" style="display:inline-flex;width:22px;height:22px">${typeObj.svg}</span>`
                   : '—';
+                const hStatus = it.hallmarkStatus || '';
+                const hBadge = hStatus === 'Verified'
+                  ? `<span style="color:var(--green);font-weight:700">✅</span>`
+                  : hStatus === 'Fake'
+                  ? `<span style="color:var(--red);font-weight:700">🚫</span>`
+                  : hStatus === 'Disputed'
+                  ? `<span style="color:var(--red);font-weight:700">❌</span>`
+                  : hStatus === 'Unverified'
+                  ? `<span style="color:#F5A623;font-weight:700">⚠️</span>`
+                  : `<span style="color:var(--tx2)">—</span>`;
+                const huidDisplay = it.huid ? `<div style="font-size:9px;color:var(--tx2);letter-spacing:1px">${it.huid}</div>` : '';
                 return `<tr>
                   <td>${typeHtml}</td>
                   <td>${it.item||'—'}</td>
                   <td>${it.qty||'—'}</td>
                   <td style="color:var(--tx2)">${gwt?gwt+'g':'—'}</td>
                   <td style="font-weight:600">${nwt?nwt+'g':'—'}</td>
-                  <td>${it.purity||'—'}</td>
+                  <td>${it.purity||'—'}${it.hPurityStamp?`<div style="font-size:9px;color:var(--tx2)">${it.hPurityStamp}</div>`:''}</td>
+                  <td>${hBadge}${huidDisplay}</td>
                   <td>${val?inr(val):'—'}</td>
                   <td style="color:var(--g2)">${val80?inr(val80):'—'}</td>
                   <td>${plHtml}</td>
@@ -1961,11 +2339,11 @@ function renderLoans() {
                 totalNwt  += parseFloat(it.wt)||0;
               });
               const total80 = Math.round(totalVal * 0.8);
-              // Total P/L = total market value − total due (principal + interest)
+              // Total P/L = 80% of market value − total due (principal + interest)
               const effRd3 = l.releaseDate || (l.status==='Active' ? localDate() : null);
               const m3 = effRd3 ? calcMonths(l.loanDate, effRd3) : 0;
               const loanTotalDue = (l.amount||0) + (m3 ? calcInterest(l.amount, l.rate, m3) : 0);
-              const diff = totalVal - loanTotalDue;
+              const diff = total80 - loanTotalDue;
               const plHtml = totalVal > 0
                 ? `<span class="${diff>=0?'itbl-profit':'itbl-loss'}">${diff>=0?'+':''}${inr(diff)}</span>`
                 : '—';
@@ -1985,6 +2363,8 @@ function renderLoans() {
       </div>` : ''}
     </div>`;
   }).join('');
+  }
+  el.innerHTML = html;
 }
 
 function renderStats() {
@@ -2071,7 +2451,32 @@ function renderStats() {
   }).length;
   $('mc').textContent       = actLoans.length;
   $('mc-cl').textContent    = clLoans.length;
-  $('mp').textContent       = inr(actP);
+  // Count active loans where 80% collateral value < total due by less than ₹5000 (P/L < ₹5000)
+  const GOLD_RATE = liveGoldRate22K;
+  const goldFactorsM = {'24K':24/22,'22K':1,'18K':18/22,'14K':14/22};
+  const silverBaseM = 105;
+  const silverFactorsM = {'Silver 999':1,'Silver 925':0.925,'Silver 800':0.8};
+  let lowPLCount = 0;
+  actLoans.forEach(l => {
+    if (!l.items || !l.items.length) return;
+    const rd2 = l.releaseDate || today;
+    const m2  = calcMonths(l.loanDate, rd2);
+    const due = l.amount + (m2 ? calcInterest(l.amount, l.rate, m2) : 0);
+    let totalVal80 = 0;
+    l.items.forEach(it => {
+      let val = parseFloat(it.value)||0;
+      if (!val && it.wt) {
+        const wt = parseFloat(it.wt)||0;
+        const p  = it.purity||'22K';
+        val = p.startsWith('Silver')
+          ? Math.round(wt * silverBaseM * (silverFactorsM[p]??1))
+          : Math.round(wt * GOLD_RATE * (goldFactorsM[p]??(22/22)));
+      }
+      totalVal80 += Math.round(val * 0.8);
+    });
+    if (totalVal80 > 0 && (totalVal80 - due) < 5000) lowPLCount++;
+  });
+  $('mp').textContent       = lowPLCount;
   $('mc-overdue').textContent = overdueCount;
 
   // ── Stats page ──
@@ -2102,7 +2507,16 @@ function renderStats() {
   $('s-cl-rate').textContent   = clLoans.length ? (clSR / clLoans.length).toFixed(1) + '%' : '0%';
 }
 
-function render() { renderLoans(); renderStats(); }
+let _renderTimer = null;
+function render() {
+  // Debounce — if called multiple times rapidly (e.g. Firebase batch), only render once
+  if (_renderTimer) clearTimeout(_renderTimer);
+  _renderTimer = setTimeout(() => {
+    renderLoans();
+    renderStats();
+    _renderTimer = null;
+  }, 80);
+}
 
 // Auto-refresh at midnight so dates, months and interest update correctly
 function scheduleMidnightRefresh() {
@@ -2222,6 +2636,87 @@ function renderItemsForm() {
             oninput="itemUpdate(${i},'value',this.value,true)"/>
         </div>
       </div>
+
+      <!-- Hallmark Verification -->
+      <div style="margin-top:10px;padding:12px;background:rgba(212,161,42,0.05);border:1px solid rgba(212,161,42,0.18);border-radius:var(--rs)">
+        <div style="font-size:9px;color:var(--tx1);text-transform:uppercase;letter-spacing:.9px;font-weight:700;margin-bottom:10px">🔖 BIS Hallmark Verification</div>
+
+        <!-- Row 1: Status + Purity Stamp -->
+        <div class="item-row-grid3" style="grid-template-columns:1fr 1fr;margin-bottom:8px">
+          <div>
+            <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Verification Status</div>
+            <select class="item-fi" onchange="itemUpdate(${i},'hallmarkStatus',this.value)">
+              <option value=""           ${!it.hallmarkStatus?'selected':''}>🔍 Not Checked</option>
+              <option value="Verified"   ${it.hallmarkStatus==='Verified'?'selected':''}>✅ Verified</option>
+              <option value="Unverified" ${it.hallmarkStatus==='Unverified'?'selected':''}>⚠️ Unverified</option>
+              <option value="Disputed"   ${it.hallmarkStatus==='Disputed'?'selected':''}>❌ Disputed</option>
+              <option value="Fake"       ${it.hallmarkStatus==='Fake'?'selected':''}>🚫 Fake</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Purity Stamp</div>
+            <select class="item-fi" onchange="itemUpdate(${i},'hPurityStamp',this.value)">
+              <option value=""    ${!it.hPurityStamp?'selected':''}>— Select —</option>
+              <option value="999" ${it.hPurityStamp==='999'?'selected':''}>999 (24K)</option>
+              <option value="958" ${it.hPurityStamp==='958'?'selected':''}>958 (23K)</option>
+              <option value="916" ${it.hPurityStamp==='916'?'selected':''}>916 (22K)</option>
+              <option value="875" ${it.hPurityStamp==='875'?'selected':''}>875 (21K)</option>
+              <option value="750" ${it.hPurityStamp==='750'?'selected':''}>750 (18K)</option>
+              <option value="585" ${it.hPurityStamp==='585'?'selected':''}>585 (14K)</option>
+              <option value="375" ${it.hPurityStamp==='375'?'selected':''}>375 (9K)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Row 2: HUID + BIS lookup button -->
+        <div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:8px">
+          <div style="flex:1">
+            <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">HUID (6-char BIS number)</div>
+            <input class="item-fi" type="text" placeholder="e.g. AB1C2D" maxlength="6" value="${it.huid||''}"
+              style="text-transform:uppercase;letter-spacing:2px;font-weight:700" oninput="itemUpdate(${i},'huid',this.value.toUpperCase())"/>
+          </div>
+          <a href="https://www.bis.gov.in/index.php/hallmarking/hallmark-registration-details/${it.huid||''}" target="_blank"
+             style="padding:9px 12px;background:rgba(212,161,42,0.12);border:1px solid var(--bd);border-radius:var(--rs);color:var(--g1);font-size:11px;font-weight:700;text-decoration:none;white-space:nowrap;display:flex;align-items:center;gap:4px;margin-bottom:0"
+             title="Verify on BIS portal">🔍 BIS</a>
+        </div>
+
+        <!-- Row 3: Assaying centre + Year -->
+        <div class="item-row-grid3" style="grid-template-columns:1fr 1fr;margin-bottom:10px">
+          <div>
+            <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Assaying Centre</div>
+            <input class="item-fi" type="text" placeholder="BIS centre name" value="${it.hCentre||''}"
+              oninput="itemUpdate(${i},'hCentre',this.value)"/>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px">Hallmark Year</div>
+            <input class="item-fi" type="text" placeholder="e.g. 13230" maxlength="4" value="${it.hYear||''}"
+              oninput="itemUpdate(${i},'hYear',this.value)"/>
+          </div>
+        </div>
+
+        <!-- Hallmark Photo -->
+        <div>
+          <div style="font-size:9px;color:var(--tx2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px">Hallmark Stamp Photo</div>
+          ${it.hPhoto
+            ? `<div style="display:flex;align-items:center;gap:10px;background:rgba(39,201,122,0.07);border:1px solid rgba(39,201,122,0.25);border-radius:var(--rs);padding:8px 12px">
+                <img src="${it.hPhoto}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;cursor:pointer" onclick="viewHallmarkPhoto(${i})"/>
+                <div style="flex:1">
+                  <div style="font-size:12px;font-weight:600;color:var(--green)">✅ Photo uploaded</div>
+                  <div style="font-size:10px;color:var(--tx2);margin-top:2px">Tap to view</div>
+                </div>
+                <button onclick="itemUpdate(${i},'hPhoto','')" style="background:rgba(232,85,85,0.1);border:none;border-radius:50%;width:24px;height:24px;color:var(--red);cursor:pointer;font-size:12px">✕</button>
+              </div>`
+            : `<div class="receipt-zone" style="padding:12px;margin-bottom:0">
+                <input type="file" accept="image/*" onchange="hallmarkPhotoChosen(event,${i})"/>
+                <div class="receipt-zone-ic" style="font-size:20px">📷</div>
+                <div class="receipt-zone-t" style="font-size:12px">Tap to capture hallmark stamp</div>
+              </div>`
+          }
+        </div>
+
+        ${it.hallmarkStatus === 'Verified' ? `<div style="margin-top:8px;padding:8px 10px;background:rgba(39,201,122,0.08);border:1px solid rgba(39,201,122,0.25);border-radius:var(--rs);font-size:11px;color:var(--green);font-weight:600">✅ BIS Hallmarked · ${it.hPurityStamp||''} · HUID: ${it.huid||'—'}</div>` : ''}
+        ${it.hallmarkStatus === 'Fake' || it.hallmarkStatus === 'Disputed' ? `<div style="margin-top:8px;padding:8px 10px;background:rgba(232,85,85,0.08);border:1px solid rgba(232,85,85,0.25);border-radius:var(--rs);font-size:11px;color:var(--red);font-weight:600">⚠️ Flag this item — ${it.hallmarkStatus} hallmark detected</div>` : ''}
+      </div>
     </div>`;
   }).join('');
 
@@ -2232,40 +2727,95 @@ function renderItemsForm() {
 const PURITY_FACTOR = { '24K': 1.0, '22K': 22/24, '18K': 18/24, '14K': 14/24 };
 
 // Module-level live gold rate — updated whenever fetched
-let liveGoldRate22K = 13195; // fallback: today's known rate
+let liveGoldRate22K = 13230; // fallback: today's known rate
+
+const GOLD_API_KEY_STORE = 'ak_goldapi_key_v1';
 
 async function fetchLiveGoldRate(silent = false) {
   const gri = $('gold-rate-input');
+  if (!silent && gri) { gri.placeholder = '⏳ Fetching...'; gri.disabled = true; }
 
-  if (!silent && gri) {
-    gri.placeholder = '⏳ Fetching live rate...';
-    gri.disabled = true;
+  let inrPer22k = null;
+
+  // Indian retail 22K = international spot + ~15% import duty + 3% GST + ~11% margin = ~29% premium
+  const INDIA_PREMIUM = 1.285;
+  const RATE_MIN = 11000, RATE_MAX = 25000; // tighter bounds: won't accept raw international spot
+
+  // ── Source 1: GoldAPI.io (returns actual Indian retail price_gram_22k) ──
+  const goldApiKey = localStorage.getItem(GOLD_API_KEY_STORE);
+  if (goldApiKey) {
+    try {
+      const res = await fetch('https://www.goldapi.io/api/XAU/INR', {
+        headers: { 'x-access-token': goldApiKey, 'Content-Type': 'application/json' }
+      });
+      if (res.ok) {
+        const d = await res.json();
+        if (d.price_gram_22k) {
+          const v = Math.round(d.price_gram_22k);
+          if (v >= RATE_MIN && v <= RATE_MAX) { inrPer22k = v; }
+        }
+      }
+    } catch {}
   }
 
-  try {
-    const res = await fetch('https://metals.live/api/spot?metals=gold');
-    if (!res.ok) throw new Error('fetch failed');
-    const data = await res.json();
-    const usdPerOz = data?.[0]?.price || data?.gold;
-    if (!usdPerOz) throw new Error('no price');
-
-    const usdPerGram24k = usdPerOz / 31.1035;
-    const fxRes = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
-    const fxData = await fxRes.json();
-    const usdToInr = fxData?.rates?.INR;
-    if (!usdToInr) throw new Error('no fx rate');
-
-    const inrPer22k = Math.round(usdPerGram24k * usdToInr * (22/24));
-    liveGoldRate22K = inrPer22k; // store globally for Summary tab
-
-    if (gri) { gri.value = inrPer22k; gri.disabled = false; gri.placeholder = 'e.g. 13195'; onGoldRateChange(); }
-    if (!silent) toast('✅ Live 22K rate: ₹' + inrPer22k.toLocaleString('en-IN') + '/g');
-    else renderStats(); // re-render summary with updated rate
-  } catch(e) {
-    if (gri) { gri.disabled = false; gri.placeholder = 'e.g. 13195'; if (!gri.value) { gri.value = liveGoldRate22K; onGoldRateChange(); } }
-    if (!silent) toast('📌 Using rate: ₹' + liveGoldRate22K.toLocaleString('en-IN') + '/g');
+  // ── Source 2: open.er-api XAU→INR spot × India premium ──
+  if (!inrPer22k) {
+    try {
+      const xauRes = await fetch('https://open.er-api.com/v6/latest/XAU');
+      if (xauRes.ok) {
+        const xauData = await xauRes.json();
+        const inrPerOzSpot = xauData?.rates?.INR; // international spot INR/oz
+        if (inrPerOzSpot && inrPerOzSpot > 200000) {
+          const v = Math.round((inrPerOzSpot / 31.1035) * (22/24) * INDIA_PREMIUM);
+          if (v >= RATE_MIN && v <= RATE_MAX) { inrPer22k = v; }
+        }
+      }
+    } catch {}
   }
+
+  // ── Source 3: frankfurter XAU→INR spot × India premium ──
+  if (!inrPer22k) {
+    try {
+      const res = await fetch('https://api.frankfurter.app/latest?from=XAU&to=INR');
+      if (res.ok) {
+        const data = await res.json();
+        const inrPerOzSpot = data?.rates?.INR; // international spot INR/oz
+        if (inrPerOzSpot && inrPerOzSpot > 200000) {
+          const v = Math.round((inrPerOzSpot / 31.1035) * (22/24) * INDIA_PREMIUM);
+          if (v >= RATE_MIN && v <= RATE_MAX) { inrPer22k = v; }
+        }
+      }
+    } catch {}
+  }
+
+  // ── Fallback ──
+  if (!inrPer22k) {
+    if (gri) { gri.disabled = false; gri.placeholder = 'e.g. 13230'; if (!gri.value) { gri.value = liveGoldRate22K; onGoldRateChange(); } }
+    if (!silent) toast('⚠️ Live fetch failed — using ₹' + liveGoldRate22K.toLocaleString('en-IN') + '/g');
+    return;
+  }
+
+  liveGoldRate22K = inrPer22k;
+  if (gri) { gri.value = inrPer22k; gri.disabled = false; gri.placeholder = 'e.g. 13230'; onGoldRateChange(); }
+  if (!silent) toast('✅ Live 22K rate: ₹' + inrPer22k.toLocaleString('en-IN') + '/g');
+  else renderStats();
 }
+
+window.saveGoldApiKey = function() {
+  const key = $('goldapi-key-input').value.trim();
+  if (!key) { toast('⚠️ Please paste your GoldAPI key'); return; }
+  localStorage.setItem(GOLD_API_KEY_STORE, key);
+  $('goldapi-ov').classList.remove('open');
+  toast('✅ GoldAPI key saved');
+  fetchLiveGoldRate();
+};
+
+// Override the manual 🔄 Live button to prompt for key if none set
+window.fetchLiveGoldRateManual = function() {
+  const key = localStorage.getItem(GOLD_API_KEY_STORE);
+  if (!key) { $('goldapi-ov').classList.add('open'); return; }
+  fetchLiveGoldRate();
+};
 
 function calcAutoValue(it) {
   const rate22k = parseFloat($('gold-rate-input')?.value) || 0;
@@ -2319,8 +2869,28 @@ function updateCollateralSummary() {
   }
 }
 
+window.hallmarkPhotoChosen = function(e, idx) {
+  const file = e.target.files[0]; if (!file) return;
+  if (file.size > 3 * 1024 * 1024) { toast('⚠️ Photo too large (max 3MB)'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    itemRows[idx].hPhoto = ev.target.result;
+    renderItemsForm();
+    toast('📷 Hallmark photo saved');
+  };
+  reader.readAsDataURL(file);
+};
+
+window.viewHallmarkPhoto = function(idx) {
+  const photo = itemRows[idx]?.hPhoto;
+  if (!photo) return;
+  $('receipt-ov-content').innerHTML = `<img class="receipt-ov-img" src="${photo}" alt="Hallmark"/>`;
+  $('receipt-ov').classList.add('open');
+};
+
 window.addItemRow = function() {
-  itemRows.push({ type: '', item: '', qty: 1, gwt: '', wt: '', purity: '22K', value: '', autoVal: true });
+  itemRows.push({ type:'', item:'', qty:1, gwt:'', wt:'', purity:'22K', value:'', autoVal:true,
+    hallmarkStatus:'', hPurityStamp:'', huid:'', hCentre:'', hYear:'', hPhoto:'' });
   renderItemsForm();
 };
 
@@ -2467,7 +3037,19 @@ async function geminiDescribeImage(base64, mimeType, apiKey) {
     contents: [{
       parts: [
         { inline_data: { mime_type: mimeType, data: base64 } },
-        { text: `You are an expert jewellery analyst. Examine this image and describe the gold/silver ornaments in detail for identification purposes. Focus on: type (ring/chain/bangle/necklace etc), distinctive features, engravings, stones, clasps, design patterns, approximate size, unique marks. Be specific. Respond ONLY with a JSON object (no markdown): {"description": "...", "types": ["ring","chain",...], "distinctive": "key identifying features in one sentence"}` }
+        { text: `You are an expert jewellery analyst for a gold loan fraud detection system. Examine this image and describe the gold/silver ornaments in maximum detail for physical identification. Focus on:
+1. Type (ring/chain/bangle/necklace/earring/pendant etc.)
+2. Approximate weight appearance (heavy/medium/light)
+3. Design pattern (plain/twisted/filigree/stone-set/engraved etc.)
+4. Stones if any (colour, size, count, setting type)
+5. Clasps, locks, joints, connecting points
+6. Any unique marks, scratches, dents, or defects
+7. Colour tone (yellow gold/rose gold/white gold/silver)
+8. Hallmark or BIS stamp if visible
+9. Distinctive features that would identify THIS SPECIFIC PIECE vs similar items
+
+Respond ONLY with a JSON object (no markdown):
+{"description": "detailed paragraph", "types": ["ring"], "distinctive": "the single most unique identifying feature of this specific piece", "weight_appearance": "heavy/medium/light", "color": "yellow/rose/white/silver"}` }
       ]
     }]
   }, apiKey);
@@ -2476,21 +3058,30 @@ async function geminiDescribeImage(base64, mimeType, apiKey) {
 }
 
 async function geminiCompare(currentDesc, otherDescs, apiKey) {
-  const prompt = `You are a fraud detection expert for a gold loan business.
+  const prompt = `You are a fraud detection expert for a gold loan business. Your job is to identify if the SAME PHYSICAL jewellery item has been pledged multiple times across different loans.
 
-Current ornament being pledged:
-${JSON.stringify(currentDesc)}
+CURRENT ITEM BEING PLEDGED:
+${JSON.stringify(currentDesc, null, 2)}
 
-Compare against these existing loans:
+COMPARE AGAINST THESE EXISTING LOANS:
 ${JSON.stringify(otherDescs.map((l,i) => ({
   index: i,
   loan: l.loanName,
   date: l.loanDate,
   amount: l.amount,
-  description: l.aiDesc ? l.aiDesc.description : 'No photo description available'
+  description: l.description
 })), null, 2)}
 
-For each existing loan, assess if the same physical ornament could have been pledged. Consider type, design, distinctive features. Respond ONLY with JSON array (no markdown): [{"loanIndex": 0, "risk": "HIGH|MEDIUM|LOW|NONE", "confidence": 0-100, "reason": "one sentence"}]`;
+INSTRUCTIONS:
+- Mark HIGH if the descriptions suggest the SAME PHYSICAL ITEM (same design, weight, markings, defects)
+- Mark MEDIUM if very similar but could be a different piece of the same type
+- Mark LOW if same general category but clearly different items
+- Mark NONE if completely different items
+- Be VERY suspicious — even partial matches on distinctive features should be HIGH
+- Weight, purity marks, unique scratches, design details are strong identifiers
+
+Respond ONLY with a JSON array (no markdown, no explanation outside JSON):
+[{"loanIndex": 0, "risk": "HIGH|MEDIUM|LOW|NONE", "confidence": 0-100, "reason": "specific matching features found"}]`;
 
   const text = await geminiPost({ contents: [{ parts: [{ text: prompt }] }] }, apiKey);
   try { return JSON.parse(text.replace(/```json|```/g,'').trim()); }
@@ -2501,60 +3092,69 @@ window.runOrnamentScan = async function() {
   const r = pendingReceipt;
   if (!r?.data || r.type === 'application/pdf') { toast('⚠️ Image receipt required for AI scan'); return; }
 
-  // Check for Gemini API key
   const apiKey = getGeminiKey();
-  if (!apiKey) {
-    $('gemini-key-input').value = '';
-    $('gemini-ov').classList.add('open');
-    return;
-  }
+  if (!apiKey) { $('gemini-key-input').value = ''; $('gemini-ov').classList.add('open'); return; }
 
-  const otherLoans = loans.filter(l => l.receipt?.data && l.receipt.type !== 'application/pdf');
+  // All other loans — with or without photos
+  const otherLoans = loans.filter(l => l.id !== editId);
 
   $('ai-match-body').innerHTML = `
     <div class="ai-scanning">
       <div class="ai-scan-ic">🤖</div>
       <div class="ai-scan-t">Analysing ornaments…</div>
-      <div class="ai-scan-s">Gemini 2.5 Flash is examining the image and comparing against ${otherLoans.length} loan${otherLoans.length!==1?'s':''} with photos.</div>
+      <div class="ai-scan-s">Step 1 of 2: Describing current jewellery photo…</div>
     </div>`;
   $('ai-match-ov').classList.add('open');
 
   try {
-    const base64  = r.data.split(',')[1];
-    const mimeType = r.type;
-
     // Step 1: Describe current image
-    const currentDesc = await geminiDescribeImage(base64, mimeType, apiKey);
+    const base64   = r.data.split(',')[1];
+    const currentDesc = await geminiDescribeImage(base64, r.type, apiKey);
     pendingReceipt.aiDesc = currentDesc;
 
     if (!otherLoans.length) {
       $('ai-match-body').innerHTML = `
-        <div class="ai-desc-box">
-          <div class="ai-desc-lbl">🔍 Ornament Description</div>
-          ${currentDesc.description}
-        </div>
-        <div class="ai-match-card safe">
-          <div class="ai-match-card-hd">
-            <span class="ai-match-loan">✅ No Other Loans to Compare</span>
-            <span class="ai-match-badge safe">CLEAR</span>
-          </div>
-          <div class="ai-match-reason">No other loans with photos found. Description saved for future comparisons.</div>
-        </div>`;
+        <div class="ai-desc-box"><div class="ai-desc-lbl">🔍 Ornament Description</div>${currentDesc.description}</div>
+        <div class="ai-match-card safe"><div class="ai-match-card-hd"><span class="ai-match-loan">✅ No Other Loans</span><span class="ai-match-badge safe">CLEAR</span></div><div class="ai-match-reason">No other loans to compare against.</div></div>`;
       return;
     }
 
-    // Step 2: Compare descriptions
-    const otherDescs = otherLoans.map(l => ({
-      loanName: l.name,
-      loanDate: l.loanDate,
-      amount:   l.amount,
-      aiDesc:   l.receipt.aiDesc || null,
-    }));
+    // Step 2: Build comparison data — use stored aiDesc or item text only (no concurrent API calls)
+    $('ai-match-body').querySelector('.ai-scan-s').textContent = `Step 2 of 2: Comparing against ${otherLoans.length} loans…`;
 
+    const loansWithDesc = otherLoans.map(l => {
+      // Priority 1: Use stored AI description
+      if (l.receipt?.aiDesc?.description) return { ...l, _desc: l.receipt.aiDesc.description };
+      // Priority 2: Fall back to item details text (no API call needed)
+      if (l.items && l.items.length) {
+        const itemText = l.items.map(it =>
+          [it.type, it.item, it.purity, it.wt?it.wt+'g':'', it.huid?'HUID:'+it.huid:'', it.hallmarkStatus].filter(Boolean).join(' ')
+        ).join('; ');
+        return { ...l, _desc: `Gold items: ${itemText}` };
+      }
+      // Priority 3: Receipt exists but no desc yet — note it
+      if (l.receipt?.data) return { ...l, _desc: `Has receipt photo but not yet scanned — loan: ${l.name}, amount: ${l.amount}` };
+      return { ...l, _desc: null };
+    });
+
+    const comparableLoans = loansWithDesc.filter(l => l._desc);
+
+    if (!comparableLoans.length) {
+      $('ai-match-body').innerHTML = `
+        <div class="ai-desc-box"><div class="ai-desc-lbl">🔍 Detected Ornaments</div>${currentDesc.description}</div>
+        <div class="ai-match-card safe"><div class="ai-match-card-hd"><span class="ai-match-loan">No comparable data</span><span class="ai-match-badge safe">CLEAR</span></div>
+        <div class="ai-match-reason">Other loans have no photos or item details to compare against. Add photos or item details to loans for AI comparison.</div></div>`;
+      return;
+    }
+
+    // Step 3: Compare
+    const otherDescs = comparableLoans.map(l => ({
+      loanName: l.name, loanDate: l.loanDate, amount: l.amount, description: l._desc
+    }));
     const results = await geminiCompare(currentDesc, otherDescs, apiKey);
 
     const highRisk = results.filter(r => r.risk === 'HIGH');
-    const summary  = highRisk.length > 0
+    const summary = highRisk.length > 0
       ? `<div style="background:rgba(232,85,85,0.1);border:1px solid rgba(232,85,85,0.4);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:600;color:var(--red)">⚠️ ${highRisk.length} HIGH RISK match${highRisk.length>1?'es':''} found — possible duplicate pledge</div>`
       : `<div style="background:rgba(39,201,122,0.07);border:1px solid rgba(39,201,122,0.25);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:600;color:var(--green)">✅ No high-risk duplicates detected</div>`;
 
@@ -2563,16 +3163,12 @@ window.runOrnamentScan = async function() {
       if (!loan) return '';
       const cls   = res.risk === 'HIGH' ? 'danger' : res.risk === 'MEDIUM' ? 'warn' : 'safe';
       const label = res.risk === 'HIGH' ? '⚠ HIGH RISK' : res.risk === 'MEDIUM' ? '⚡ MEDIUM' : '✓ LOW';
-      return `
-        <div class="ai-match-card ${cls}">
-          <div class="ai-match-card-hd">
-            <span class="ai-match-loan">${loan.loanName}</span>
-            <span class="ai-match-badge ${cls}">${label}</span>
-          </div>
-          <div class="ai-match-reason">${res.reason}</div>
-          <div class="ai-match-meta">Confidence: ${res.confidence}% · ${inr(loan.amount)} · ${fmtDate(loan.loanDate)}</div>
-        </div>`;
-    }).join('') || `<div class="ai-match-card safe"><div class="ai-match-card-hd"><span class="ai-match-loan">All loans checked</span><span class="ai-match-badge safe">ALL CLEAR</span></div><div class="ai-match-reason">No matching ornaments found across ${otherLoans.length} loans.</div></div>`;
+      return `<div class="ai-match-card ${cls}">
+        <div class="ai-match-card-hd"><span class="ai-match-loan">${loan.loanName}</span><span class="ai-match-badge ${cls}">${label}</span></div>
+        <div class="ai-match-reason">${res.reason}</div>
+        <div class="ai-match-meta">Confidence: ${res.confidence}% · ${inr(loan.amount)} · ${fmtDate(loan.loanDate)}</div>
+      </div>`;
+    }).join('') || `<div class="ai-match-card safe"><div class="ai-match-card-hd"><span class="ai-match-loan">All ${comparableLoans.length} loans checked</span><span class="ai-match-badge safe">ALL CLEAR</span></div><div class="ai-match-reason">No matching ornaments found.</div></div>`;
 
     $('ai-match-body').innerHTML = `
       <div class="ai-desc-box">
@@ -2580,9 +3176,10 @@ window.runOrnamentScan = async function() {
         ${currentDesc.description}
         ${currentDesc.distinctive ? `<div style="margin-top:6px;font-weight:600;color:var(--g2)">${currentDesc.distinctive}</div>` : ''}
       </div>
+      <div style="font-size:11px;color:var(--tx2);margin-bottom:10px">Compared against ${comparableLoans.length} of ${otherLoans.length} loans (${otherLoans.length - comparableLoans.length} had no data)</div>
       ${summary}${cards}
       <div style="text-align:center;margin-top:16px">
-        <button onclick="$('gemini-key-input').value='';localStorage.removeItem('${GEMINI_KEY_STORE}');$('gemini-ov').classList.add('open');closeAiMatch()" style="font-size:11px;color:var(--tx2);background:none;border:none;cursor:pointer;text-decoration:underline">Change Gemini API Key</button>
+        <button onclick="localStorage.removeItem('${GEMINI_KEY_STORE}');closeAiMatch();runOrnamentScan()" style="font-size:11px;color:var(--tx2);background:none;border:none;cursor:pointer;text-decoration:underline">Change Gemini API Key</button>
       </div>`;
 
   } catch(err) {
@@ -2591,8 +3188,9 @@ window.runOrnamentScan = async function() {
         <div class="ai-match-card-hd"><span class="ai-match-loan">⚠ Scan Failed</span></div>
         <div class="ai-match-reason">${err.message}</div>
         <div class="ai-match-meta" style="margin-top:8px">
-          ${err.message.includes('API_KEY') || err.message.includes('invalid') ? `
-          <button onclick="localStorage.removeItem('${GEMINI_KEY_STORE}');closeAiMatch();runOrnamentScan()" style="background:rgba(212,161,42,0.1);border:1px solid var(--bd);border-radius:var(--rs);color:var(--g1);padding:8px 14px;font-size:12px;cursor:pointer">🔑 Update API Key</button>` : 'Check your internet connection and try again.'}
+          ${err.message.includes('API_KEY')||err.message.includes('invalid')||err.message.includes('key')
+            ? `<button onclick="localStorage.removeItem('${GEMINI_KEY_STORE}');closeAiMatch();runOrnamentScan()" style="background:rgba(212,161,42,0.1);border:1px solid var(--bd);border-radius:var(--rs);color:var(--g1);padding:8px 14px;font-size:12px;cursor:pointer">🔑 Update API Key</button>`
+            : 'Check your internet connection and try again.'}
         </div>
       </div>`;
   }
@@ -2614,6 +3212,7 @@ window.openLoanSheet = function(loan = null) {
   $('f-rate').value   = loan ? loan.rate        : '';
   $('f-status').value = loan ? loan.status      : 'Active';
   const opt = $('f-rd-opt'); if(opt) opt.style.display = (loan && loan.status==='Closed') ? 'none' : 'inline';
+  populateCustDropdown(loan?.custId || '');
   renderReceiptArea(loan?.receipt || null);
   renderItemsForm();
   // reset gold rate and auto-fetch live rate
@@ -2643,15 +3242,72 @@ window.onStatusChange = function() {
 window.livePreview = function() {
   const ld     = $('f-ld').value;
   const status = $('f-status').value;
-  const rd     = $('f-rd').value || (status === 'Active' ? localDate() : '');
-  const amt    = parseFloat($('f-amt').value) || 0;
-  const rt     = parseFloat($('f-rate').value) || 0;
-  const m      = calcMonths(ld, rd);
-  const i      = (m !== null && amt && rt) ? calcInterest(amt, rt, m) : null;
-  const tot    = i !== null ? amt + i : null;
-  $('pv-m').textContent = m !== null ? (rd && !$('f-rd').value && status==='Active' ? m+'*' : m) : '—';
+  const rdVal  = $('f-rd').value;
+  // Auto-switch status based on release date
+  if (rdVal && status === 'Active') {
+    $('f-status').value = 'Closed';
+    const opt = $('f-rd-opt'); if (opt) opt.style.display = 'none';
+  } else if (!rdVal && status === 'Closed') {
+    $('f-status').value = 'Active';
+    const opt = $('f-rd-opt'); if (opt) opt.style.display = 'inline';
+  }
+  const rd  = rdVal || (($('f-status').value === 'Active') ? localDate() : '');
+  const amt = parseFloat($('f-amt').value) || 0;
+  const rt  = parseFloat($('f-rate').value) || 0;
+  const m   = calcMonths(ld, rd);
+  const i   = (m !== null && amt && rt) ? calcInterest(amt, rt, m) : null;
+  const tot = i !== null ? amt + i : null;
+  $('pv-m').textContent = m !== null ? (rd && !$('f-rd').value && $('f-status').value==='Active' ? m+'*' : m) : '—';
   $('pv-i').textContent = inr(i);
   $('pv-t').textContent = inr(tot);
+};
+
+window.onLoanCustChange = function() {
+  const custId = $('f-cust-id').value;
+  const preview = $('f-cust-preview');
+  if (!custId || !preview) { if(preview) preview.style.display='none'; return; }
+  const c = customers.find(x => x.id === custId);
+  if (!c) { preview.style.display='none'; return; }
+  preview.style.display = 'block';
+  preview.innerHTML = `<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(39,201,122,0.07);border:1px solid rgba(39,201,122,0.2);border-radius:var(--rs)">
+    ${c.photo ? `<img src="${c.photo.data}" style="width:32px;height:32px;border-radius:50%;object-fit:cover"/>` : '<div style="width:32px;height:32px;border-radius:50%;background:var(--glass);display:flex;align-items:center;justify-content:center;font-size:16px">👤</div>'}
+    <div>
+      <div style="font-size:13px;font-weight:600;color:var(--tx0)">${c.name}</div>
+      <div style="font-size:11px;color:var(--tx2)">${c.code||''} · ${c.mobile||''}</div>
+    </div>
+    <span style="margin-left:auto;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:${custStatusBg(c.status)};color:${custStatusColor(c.status)}">${c.status||'Active'}</span>
+  </div>`;
+};
+
+function populateCustDropdown(selectedId) {
+  const sel = $('f-cust-id');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— No customer linked —</option>' +
+    [...customers].sort((a,b)=>a.name.localeCompare(b.name)).map(c =>
+      `<option value="${c.id}" ${c.id===selectedId?'selected':''}>${c.name}${c.code?' ('+c.code+')':''}</option>`
+    ).join('');
+  if (selectedId) onLoanCustChange();
+}
+
+window.checkLoanNumDup = function(el) {
+  const val = el.value.trim().toLowerCase();
+  const dup = val && loans.find(l => l.name.trim().toLowerCase() === val && l.id !== editId);
+  el.style.borderColor = dup ? 'var(--red)' : '';
+  el.style.boxShadow   = dup ? '0 0 0 3px rgba(232,85,85,0.15)' : '';
+  let hint = el.nextElementSibling;
+  if (dup) {
+    if (!hint || !hint.classList.contains('dup-hint')) {
+      hint = document.createElement('div');
+      hint.className = 'dup-hint';
+      hint.style.cssText = 'font-size:11px;color:var(--red);margin-top:4px;font-weight:600';
+      el.parentNode.insertBefore(hint, el.nextSibling);
+    }
+    hint.textContent = `⚠️ "${el.value.trim()}" already exists`;
+  } else if (hint?.classList.contains('dup-hint')) {
+    hint.remove();
+    el.style.borderColor = '';
+    el.style.boxShadow   = '';
+  }
 };
 
 window.saveLoan = async function() {
@@ -2660,7 +3316,10 @@ window.saveLoan = async function() {
   const rd     = $('f-rd').value;
   const amt    = parseFloat($('f-amt').value);
   const rate   = parseFloat($('f-rate').value);
-  const status = $('f-status').value;
+  // Auto-correct status: if release date is set → Closed, else Active
+  let status = $('f-status').value;
+  if (rd && status === 'Active') status = 'Closed';
+  if (!rd && status === 'Closed') status = 'Active';
 
   if (!no)                  { toast('⚠️ Enter Loan Number'); return; }
   if (!ld)                  { toast('⚠️ Select Loan Date'); return; }
@@ -2668,18 +3327,32 @@ window.saveLoan = async function() {
   if (isNaN(amt) || amt<=0) { toast('⚠️ Enter valid amount'); return; }
   if (isNaN(rate)||rate<=0) { toast('⚠️ Enter valid rate'); return; }
 
+  // Duplicate loan number check — exclude current loan when editing
+  const duplicate = loans.find(l => l.name.trim().toLowerCase() === no.toLowerCase() && l.id !== editId);
+  if (duplicate) { toast(`⚠️ Loan number "${no}" already exists`); $('f-no').focus(); return; }
+
   // Handle receipt
   let receiptData = editId ? (loans.find(l => l.id === editId)?.receipt || null) : null;
   if (pendingReceipt?.removed) receiptData = null;
-  else if (pendingReceipt?.data) receiptData = { data: pendingReceipt.data, type: pendingReceipt.type, name: pendingReceipt.name };
+  else if (pendingReceipt?.data) receiptData = { data: pendingReceipt.data, type: pendingReceipt.type, name: pendingReceipt.name, aiDesc: pendingReceipt.aiDesc || null };
 
   const lObj = { id: editId || uid(), name: no, loanDate: ld, releaseDate: rd, amount: amt, rate, status };
+  const custId = $('f-cust-id')?.value || '';
+  if (custId) lObj.custId = custId;
   if (receiptData) lObj.receipt = receiptData;
   if (itemRows.length) lObj.items = itemRows.filter(it => it.item || it.wt || it.value);
 
   if (fbOn) {
+    closeLoanSheet();
+    toast(editId ? '✅ Loan updated' : '✅ Loan added');
     syncBar('syncing', 'Saving…');
-    await fbWrite(lObj);
+    fbWrite(lObj).then(() => {
+      syncBar('synced', '✓ Saved');
+    }).catch(e => {
+      syncBar('offline', '⚠️ Save failed');
+      toast('⚠️ Failed to save: ' + e.message);
+    });
+    return;
   } else {
     if (editId) {
       const idx = loans.findIndex(l => l.id === editId);
@@ -2707,9 +3380,17 @@ window.askDelete = function(id) {
 };
 window.closeConf = function()   { deleteId = null; $('conf-ov').classList.remove('open'); };
 window.doDelete  = async function() {
-  if (fbOn) { syncBar('syncing','Deleting…'); await fbDelete(deleteId); }
-  else { loans = loans.filter(l => l.id !== deleteId); lsSave(); render(); }
-  closeConf(); toast('🗑️ Deleted');
+  const idToDelete = deleteId;
+  closeConf();
+  if (fbOn) {
+    syncBar('syncing','Deleting…');
+    fbDelete(idToDelete)
+      .then(() => syncBar('synced','✓ Deleted'))
+      .catch(e => { syncBar('offline','⚠️ Delete failed'); toast('⚠️ ' + e.message); });
+  } else {
+    loans = loans.filter(l => l.id !== idToDelete); lsSave(); render();
+  }
+  toast('🗑️ Deleted');
 };
 
 // ══════════════════════════════════════════
@@ -2717,10 +3398,12 @@ window.doDelete  = async function() {
 // ══════════════════════════════════════════
 window.sheetOvClick = function(e, id) {
   if (e.target === $(id)) {
-    if (id === 'loan-ov')   closeLoanSheet();
-    if (id === 'import-ov') closeUpload();
-    if (id === 'roles-ov')  closeRoles();
-    if (id === 'roles-ov')  closeRoles();
+    if (id === 'loan-ov')        closeLoanSheet();
+    if (id === 'import-ov')      closeUpload();
+    if (id === 'roles-ov')       closeRoles();
+    if (id === 'cust-ov')        closeCustSheet();
+    if (id === 'cust-detail-ov') $('cust-detail-ov').classList.remove('open');
+    if (id === 'reminder-ov')    closeReminder();
   }
 };
 
@@ -3004,6 +3687,8 @@ function applyRole(role){
   if(lb)lb.style.display=role==='admin'?'flex':'none';
   const sb=document.getElementById('nv-stats');
   if(sb)sb.style.display=role==='admin'?'flex':'none';
+  const custb=document.getElementById('nv-customers');
+  if(custb)custb.style.display=role==='admin'?'flex':'none';
   if(role==='staff'){
     document.querySelectorAll('.c-del').forEach(el=>el.style.display='none');
     const imp=document.getElementById('nv-import');if(imp)imp.style.display='none';
@@ -3072,6 +3757,551 @@ function bootAuth(){
 // ROLES_PLACEHOLDER_END
 
 // ══════════════════════════════════════════
+// ══════════════════════════════════════════
+// CUSTOMER MODULE
+// ══════════════════════════════════════════
+const LS_CUST = 'ak_customers_v1';
+let customers = [];
+let custEditId = null;
+let custFilter = 'All';
+let custPhoto = null;   // { data, type, name }
+let custIdImg = null;   // { data, type, name }
+
+function loadCustomers() {
+  try { customers = JSON.parse(localStorage.getItem(LS_CUST)) || []; } catch { customers = []; }
+}
+function saveCustomersLocal() { localStorage.setItem(LS_CUST, JSON.stringify(customers)); }
+
+// Write to Firestore if Firebase on
+async function fbWriteCustomer(c) {
+  if (!db) return;
+  const { id, ...data } = c;
+  try {
+    const { doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    await setDoc(doc(db, 'customers', id), data);
+  } catch {}
+}
+async function fbDeleteCustomer(id) {
+  if (!db) return;
+  try {
+    const { doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    await deleteDoc(doc(db, 'customers', id));
+  } catch {}
+}
+
+// Get loan summary for a customer (link by customer code in loan name or custCode field)
+function getCustLoans(c) {
+  return loans.filter(l => l.custId === c.id || l.custCode === c.code);
+}
+
+function custLoanStats(c) {
+  const cl = getCustLoans(c);
+  const today = localDate();
+  let totalPrincipal = 0, interestTillDate = 0, interestEarnedClosed = 0;
+  const byStatus = { Active: 0, Closed: 0, Overdue: 0 };
+  cl.forEach(l => {
+    totalPrincipal += l.amount || 0;
+    const rd = l.releaseDate || (l.status === 'Active' ? today : null);
+    const m  = rd ? calcMonths(l.loanDate, rd) : 0;
+    const i  = m ? calcInterest(l.amount, l.rate, m) : 0;
+    if (l.status === 'Active') {
+      interestTillDate += i;
+      // Check if overdue >1 year
+      const days = Math.floor((new Date(today+'T00:00:00') - new Date(l.loanDate+'T00:00:00')) / (1000*60*60*24));
+      if (days >= 365) byStatus.Overdue++;
+      else byStatus.Active++;
+    } else {
+      interestEarnedClosed += i;
+      byStatus.Closed++;
+    }
+  });
+  return { loans: cl, totalPrincipal, interestTillDate, interestEarnedClosed, byStatus };
+}
+
+// Status color helper
+function custStatusColor(s) {
+  return { Active:'var(--green)', Closed:'var(--tx2)', Overdue:'#F5A623', Defaulter:'var(--red)', Blacklisted:'var(--red)' }[s] || 'var(--tx2)';
+}
+function custStatusBg(s) {
+  return { Active:'rgba(39,201,122,0.1)', Closed:'rgba(120,120,120,0.1)', Overdue:'rgba(245,166,35,0.1)', Defaulter:'rgba(232,85,85,0.12)', Blacklisted:'rgba(232,85,85,0.12)' }[s] || 'rgba(120,120,120,0.1)';
+}
+function custStatusEmoji(s) {
+  return { Active:'🟢', Closed:'⚫', Overdue:'🟡', Defaulter:'🔴', Blacklisted:'⛔' }[s] || '';
+}
+
+// ── Render customer list ──
+function renderCustomers() {
+  const q   = ($('cust-si')?.value || '').toLowerCase();
+  const el  = $('cust-list');
+  if (!el) return;
+
+  let list = customers.filter(c => {
+    const match = (c.name||'').toLowerCase().includes(q) ||
+                  (c.code||'').toLowerCase().includes(q) ||
+                  (c.mobile||'').includes(q);
+    const filterOk = custFilter === 'All' || c.status === custFilter;
+    return match && filterOk;
+  });
+
+  // Update chip active state
+  ['All','Active','Closed','Overdue','Defaulter','Blacklisted'].forEach(s => {
+    const el = $('cf-' + s); if (el) el.classList.toggle('act', custFilter === s);
+  });
+
+  if (!list.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-ic">👥</div><div class="empty-t">No Customers</div><div class="empty-s">${customers.length ? 'No results for this filter.' : 'Tap + to add your first customer.'}</div></div>`;
+    return;
+  }
+
+  el.innerHTML = list.map((c, i) => {
+    const stats = custLoanStats(c);
+    const avatarHtml = c.photo
+      ? `<img src="${c.photo.data}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`
+      : `<span style="font-size:22px">${c.gender === 'Female' ? '👩' : '👤'}</span>`;
+
+    const loanSummary = stats.loans.length
+      ? `<span style="color:var(--green)">${stats.byStatus.Active} Active</span>${stats.byStatus.Overdue ? ` · <span style="color:#F5A623">${stats.byStatus.Overdue} Overdue</span>` : ''}${stats.byStatus.Closed ? ` · <span style="color:var(--tx2)">${stats.byStatus.Closed} Closed</span>` : ''}`
+      : '<span style="color:var(--tx2)">No loans yet</span>';
+
+    return `<div class="cust-card" onclick="openCustDetail('${c.id}')" style="animation-delay:${i*0.03}s">
+      <div class="cust-card-head">
+        <div class="cust-avatar">${avatarHtml}</div>
+        <div class="cust-info">
+          <div class="cust-name">${c.name||'—'}</div>
+          <div class="cust-code">${c.code||''} ${c.mobile ? '· '+c.mobile : ''}</div>
+          <div class="cust-mobile" style="margin-top:3px;font-size:11px">${loanSummary}</div>
+        </div>
+        <span class="cust-status-badge" style="background:${custStatusBg(c.status)};color:${custStatusColor(c.status)};border:1px solid ${custStatusColor(c.status)}40">
+          ${custStatusEmoji(c.status)} ${c.status||'Active'}
+        </span>
+      </div>
+      ${stats.loans.length ? `<div class="cust-card-body">
+        <div><div class="cust-cf-l">Principal</div><div class="cust-cf-v">${inr(stats.totalPrincipal)}</div></div>
+        <div><div class="cust-cf-l">Interest Accr.</div><div class="cust-cf-v" style="color:var(--green)">${inr(stats.interestTillDate)}</div></div>
+        <div><div class="cust-cf-l">Interest Earned</div><div class="cust-cf-v" style="color:var(--g1)">${inr(stats.interestEarnedClosed)}</div></div>
+      </div>` : ''}
+      <div class="cust-card-foot">
+        ${currentRole !== 'staff' ? `<button class="c-btn c-edit" onclick="event.stopPropagation();openCustSheet('${c.id}')">✏️</button>` : ''}
+        <button class="c-btn" onclick="event.stopPropagation();exportCustomer('${c.id}')" style="background:rgba(212,161,42,0.1);color:var(--g2)">📤</button>
+        ${c.mobile ? `
+        <a class="c-btn" href="https://wa.me/91${c.mobile.replace(/\D/g,'')}" target="_blank" onclick="event.stopPropagation()" style="background:rgba(37,211,102,0.12);color:#25D366;text-decoration:none;display:flex;align-items:center;justify-content:center" title="WhatsApp">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        </a>
+        <a class="c-btn" href="sms:+91${c.mobile.replace(/\D/g,'')}" onclick="event.stopPropagation()" style="background:rgba(91,141,239,0.12);color:var(--blue);text-decoration:none;display:flex;align-items:center;justify-content:center" title="SMS">💬</a>
+        <a class="c-btn" href="tel:+91${c.mobile.replace(/\D/g,'')}" onclick="event.stopPropagation()" style="background:rgba(39,201,122,0.1);color:var(--green);text-decoration:none;display:flex;align-items:center;justify-content:center" title="Call">📞</a>
+        ` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Customer detail sheet ──
+window.closeCustDetail = function() { $('cust-detail-ov').classList.remove('open'); };
+
+window.openCustDetail = function(id) {
+  const c = customers.find(x => x.id === id);
+  if (!c) return;
+  const stats = custLoanStats(c);
+  const body = $('cust-detail-body');
+  const title = $('cust-detail-title');
+  if (!body) return;
+  title.textContent = c.name || 'Customer';
+
+  body.innerHTML = `
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+      <div style="width:80px;height:80px;border-radius:50%;background:var(--glass);border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+        ${c.photo ? `<img src="${c.photo.data}" style="width:100%;height:100%;object-fit:cover"/>` : `<span style="font-size:34px">${c.gender==='Female'?'👩':'👤'}</span>`}
+      </div>
+      <div>
+        <div style="font-family:'Manrope',sans-serif;font-size:20px;font-weight:700;color:var(--g1)">${c.name||'—'}</div>
+        <div style="font-size:12px;color:var(--tx2);margin-top:2px">${c.code||''}</div>
+        <span style="display:inline-block;margin-top:6px;padding:3px 12px;border-radius:20px;font-size:11px;font-weight:700;background:${custStatusBg(c.status)};color:${custStatusColor(c.status)}">${custStatusEmoji(c.status)} ${c.status||'Active'}</span>
+      </div>
+    </div>
+
+    <!-- Loan Summary -->
+    <div style="background:var(--glass);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:16px">
+      <div style="font-size:10px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">📊 Loan Summary</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><div style="font-size:9px;color:var(--tx2);text-transform:uppercase">Total Loans</div><div style="font-size:18px;font-weight:700;color:var(--g1);margin-top:2px">${stats.loans.length}</div></div>
+        <div><div style="font-size:9px;color:var(--tx2);text-transform:uppercase">Total Principal</div><div style="font-size:18px;font-weight:700;color:var(--g1);margin-top:2px">${inr(stats.totalPrincipal)}</div></div>
+        <div><div style="font-size:9px;color:var(--tx2);text-transform:uppercase">Interest Till Date</div><div style="font-size:18px;font-weight:700;color:var(--green);margin-top:2px">${inr(stats.interestTillDate)}</div></div>
+        <div><div style="font-size:9px;color:var(--tx2);text-transform:uppercase">Interest Earned (Closed)</div><div style="font-size:18px;font-weight:700;color:var(--g1);margin-top:2px">${inr(stats.interestEarnedClosed)}</div></div>
+        <div><div style="font-size:9px;color:var(--tx2);text-transform:uppercase">Total Due</div><div style="font-size:18px;font-weight:700;color:var(--tx0);margin-top:2px">${inr(stats.totalPrincipal + stats.interestTillDate)}</div></div>
+        <div><div style="font-size:9px;color:var(--tx2);text-transform:uppercase">Loan Status</div><div style="font-size:13px;font-weight:600;margin-top:4px">${stats.byStatus.Active?`<span style="color:var(--green)">${stats.byStatus.Active} Active</span> `:''}${stats.byStatus.Overdue?`<span style="color:#F5A623">${stats.byStatus.Overdue} Overdue</span> `:''}${stats.byStatus.Closed?`<span style="color:var(--tx2)">${stats.byStatus.Closed} Closed</span>`:''}</div></div>
+      </div>
+      ${stats.loans.length ? `<div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:10px">
+        ${stats.loans.map(l => `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(212,161,42,0.05);font-size:12px">
+          <span style="color:var(--g1);font-weight:600">${l.name}</span>
+          <span style="color:var(--tx2)">${fmtDate(l.loanDate)}</span>
+          <span style="color:var(--tx0)">${inr(l.amount)}</span>
+          <span style="color:${l.status==='Active'?'var(--green)':'var(--tx2)'}">${l.status}</span>
+        </div>`).join('')}
+      </div>` : ''}
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      ${c.mobile ? `
+        <a href="https://wa.me/91${c.mobile.replace(/\D/g,'')}" target="_blank"
+           style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);border-radius:var(--rs);color:#25D366;font-weight:600;font-size:13px;text-decoration:none">
+          <span style="font-size:18px">💬</span> WhatsApp
+        </a>
+        <a href="sms:+91${c.mobile.replace(/\D/g,'')}"
+           style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;background:rgba(91,141,239,0.12);border:1px solid rgba(91,141,239,0.3);border-radius:var(--rs);color:var(--blue);font-weight:600;font-size:13px;text-decoration:none">
+          <span style="font-size:18px">✉️</span> SMS
+        </a>
+        <a href="tel:+91${c.mobile.replace(/\D/g,'')}"
+           style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;background:rgba(39,201,122,0.08);border:1px solid rgba(39,201,122,0.25);border-radius:var(--rs);color:var(--green);font-weight:600;font-size:13px;text-decoration:none">
+          <span style="font-size:18px">📞</span> Call
+        </a>` : '<div style="font-size:12px;color:var(--tx2);padding:10px">No mobile number saved</div>'}
+    </div>
+    <div style="font-size:10px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">👤 Personal Info</div>
+    ${detailRow('Mobile', c.mobile)} ${detailRow('Alt Mobile', c.mobile2)} ${detailRow('Address', [c.address, c.city, c.pincode].filter(Boolean).join(', '))} ${detailRow('Father/Husband', c.fathername)} ${detailRow('DOB', c.dob ? fmtDate(c.dob) : '')} ${detailRow('Gender', c.gender)} ${detailRow('Occupation', c.occupation)}
+
+    <!-- KYC -->
+    <div style="font-size:10px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin:12px 0 8px">🪪 KYC</div>
+    ${detailRow('Aadhaar', c.aadhaar)} ${detailRow('PAN', c.pan)} ${detailRow('Voter ID', c.voterid)} ${detailRow('Driving License', c.dl)}
+    ${c.idImg ? `<div style="margin-top:8px"><div style="font-size:10px;color:var(--tx2);margin-bottom:4px">ID Proof Image</div><img src="${c.idImg.data}" onclick="openImgViewer('${c.id}')" style="max-width:100%;border-radius:var(--rs);cursor:pointer;border:1px solid var(--bd)"/></div>` : ''}
+
+    <!-- Financial -->
+    <div style="font-size:10px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin:12px 0 8px">💰 Financial</div>
+    ${detailRow('Annual Income', c.income ? inr(c.income) : '')} ${detailRow('Credit Limit', c.limit ? inr(c.limit) : '')} ${detailRow('Risk Level', c.risk)} ${detailRow('Customer Since', c.since ? fmtDate(c.since) : '')}
+
+    <!-- Guarantor -->
+    ${c.gname ? `<div style="font-size:10px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;margin:12px 0 8px">🤝 Guarantor</div>${detailRow('Name', c.gname)}${detailRow('Mobile', c.gmobile)}` : ''}
+    ${c.notes ? `<div style="margin-top:10px;padding:10px;background:var(--glass);border-radius:var(--rs);font-size:12px;color:var(--tx1)">📝 ${c.notes}</div>` : ''}
+
+    <div style="display:flex;gap:8px;margin-top:20px">
+      ${currentRole !== 'staff' ? `<button class="btn-primary" style="flex:1" onclick="openCustSheet('${c.id}')">✏️ Edit</button>` : ''}
+      <button class="btn-ghost" style="flex:1;margin-top:0" onclick="exportCustomer('${c.id}')">📤 Export</button>
+    </div>`;
+
+  $('cust-detail-ov').classList.add('open');
+};
+
+function detailRow(label, val) {
+  if (!val) return '';
+  return `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(212,161,42,0.05);font-size:12px"><span style="color:var(--tx2)">${label}</span><span style="color:var(--tx0);font-weight:500;text-align:right;max-width:60%">${val}</span></div>`;
+}
+
+// ── Open add/edit sheet ──
+window.openCustSheet = function(id = null) {
+  custEditId = id;
+  custPhoto = null; custIdImg = null;
+  const c = id ? customers.find(x => x.id === id) : null;
+  $('cust-sheet-title').textContent = c ? 'Edit Customer' : 'New Customer';
+
+  // Reset all fields
+  ['cf-code','cf-name','cf-fathername','cf-mobile','cf-mobile2','cf-address','cf-city',
+   'cf-pincode','cf-aadhaar','cf-pan','cf-voterid','cf-dl','cf-income','cf-limit',
+   'cf-notes','cf-gname','cf-gmobile','cf-occupation'].forEach(id => { const el=$(id); if(el) el.value = c ? (c[id.replace('cf-','')] || '') : ''; });
+
+  if ($('cf-dob')) $('cf-dob').value = c?.dob || '';
+  if ($('cf-since')) $('cf-since').value = c?.since || '';
+  if ($('cf-gender')) $('cf-gender').value = c?.gender || '';
+  if ($('cf-status')) $('cf-status').value = c?.status || 'Active';
+  if ($('cf-risk')) $('cf-risk').value = c?.risk || 'Low';
+
+  // Photo preview
+  const prev = $('cust-photo-preview');
+  if (prev) prev.innerHTML = c?.photo ? `<img src="${c.photo.data}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>` : '👤';
+  if (c?.photo) custPhoto = c.photo;
+
+  // ID image
+  renderCustIdUpload(c?.idImg || null);
+  if (c?.idImg) custIdImg = c.idImg;
+
+  // Delete btn
+  const db2 = $('cf-delete-btn');
+  if (db2) db2.style.display = (c && currentRole === 'admin') ? 'block' : 'none';
+
+  $('cust-ov').classList.add('open');
+  $('cust-detail-ov').classList.remove('open');
+};
+
+window.closeCustSheet = function() { $('cust-ov').classList.remove('open'); custEditId = null; };
+
+function renderCustIdUpload(existing) {
+  const area = $('cust-id-upload-area');
+  if (!area) return;
+  if (custIdImg || existing) {
+    const r = custIdImg || existing;
+    area.innerHTML = `<div class="receipt-uploaded"><div class="receipt-uploaded-info"><div class="receipt-uploaded-ic">${r.type?.includes('pdf') ? '📄' : '🪪'}</div><div><div class="receipt-uploaded-lbl">ID uploaded</div><div class="receipt-uploaded-sub">${r.name||'id document'}</div></div></div><div class="receipt-actions"><button class="receipt-btn receipt-view-btn" onclick="openIdImgViewer()">👁 View</button><button class="receipt-btn receipt-remove-btn" onclick="custIdImg=null;renderCustIdUpload(null)">✕</button></div></div>`;
+  } else {
+    area.innerHTML = `<div class="receipt-zone"><input type="file" accept="image/*,.pdf" onchange="custIdFileChosen(event)"/><div class="receipt-zone-ic">🪪</div><div class="receipt-zone-t">Tap to upload ID proof</div><div class="receipt-zone-s">Aadhaar / PAN / Voter ID image or PDF</div></div>`;
+  }
+}
+
+window.custPhotoChosen = function(e) {
+  const file = e.target.files[0]; if (!file) return;
+  if (file.size > 3 * 1024 * 1024) { toast('⚠️ Photo too large (max 3MB)'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    custPhoto = { data: ev.target.result, type: file.type, name: file.name };
+    const prev = $('cust-photo-preview');
+    if (prev) prev.innerHTML = `<img src="${custPhoto.data}" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;
+  };
+  reader.readAsDataURL(file);
+};
+
+window.custIdFileChosen = function(e) {
+  const file = e.target.files[0]; if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { toast('⚠️ File too large (max 5MB)'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => { custIdImg = { data: ev.target.result, type: file.type, name: file.name }; renderCustIdUpload(null); };
+  reader.readAsDataURL(file);
+};
+
+window.openIdImgViewer = function() {
+  const r = custIdImg; if (!r) return;
+  $('receipt-ov-content').innerHTML = r.type?.includes('pdf') ? `<iframe class="receipt-ov-pdf" src="${r.data}"></iframe>` : `<img class="receipt-ov-img" src="${r.data}" alt="ID"/>`;
+  $('receipt-ov').classList.add('open');
+};
+
+// ── Save customer ──
+window.saveCustomer = async function() {
+  const name = $('cf-name')?.value.trim();
+  if (!name) { toast('⚠️ Customer name is required'); return; }
+
+  const c = {
+    id: custEditId || uid(),
+    code: $('cf-code')?.value.trim() || ('CUST-' + Date.now().toString(36).toUpperCase()),
+    name, status: $('cf-status')?.value || 'Active',
+    fathername: $('cf-fathername')?.value.trim() || '',
+    gender: $('cf-gender')?.value || '',
+    dob: $('cf-dob')?.value || '',
+    occupation: $('cf-occupation')?.value.trim() || '',
+    mobile: $('cf-mobile')?.value.trim() || '',
+    mobile2: $('cf-mobile2')?.value.trim() || '',
+    address: $('cf-address')?.value.trim() || '',
+    city: $('cf-city')?.value.trim() || '',
+    pincode: $('cf-pincode')?.value.trim() || '',
+    aadhaar: $('cf-aadhaar')?.value.trim() || '',
+    pan: $('cf-pan')?.value.trim() || '',
+    voterid: $('cf-voterid')?.value.trim() || '',
+    dl: $('cf-dl')?.value.trim() || '',
+    income: parseFloat($('cf-income')?.value) || 0,
+    limit: parseFloat($('cf-limit')?.value) || 0,
+    risk: $('cf-risk')?.value || 'Low',
+    since: $('cf-since')?.value || '',
+    gname: $('cf-gname')?.value.trim() || '',
+    gmobile: $('cf-gmobile')?.value.trim() || '',
+    notes: $('cf-notes')?.value.trim() || '',
+  };
+  if (custPhoto) c.photo = custPhoto;
+  if (custIdImg) c.idImg = custIdImg;
+
+  if (fbOn) { await fbWriteCustomer(c); }
+  const idx = customers.findIndex(x => x.id === c.id);
+  if (idx >= 0) customers[idx] = c; else customers.unshift(c);
+  saveCustomersLocal();
+  renderCustomers();
+  closeCustSheet();
+  toast(custEditId ? '✅ Customer updated' : '✅ Customer added');
+};
+
+// ── Delete customer ──
+window.deleteCustomer = function() {
+  if (!custEditId || currentRole !== 'admin') return;
+  if (!confirm('Delete this customer? This cannot be undone.')) return;
+  fbDeleteCustomer(custEditId);
+  customers = customers.filter(x => x.id !== custEditId);
+  saveCustomersLocal();
+  renderCustomers();
+  closeCustSheet();
+  toast('🗑️ Customer deleted');
+};
+
+// ── Filter ──
+window.setCustFilter = function(f) {
+  custFilter = f;
+  renderCustomers();
+};
+
+// ── Export single customer as text ──
+window.exportCustomer = function(id) {
+  const c = customers.find(x => x.id === id);
+  if (!c) return;
+  const stats = custLoanStats(c);
+  const rows = [
+    ['Customer Code', c.code], ['Name', c.name], ['Status', c.status],
+    ['Mobile', c.mobile], ['Alt Mobile', c.mobile2],
+    ['Address', [c.address, c.city, c.pincode].filter(Boolean).join(', ')],
+    ['Aadhaar', c.aadhaar], ['PAN', c.pan],
+    ['Father/Husband', c.fathername], ['DOB', c.dob], ['Gender', c.gender],
+    ['Occupation', c.occupation], ['Risk Level', c.risk],
+    ['Annual Income', c.income ? inr(c.income) : ''],
+    ['Credit Limit', c.limit ? inr(c.limit) : ''],
+    ['Customer Since', c.since], ['Guarantor', c.gname],
+    ['Guarantor Mobile', c.gmobile], ['Notes', c.notes],
+    ['', ''],
+    ['--- LOAN SUMMARY ---', ''],
+    ['Total Loans', stats.loans.length],
+    ['Active Loans', stats.byStatus.Active],
+    ['Overdue Loans', stats.byStatus.Overdue],
+    ['Closed Loans', stats.byStatus.Closed],
+    ['Total Principal', stats.totalPrincipal],
+    ['Interest Till Date (Active)', stats.interestTillDate],
+    ['Total Due', stats.totalPrincipal + stats.interestTillDate],
+    ['Interest Earned (Closed)', stats.interestEarnedClosed],
+  ];
+  const csv = rows.filter(r => r[1] !== '' && r[1] !== undefined)
+    .map(r => `"${r[0]}","${r[1]}"`).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${c.code || c.name}_${localDate()}.csv`;
+  a.click();
+  toast('📤 Exported');
+};
+
+// ── Export all customers ──
+window.exportAllCustomers = function() {
+  if (!customers.length) { toast('No customers to export'); return; }
+  const header = 'Code,Name,Status,Mobile,Address,Aadhaar,PAN,Risk,Loans,Principal,Interest Due,Interest Earned';
+  const rows = customers.map(c => {
+    const s = custLoanStats(c);
+    return `"${c.code}","${c.name}","${c.status}","${c.mobile}","${[c.address,c.city,c.pincode].filter(Boolean).join(' ')}","${c.aadhaar}","${c.pan}","${c.risk}",${s.loans.length},${s.totalPrincipal},${s.interestTillDate},${s.interestEarnedClosed}`;
+  });
+  const blob = new Blob([[header, ...rows].join('\n')], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `customers_${localDate()}.csv`;
+  a.click();
+  toast('📤 All customers exported');
+};
+
+window.openImgViewer = function(custId) {
+  const c = customers.find(x => x.id === custId);
+  if (!c?.idImg) return;
+  const r = c.idImg;
+  $('receipt-ov-content').innerHTML = r.type?.includes('pdf')
+    ? `<iframe class="receipt-ov-pdf" src="${r.data}"></iframe>`
+    : `<img class="receipt-ov-img" src="${r.data}" alt="ID Proof"/>`;
+  $('receipt-ov').classList.add('open');
+};
+
+// ══════════════════════════════════════════
+// WHATSAPP BULK REMINDER
+// ══════════════════════════════════════════
+const REMINDER_KEY = 'ak_reminders_v1'; // { custId: 'YYYY-MM-DD' }
+
+function getRemindersSent() {
+  try { return JSON.parse(localStorage.getItem(REMINDER_KEY) || '{}'); } catch { return {}; }
+}
+function markReminderSent(custId) {
+  const data = getRemindersSent();
+  data[custId] = localDate();
+  localStorage.setItem(REMINDER_KEY, JSON.stringify(data));
+  // Update the card UI
+  const badge = $('rsent-' + custId);
+  if (badge) badge.innerHTML = '<span class="reminder-sent-badge">✅ Sent today</span>';
+  const card = $('rcard-' + custId);
+  if (card) card.classList.add('sent');
+}
+
+function buildReminderMessage(c, stats) {
+  const overdueLoanNames = stats.loans
+    .filter(l => {
+      const days = Math.floor((new Date(localDate()+'T00:00:00') - new Date(l.loanDate+'T00:00:00')) / 86400000);
+      return l.status === 'Active' && days >= 365;
+    })
+    .map(l => l.name).join(', ');
+
+  const totalDue = stats.totalPrincipal + stats.interestTillDate;
+  const months = Math.max(...stats.loans.filter(l=>l.status==='Active').map(l=>calcMonths(l.loanDate, localDate())||0));
+
+  return `Dear ${c.name},
+
+Your gold loan${overdueLoanNames ? ` (${overdueLoanNames})` : ''} with A&S Gold Loans has exceeded ${months} months.
+
+📌 Total Principal: ${inr(stats.totalPrincipal)}
+💰 Interest Accrued: ${inr(stats.interestTillDate)}
+⚠️ Total Due: ${inr(totalDue)}
+
+Kindly visit our office or contact us immediately to settle your dues and collect your gold.
+
+Thank you,
+A&S Gold Loans`;
+}
+
+window.openBulkReminder = function() {
+  const sentData = getRemindersSent();
+  const today = localDate();
+
+  // Get overdue + defaulter customers with a mobile number
+  const targets = customers.filter(c => {
+    return (c.status === 'Overdue' || c.status === 'Defaulter') && c.mobile;
+  });
+
+  // Also include customers whose loans are overdue (>1 year) even if status not set
+  const fromLoans = customers.filter(c => {
+    if (!c.mobile) return false;
+    if (c.status === 'Overdue' || c.status === 'Defaulter') return false; // already included
+    const stats = custLoanStats(c);
+    return stats.byStatus.Overdue > 0;
+  });
+
+  const all = [...targets, ...fromLoans];
+
+  const body = $('reminder-body');
+  if (!all.length) {
+    body.innerHTML = `<div class="empty"><div class="empty-ic">✅</div><div class="empty-t">No Overdue Customers</div><div class="empty-s">All customers are up to date.</div></div>`;
+    $('reminder-ov').classList.add('open');
+    return;
+  }
+
+  const sentToday = all.filter(c => sentData[c.id] === today).length;
+  const pending   = all.length - sentToday;
+
+  body.innerHTML = `
+    <div style="background:rgba(37,211,102,0.07);border:1px solid rgba(37,211,102,0.2);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px;font-size:13px">
+      <strong style="color:#25D366">${pending} reminder${pending!==1?'s':''} pending</strong>
+      ${sentToday ? ` · <span style="color:var(--tx2)">${sentToday} sent today</span>` : ''}
+      <div style="font-size:11px;color:var(--tx2);margin-top:4px">Tap WhatsApp to open the chat with pre-filled message. App marks it as sent automatically.</div>
+    </div>
+    ${all.map(c => {
+      const stats  = custLoanStats(c);
+      const msg    = encodeURIComponent(buildReminderMessage(c, stats));
+      const mobile = c.mobile.replace(/\D/g,'');
+      const waUrl  = `https://wa.me/91${mobile}?text=${msg}`;
+      const sent   = sentData[c.id] === today;
+      return `
+      <div class="reminder-card ${sent?'sent':''}" id="rcard-${c.id}">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div>
+            <div style="font-weight:700;font-size:14px;color:var(--tx0)">${c.name}</div>
+            <div style="font-size:11px;color:var(--tx2)">${c.code||''} · 📱 ${c.mobile}</div>
+          </div>
+          <div id="rsent-${c.id}">${sent ? '<span class="reminder-sent-badge">✅ Sent today</span>' : `<span style="background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.3);color:#F5A623;border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700">${c.status||'Overdue'}</span>`}</div>
+        </div>
+        <div style="font-size:11px;color:var(--tx2);margin-bottom:4px">📌 Due: ${inr(stats.totalPrincipal + stats.interestTillDate)} · ${stats.loans.length} loan${stats.loans.length!==1?'s':''}</div>
+        <div class="reminder-actions">
+          <a class="wa-send-btn" href="${waUrl}" target="_blank" onclick="setTimeout(()=>markReminderSent('${c.id}'),1000)">
+            💬 WhatsApp
+          </a>
+          <a class="wa-send-btn" href="sms:+91${mobile}?body=${msg}" style="background:rgba(91,141,239,0.12);border-color:rgba(91,141,239,0.3);color:var(--blue)" onclick="setTimeout(()=>markReminderSent('${c.id}'),1000)">
+            ✉️ SMS
+          </a>
+          <button class="skip-btn" onclick="markReminderSent('${c.id}')">Skip</button>
+        </div>
+      </div>`;
+    }).join('')}
+    <button onclick="closeReminder()" style="width:100%;padding:13px;background:var(--glass);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx1);font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-top:6px">Done</button>`;
+
+  $('reminder-ov').classList.add('open');
+};
+
+window.closeReminder = function() { $('reminder-ov').classList.remove('open'); };
+
+
+// ── Boot customers ──
+function bootCustomers() {
+  loadCustomers();
+  renderCustomers();
+}
+
 // THEME SWITCHER
 // ══════════════════════════════════════════
 const THEME_KEY = 'ak_theme_v1';
@@ -3105,6 +4335,9 @@ if (!storedCfg) {
 
 // Signal module is ready — flush any queued onclick calls
 if (typeof window._moduleReady === 'function') window._moduleReady();
+
+// Boot customers
+bootCustomers();
 
 // Auto-fetch live gold rate on boot (silent)
 setTimeout(() => fetchLiveGoldRate(true), 1500);
