@@ -2727,7 +2727,7 @@ function renderItemsForm() {
 const PURITY_FACTOR = { '24K': 1.0, '22K': 22/24, '18K': 18/24, '14K': 14/24 };
 
 // Module-level live gold rate — updated whenever fetched
-let liveGoldRate22K = 13230; // fallback: today's known rate
+let liveGoldRate22K = 13725; // fallback: 7 Aug 2026 rate
 
 const GOLD_API_KEY_STORE = 'ak_goldapi_key_v1';
 
@@ -2758,32 +2758,42 @@ async function fetchLiveGoldRate(silent = false) {
     } catch {}
   }
 
-  // ── Source 2: open.er-api XAU→INR spot × India premium ──
+  // ── Source 2: metals-api.com free endpoint (has CORS, returns USD/oz) ──
   if (!inrPer22k) {
     try {
-      const xauRes = await fetch('https://open.er-api.com/v6/latest/XAU');
-      if (xauRes.ok) {
+      // Use allorigins proxy to bypass CORS for exchange rate fetch
+      const fxUrl = 'https://api.exchangerate-api.com/v4/latest/USD';
+      const fxRes = await fetch(fxUrl);
+      if (fxRes.ok) {
+        const fxData = await fxRes.json();
+        const usdToInr = fxData?.rates?.INR;
+        // XAU/USD from public endpoint with CORS
+        const xauRes = await fetch('https://cdn.jsdelivr.net/npm/@nicehash/data/gold.json').catch(()=>null);
+        if (!xauRes || !xauRes.ok) throw new Error('no xau');
         const xauData = await xauRes.json();
-        const inrPerOzSpot = xauData?.rates?.INR; // international spot INR/oz
-        if (inrPerOzSpot && inrPerOzSpot > 200000) {
-          const v = Math.round((inrPerOzSpot / 31.1035) * (22/24) * INDIA_PREMIUM);
+        const usdPerOz = xauData?.price || xauData?.XAU;
+        if (usdToInr && usdPerOz && usdPerOz > 1000) {
+          const v = Math.round((usdPerOz / 31.1035) * usdToInr * (22/24) * INDIA_PREMIUM);
           if (v >= RATE_MIN && v <= RATE_MAX) { inrPer22k = v; }
         }
       }
     } catch {}
   }
 
-  // ── Source 3: frankfurter XAU→INR spot × India premium ──
+  // ── Source 3: exchangerate-api + open.er-api for XAU ──
   if (!inrPer22k) {
     try {
-      const res = await fetch('https://api.frankfurter.app/latest?from=XAU&to=INR');
-      if (res.ok) {
-        const data = await res.json();
-        const inrPerOzSpot = data?.rates?.INR; // international spot INR/oz
-        if (inrPerOzSpot && inrPerOzSpot > 200000) {
-          const v = Math.round((inrPerOzSpot / 31.1035) * (22/24) * INDIA_PREMIUM);
-          if (v >= RATE_MIN && v <= RATE_MAX) { inrPer22k = v; }
-        }
+      const [fxRes, xauRes] = await Promise.all([
+        fetch('https://api.exchangerate-api.com/v4/latest/USD'),
+        fetch('https://open.er-api.com/v6/latest/XAU')
+      ]);
+      const fxData  = fxRes.ok  ? await fxRes.json()  : null;
+      const xauData = xauRes.ok ? await xauRes.json() : null;
+      const usdToInr     = fxData?.rates?.INR;
+      const inrPerOzSpot = xauData?.rates?.INR; // INR/troy oz at international spot
+      if (usdToInr && inrPerOzSpot && inrPerOzSpot > 200000) {
+        const v = Math.round((inrPerOzSpot / 31.1035) * (22/24) * INDIA_PREMIUM);
+        if (v >= RATE_MIN && v <= RATE_MAX) { inrPer22k = v; }
       }
     } catch {}
   }
@@ -3798,7 +3808,11 @@ function custLoanStats(c) {
   const cl = getCustLoans(c);
   const today = localDate();
   let totalPrincipal = 0, interestTillDate = 0, interestEarnedClosed = 0;
+  let totalNetWt = 0, totalVal80 = 0;
   const byStatus = { Active: 0, Closed: 0, Overdue: 0 };
+  const gf = {'24K':24/22,'22K':1,'18K':18/22,'14K':14/22};
+  const sf = {'Silver 999':1,'Silver 925':0.925,'Silver 800':0.8};
+
   cl.forEach(l => {
     totalPrincipal += l.amount || 0;
     const rd = l.releaseDate || (l.status === 'Active' ? today : null);
@@ -3806,16 +3820,32 @@ function custLoanStats(c) {
     const i  = m ? calcInterest(l.amount, l.rate, m) : 0;
     if (l.status === 'Active') {
       interestTillDate += i;
-      // Check if overdue >1 year
       const days = Math.floor((new Date(today+'T00:00:00') - new Date(l.loanDate+'T00:00:00')) / (1000*60*60*24));
       if (days >= 365) byStatus.Overdue++;
       else byStatus.Active++;
+      // Sum net weight and 80% value for active loans only
+      if (l.items?.length) {
+        l.items.forEach(it => {
+          const wt = parseFloat(it.wt) || 0;
+          totalNetWt += wt;
+          let val = parseFloat(it.value) || 0;
+          if (!val && wt) {
+            const p = it.purity || '22K';
+            val = p.startsWith('Silver')
+              ? Math.round(wt * 105 * (sf[p] ?? 1))
+              : Math.round(wt * liveGoldRate22K * (gf[p] ?? 1));
+          }
+          totalVal80 += Math.round(val * 0.8);
+        });
+      }
     } else {
       interestEarnedClosed += i;
       byStatus.Closed++;
     }
   });
-  return { loans: cl, totalPrincipal, interestTillDate, interestEarnedClosed, byStatus };
+
+  const total80PlusInterest = totalVal80 + interestTillDate;
+  return { loans: cl, totalPrincipal, interestTillDate, interestEarnedClosed, byStatus, totalNetWt, totalVal80, total80PlusInterest };
 }
 
 // Status color helper
@@ -3879,7 +3909,12 @@ function renderCustomers() {
         <div><div class="cust-cf-l">Principal</div><div class="cust-cf-v">${inr(stats.totalPrincipal)}</div></div>
         <div><div class="cust-cf-l">Interest Accr.</div><div class="cust-cf-v" style="color:var(--green)">${inr(stats.interestTillDate)}</div></div>
         <div><div class="cust-cf-l">Interest Earned</div><div class="cust-cf-v" style="color:var(--g1)">${inr(stats.interestEarnedClosed)}</div></div>
-      </div>` : ''}
+      </div>
+      ${stats.totalNetWt > 0 ? `<div class="cust-card-body" style="border-top:1px solid var(--bd);padding-top:10px">
+        <div><div class="cust-cf-l">⚖️ Net Wt (Active)</div><div class="cust-cf-v">${stats.totalNetWt.toFixed(2)}g</div></div>
+        <div><div class="cust-cf-l">💰 80% Value</div><div class="cust-cf-v" style="color:var(--g2)">${inr(stats.totalVal80)}</div></div>
+        <div><div class="cust-cf-l">📊 80%+Interest</div><div class="cust-cf-v" style="color:${stats.total80PlusInterest>=(stats.totalPrincipal+stats.interestTillDate)?'var(--green)':'var(--red)'};font-weight:700">${inr(stats.total80PlusInterest)}</div></div>
+      </div>` : ''}` : ''}
       <div class="cust-card-foot">
         ${currentRole !== 'staff' ? `<button class="c-btn c-edit" onclick="event.stopPropagation();openCustSheet('${c.id}')">✏️</button>` : ''}
         <button class="c-btn" onclick="event.stopPropagation();exportCustomer('${c.id}')" style="background:rgba(212,161,42,0.1);color:var(--g2)">📤</button>
