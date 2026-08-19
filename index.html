@@ -3346,11 +3346,20 @@ window.saveLoan = async function() {
   if (pendingReceipt?.removed) receiptData = null;
   else if (pendingReceipt?.data) receiptData = { data: pendingReceipt.data, type: pendingReceipt.type, name: pendingReceipt.name, aiDesc: pendingReceipt.aiDesc || null };
 
-  const lObj = { id: editId || uid(), name: no, loanDate: ld, releaseDate: rd, amount: amt, rate, status };
+  // Preserve ALL existing loan fields — only override what the form controls
+  const existingLoan = editId ? (loans.find(l => l.id === editId) || {}) : {};
+  const lObj = {
+    ...existingLoan,                        // keep all existing fields
+    id: editId || uid(),
+    name: no, loanDate: ld, releaseDate: rd,
+    amount: amt, rate, status
+  };
   const custId = $('f-cust-id')?.value || '';
-  if (custId) lObj.custId = custId;
-  if (receiptData) lObj.receipt = receiptData;
-  if (itemRows.length) lObj.items = itemRows.filter(it => it.item || it.wt || it.value);
+  if (custId) lObj.custId = custId; else delete lObj.custId;
+  if (receiptData) lObj.receipt = receiptData; else if (pendingReceipt?.removed) delete lObj.receipt;
+  // Save items — keep if any field filled (including hallmark/type)
+  const filteredItems = itemRows.filter(it => it.item || it.wt || it.value || it.type || it.huid || it.hallmarkStatus);
+  if (filteredItems.length) lObj.items = filteredItems; else if (itemRows.length === 0 && existingLoan.items) lObj.items = existingLoan.items;
 
   if (fbOn) {
     closeLoanSheet();
