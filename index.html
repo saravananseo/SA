@@ -3101,60 +3101,61 @@ async function geminiPost(payload, apiKey) {
   throw new Error(lastErr || 'All models failed');
 }
 
+function extractJSON(text) {
+  // Try direct parse first
+  try { return JSON.parse(text.trim()); } catch {}
+  // Extract first JSON object
+  const objMatch = text.match(/\{[\s\S]*\}/);
+  if (objMatch) { try { return JSON.parse(objMatch[0]); } catch {} }
+  // Extract first JSON array
+  const arrMatch = text.match(/\[[\s\S]*\]/);
+  if (arrMatch) { try { return JSON.parse(arrMatch[0]); } catch {} }
+  // Strip markdown fences and retry
+  const stripped = text.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
+  try { return JSON.parse(stripped); } catch {}
+  return null;
+}
+
 async function geminiDescribeImage(base64, mimeType, apiKey) {
   const text = await geminiPost({
     contents: [{
       parts: [
         { inline_data: { mime_type: mimeType, data: base64 } },
-        { text: `You are an expert jewellery analyst for a gold loan fraud detection system. Examine this image and describe the gold/silver ornaments in maximum detail for physical identification. Focus on:
-1. Type (ring/chain/bangle/necklace/earring/pendant etc.)
-2. Approximate weight appearance (heavy/medium/light)
-3. Design pattern (plain/twisted/filigree/stone-set/engraved etc.)
-4. Stones if any (colour, size, count, setting type)
-5. Clasps, locks, joints, connecting points
-6. Any unique marks, scratches, dents, or defects
-7. Colour tone (yellow gold/rose gold/white gold/silver)
-8. Hallmark or BIS stamp if visible
-9. Distinctive features that would identify THIS SPECIFIC PIECE vs similar items
-
-Respond ONLY with a JSON object (no markdown):
-{"description": "detailed paragraph", "types": ["ring"], "distinctive": "the single most unique identifying feature of this specific piece", "weight_appearance": "heavy/medium/light", "color": "yellow/rose/white/silver"}` }
+        { text: `You are an expert jewellery analyst for gold loan fraud detection. Examine this image and describe the ornaments in detail for physical identification. Focus on: 1) Type (ring/chain/bangle etc) 2) Weight appearance (heavy/medium/light) 3) Design pattern 4) Stones (colour/size/count/setting) 5) Clasps/locks/joints 6) Unique marks/scratches/defects 7) Colour (yellow/rose/white/silver) 8) Hallmark if visible. Return ONLY valid JSON, no other text: {"description":"detailed paragraph","types":["ring"],"distinctive":"the single most unique identifying feature","weight_appearance":"heavy/medium/light","color":"yellow/rose/white/silver"}` }
       ]
     }]
   }, apiKey);
-  try { return JSON.parse(text.replace(/```json|```/g,'').trim()); }
-  catch { return { description: text, types: [], distinctive: text }; }
+  const parsed = extractJSON(text);
+  if (parsed && parsed.description) return parsed;
+  // fallback — wrap raw text
+  return { description: text.substring(0, 500), types: [], distinctive: text.substring(0, 100) };
 }
 
 async function geminiCompare(currentDesc, otherDescs, apiKey) {
-  const prompt = `You are a fraud detection expert for a gold loan business. Your job is to identify if the SAME PHYSICAL jewellery item has been pledged multiple times across different loans.
+  const prompt = `You are a fraud detection expert for a gold loan business. Identify if the SAME PHYSICAL jewellery item has been pledged in multiple loans.
 
-CURRENT ITEM BEING PLEDGED:
+CURRENT ITEM:
 ${JSON.stringify(currentDesc, null, 2)}
 
-COMPARE AGAINST THESE EXISTING LOANS:
+EXISTING LOANS TO COMPARE:
 ${JSON.stringify(otherDescs.map((l,i) => ({
-  index: i,
-  loan: l.loanName,
-  date: l.loanDate,
-  amount: l.amount,
-  description: l.description
+  index: i, loan: l.loanName, date: l.loanDate, amount: l.amount,
+  description: l.description || 'no data'
 })), null, 2)}
 
-INSTRUCTIONS:
-- Mark HIGH if the descriptions suggest the SAME PHYSICAL ITEM (same design, weight, markings, defects)
-- Mark MEDIUM if very similar but could be a different piece of the same type
-- Mark LOW if same general category but clearly different items
-- Mark NONE if completely different items
-- Be VERY suspicious — even partial matches on distinctive features should be HIGH
-- Weight, purity marks, unique scratches, design details are strong identifiers
+RULES:
+- HIGH: same physical item (same design, weight, stones, defects, distinctive features)
+- MEDIUM: very similar, could be same piece
+- LOW: same category but clearly different
+- NONE: completely different
+- Be suspicious — partial matches on distinctive features = HIGH
 
-Respond ONLY with a JSON array (no markdown, no explanation outside JSON):
-[{"loanIndex": 0, "risk": "HIGH|MEDIUM|LOW|NONE", "confidence": 0-100, "reason": "specific matching features found"}]`;
+Return ONLY a JSON array, no other text:
+[{"loanIndex":0,"risk":"HIGH|MEDIUM|LOW|NONE","confidence":0-100,"reason":"specific matching features"}]`;
 
   const text = await geminiPost({ contents: [{ parts: [{ text: prompt }] }] }, apiKey);
-  try { return JSON.parse(text.replace(/```json|```/g,'').trim()); }
-  catch { return []; }
+  const parsed = extractJSON(text);
+  return Array.isArray(parsed) ? parsed : [];
 }
 
 window.runOrnamentScan = async function() {
@@ -3183,7 +3184,7 @@ window.runOrnamentScan = async function() {
 
     if (!otherLoans.length) {
       $('ai-match-body').innerHTML = `
-        <div class="ai-desc-box"><div class="ai-desc-lbl">🔍 Ornament Description</div>${currentDesc.description}</div>
+        <div class="ai-desc-box"><div class="ai-desc-lbl">🔍 Ornament Description</div>${(currentDesc.description||"").replace(/```json|```/g,"").trim().substring(0,600)}</div>
         <div class="ai-match-card safe"><div class="ai-match-card-hd"><span class="ai-match-loan">✅ No Other Loans</span><span class="ai-match-badge safe">CLEAR</span></div><div class="ai-match-reason">No other loans to compare against.</div></div>`;
       return;
     }
@@ -3210,7 +3211,7 @@ window.runOrnamentScan = async function() {
 
     if (!comparableLoans.length) {
       $('ai-match-body').innerHTML = `
-        <div class="ai-desc-box"><div class="ai-desc-lbl">🔍 Detected Ornaments</div>${currentDesc.description}</div>
+        <div class="ai-desc-box"><div class="ai-desc-lbl">🔍 Detected Ornaments</div>${(currentDesc.description||"").replace(/```json|```/g,"").trim().substring(0,600)}</div>
         <div class="ai-match-card safe"><div class="ai-match-card-hd"><span class="ai-match-loan">No comparable data</span><span class="ai-match-badge safe">CLEAR</span></div>
         <div class="ai-match-reason">Other loans have no photos or item details to compare against. Add photos or item details to loans for AI comparison.</div></div>`;
       return;
@@ -3242,7 +3243,7 @@ window.runOrnamentScan = async function() {
     $('ai-match-body').innerHTML = `
       <div class="ai-desc-box">
         <div class="ai-desc-lbl">🔍 Detected Ornaments</div>
-        ${currentDesc.description}
+        ${(currentDesc.description||"").replace(/```json|```/g,"").trim().substring(0,600)}
         ${currentDesc.distinctive ? `<div style="margin-top:6px;font-weight:600;color:var(--g2)">${currentDesc.distinctive}</div>` : ''}
       </div>
       <div style="font-size:11px;color:var(--tx2);margin-bottom:10px">Compared against ${comparableLoans.length} of ${otherLoans.length} loans (${otherLoans.length - comparableLoans.length} had no data)</div>
